@@ -29,21 +29,32 @@ With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, 
 4. Builder engine applies user’s preferences  
 5. Website is generated → Preview → Deploy  
 
-## 📂 Project Structure
+### 📁 Directories
 
-├── builder/          # Core website builder logic
-├── templates/        # Pre-built templates (HTML/React/Tailwind)
-├── mcp-server/       # MCP adapter for template access
-├── frontend/         # User-facing dashboard
-└── README.md
+- **builder/**  
+  Core logic for assembling and generating websites.  
+  Handles template composition, styling, and final code output.  
 
+- **templates/**  
+  Collection of pre-built website templates.  
+  Includes HTML, React components, and TailwindCSS layouts.  
+
+- **mcp-server/**  
+  MCP (Model Context Protocol) adapter that connects the AI to the template library.  
+  Allows AI to search, fetch, and inject templates dynamically.  
+
+- **frontend/**  
+  User-facing dashboard where users interact with the builder.  
+  Provides chat interface, preview, and deployment features.  
+
+- **README.md**  
+  Documentation for the project including setup instructions and usage.
 ---
 
 ## 🛠️ Getting Started
 ### 1. Clone repository
 ```bash  
-git clone https://github.com/your-org/ai-website-builder.git
-cd ai-website-builder
+git clone https://github.com/jukangpark/Code_King_Builder.git
 ```
 
 2. Install dependencies
