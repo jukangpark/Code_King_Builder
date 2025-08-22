@@ -1,4 +1,21 @@
-<img width="500" height="500" alt="Code_King_Builder" src="https://github.com/user-attachments/assets/ebc82876-2fab-44ff-9117-859470e719a8" />
+<img width="300" height="300" alt="Code_King_Builder" src="https://github.com/user-attachments/assets/ebc82876-2fab-44ff-9117-859470e719a8" />
+
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-yellow)
+
+<!-- Tech Stack Badges -->
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white)
+![Turbopack](https://img.shields.io/badge/Turbopack-FF5733?logo=vercel&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwindcss&logoColor=white)
+![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?logo=jsonwebtokens&logoColor=white)
+![Lucide React](https://img.shields.io/badge/Lucide%20React-18181B?logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/FramerMotion-✔️-F24E1E?logo=framer)
+
 
 # 🤖 AI-Powered ✨ Website Builder SaaS
 
