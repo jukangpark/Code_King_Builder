@@ -1,3 +1,5 @@
+<img width="500" height="500" alt="Code_King_Builder" src="https://github.com/user-attachments/assets/ebc82876-2fab-44ff-9117-859470e719a8" />
+
 # 🤖 AI-Powered ✨ Website Builder SaaS
 
 An **AI-driven website builder SaaS** that enables users to build and deploy websites through natural language.  
@@ -6,6 +8,7 @@ With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, 
 ---
 
 ## 🚀 Features
+
 - 🧠 **AI-Powered Conversations**: Build websites by chatting with AI  
 - 🏗️ **Template Management**: Pre-built templates accessible via MCP  
 - 🎨 **Customizable Designs**: Colors, layouts, and branding applied instantly  
