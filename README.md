@@ -49,6 +49,9 @@ With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, 
 4. Builder engine applies user’s preferences  
 5. Website is generated → Preview → Deploy  
 
+<img width="1536" height="1024" alt="030C2355-CC6C-4018-935F-C90E3C60A24C" src="https://github.com/user-attachments/assets/08a072b6-4220-4b23-a1ad-d9eb5f473b71" />
+
+
 ### 📁 Directories
 
 - **builder/**  
