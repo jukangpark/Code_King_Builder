@@ -28,7 +28,7 @@ export default function Navigation({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+            <Link href={`/${currentLocale}`} className="flex items-center">
               <CodeBracketIcon className="h-8 w-8 text-purple-600" />
               <span className="ml-2 text-xl font-bold text-gray-900">
                 Code King Builder
@@ -38,7 +38,7 @@ export default function Navigation({
 
           <div className="hidden md:flex items-center space-x-4">
             <Link
-              href="/templates"
+              href={`/${currentLocale}/templates`}
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 activePage === "templates"
                   ? "text-purple-600 bg-purple-50"
@@ -48,7 +48,7 @@ export default function Navigation({
               {getTranslation(currentLocale, "nav.templates")}
             </Link>
             <Link
-              href="/deploy"
+              href={`/${currentLocale}/deploy`}
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 activePage === "deploy"
                   ? "text-purple-600 bg-purple-50"

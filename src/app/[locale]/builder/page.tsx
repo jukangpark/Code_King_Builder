@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -17,13 +17,18 @@ import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 
-export default function BuilderPage() {
-  const [currentLocale, setCurrentLocale] = useState<Locale>("ko");
+export default function BuilderPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = use(params);
+  const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
   const [messages, setMessages] = useState([
     {
       id: 1,
       type: "ai",
-      content: getTranslation("ko", "builder.aiGreeting"),
+      content: getTranslation(locale, "builder.aiGreeting"),
       timestamp: new Date(),
     },
   ]);
@@ -260,7 +265,7 @@ export default function BuilderPage() {
           <div className="bg-gradient-to-r from-purple-600 to-purple-700 p-6">
             <div className="flex items-center">
               <Link
-                href="/templates"
+                href={`/${currentLocale}/templates`}
                 className="flex items-center text-white hover:text-purple-100 mr-4"
               >
                 <ArrowLeftIcon className="h-5 w-5 mr-2" />

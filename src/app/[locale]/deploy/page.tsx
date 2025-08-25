@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  CodeBracketIcon,
   ArrowLeftIcon,
   RocketLaunchIcon,
   GlobeAltIcon,
-  CloudArrowUpIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
   Cog6ToothIcon,
@@ -63,8 +61,13 @@ const deploymentPlatforms = [
   },
 ];
 
-export default function DeployPage() {
-  const [currentLocale, setCurrentLocale] = useState<Locale>("ko");
+export default function DeployPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = use(params);
+  const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
   const [selectedPlatform, setSelectedPlatform] = useState("vercel");
   const [deploymentStep, setDeploymentStep] = useState(1);
   const [isDeploying, setIsDeploying] = useState(false);
@@ -111,7 +114,7 @@ export default function DeployPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center mb-6">
             <Link
-              href="/builder"
+              href={`/${currentLocale}/builder`}
               className="flex items-center text-purple-600 hover:text-purple-700"
             >
               <ArrowLeftIcon className="h-5 w-5 mr-2" />
@@ -432,7 +435,7 @@ export default function DeployPage() {
               </div>
 
               <div className="flex justify-center pt-6">
-                <Link href="/">
+                <Link href={`/${currentLocale}`}>
                   <button className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
                     {getTranslation(currentLocale, "deploy.backToHome")}
                   </button>

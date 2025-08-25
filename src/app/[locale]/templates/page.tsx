@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -89,8 +89,13 @@ const categories = [
   "Food & Dining",
 ];
 
-export default function TemplatesPage() {
-  const [currentLocale, setCurrentLocale] = useState<Locale>("ko");
+export default function TemplatesPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = use(params);
+  const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -117,7 +122,7 @@ export default function TemplatesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center mb-6">
             <Link
-              href="/"
+              href={`/${currentLocale}`}
               className="flex items-center text-purple-600 hover:text-purple-700"
             >
               <ArrowLeftIcon className="h-5 w-5 mr-2" />

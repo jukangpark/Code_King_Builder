@@ -1,9 +1,4 @@
 const nextConfig = {
-  i18n: {
-    locales: ["ko", "en", "ja", "zh"],
-    defaultLocale: "ko",
-    localeDetection: true,
-  },
   experimental: {
     turbo: {
       rules: {

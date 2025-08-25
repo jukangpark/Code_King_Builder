@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -8,15 +8,19 @@ import {
   RocketLaunchIcon,
   CodeBracketIcon,
   ChatBubbleLeftRightIcon,
-  GlobeAltIcon,
   ArrowRightIcon,
 } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 
-export default function HomePage() {
-  const [currentLocale, setCurrentLocale] = useState<Locale>("ko");
+export default function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = use(params);
+  const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
 
   return (
     <div className="min-h-screen bg-white">
@@ -49,7 +53,7 @@ export default function HomePage() {
                 {getTranslation(currentLocale, "home.hero.subtitle")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/builder">
+                <Link href={`/${currentLocale}/builder`}>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -59,7 +63,7 @@ export default function HomePage() {
                     <ArrowRightIcon className="ml-2 h-5 w-5" />
                   </motion.button>
                 </Link>
-                <Link href="/templates">
+                <Link href={`/${currentLocale}/templates`}>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -164,7 +168,7 @@ export default function HomePage() {
             <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
               {getTranslation(currentLocale, "home.cta.subtitle")}
             </p>
-            <Link href="/builder">
+            <Link href={`/${currentLocale}/builder`}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -199,7 +203,7 @@ export default function HomePage() {
               <ul className="space-y-2">
                 <li>
                   <Link
-                    href="/templates"
+                    href={`/${currentLocale}/templates`}
                     className="text-gray-600 hover:text-purple-600"
                   >
                     {getTranslation(currentLocale, "nav.templates")}
@@ -207,7 +211,7 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link
-                    href="/builder"
+                    href={`/${currentLocale}/builder`}
                     className="text-gray-600 hover:text-purple-600"
                   >
                     {getTranslation(currentLocale, "nav.builder")}
@@ -215,7 +219,7 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link
-                    href="/deploy"
+                    href={`/${currentLocale}/deploy`}
                     className="text-gray-600 hover:text-purple-600"
                   >
                     {getTranslation(currentLocale, "nav.deploy")}

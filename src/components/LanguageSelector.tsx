@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { Locale, localeNames, localeFlags } from "@/lib/i18n";
 
 interface LanguageSelectorProps {
@@ -16,6 +17,7 @@ export default function LanguageSelector({
 }: LanguageSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -36,6 +38,24 @@ export default function LanguageSelector({
   const handleLocaleChange = (locale: Locale) => {
     onLocaleChange(locale);
     setIsOpen(false);
+
+    // 현재 경로에서 locale 부분만 변경
+    const currentPath = window.location.pathname;
+    const pathSegments = currentPath.split("/");
+
+    // 첫 번째 세그먼트가 locale인 경우 (예: /ko/builder -> /en/builder)
+    if (
+      pathSegments.length > 1 &&
+      ["ko", "en", "ja", "zh"].includes(pathSegments[1])
+    ) {
+      pathSegments[1] = locale;
+    } else {
+      // locale이 없는 경우 루트 경로로 이동
+      pathSegments.splice(1, 0, locale);
+    }
+
+    const newPath = pathSegments.join("/");
+    router.push(newPath);
   };
 
   return (
