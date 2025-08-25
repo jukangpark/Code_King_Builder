@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "templates": "템플릿",
+    "builder": "빌더",
+    "deploy": "배포"
+  },
+  "home": {
+    "hero": {
+      "title": "AI 마법으로",
+      "titleHighlight": "웹사이트 구축",
+      "subtitle": "자연어를 사용하여 멋진 반응형 웹사이트를 만드세요. AI 기반 빌더가 몇 분 안에 여러분의 아이디어를 현실로 만들어줍니다.",
+      "startBuilding": "빌딩 시작",
+      "browseTemplates": "템플릿 둘러보기"
+    },
+    "features": {
+      "title": "Code King Builder를 선택하는 이유는?",
+      "subtitle": "현대적인 개발자와 크리에이터를 위한 가장 진보된 AI 기반 웹사이트 빌더입니다.",
+      "aiConversations": {
+        "title": "AI 기반 대화",
+        "description": "고급 AI와 채팅하여 웹사이트를 구축하세요. 원하는 것을 설명하면 그것이 생명을 얻는 것을 지켜보세요."
+      },
+      "templates": {
+        "title": "전문 템플릿",
+        "description": "다양한 산업과 사용 사례를 위해 설계된 사전 구축된 템플릿의 광범위한 라이브러리에 액세스하세요."
+      },
+      "deployment": {
+        "title": "즉시 배포",
+        "description": "원클릭으로 Vercel, Netlify 또는 자체 호스팅에 웹사이트를 배포하세요."
+      }
+    },
+    "cta": {
+      "title": "놀라운 것을 만들 준비가 되셨나요?",
+      "subtitle": "이미 AI로 구축하고 있는 수천 명의 개발자와 크리에이터에 합류하세요.",
+      "button": "지금 시작하기"
+    }
+  },
+  "templates": {
+    "title": "템플릿 선택",
+    "subtitle": "전문적으로 디자인된 템플릿 컬렉션에서 선택하고 AI로 커스터마이징하세요.",
+    "backToHome": "홈으로 돌아가기",
+    "search": "템플릿 검색...",
+    "categories": {
+      "all": "전체",
+      "portfolio": "포트폴리오",
+      "ecommerce": "이커머스",
+      "business": "비즈니스",
+      "blog": "블로그",
+      "fooddining": "음식 & 다이닝"
+    },
+    "useTemplate": "이 템플릿 사용",
+    "noResults": "템플릿을 찾을 수 없습니다",
+    "noResultsSubtitle": "검색 또는 필터 기준을 조정해보세요."
+  },
+  "builder": {
+    "title": "AI 웹사이트 빌더",
+    "subtitle": "AI와 채팅하여 완벽한 웹사이트를 만드세요",
+    "backToTemplates": "템플릿으로 돌아가기",
+    "aiGreeting": "안녕하세요! 저는 여러분의 AI 웹사이트 빌더입니다. 만들고 싶은 웹사이트를 설명해주시면 구축을 도와드리겠습니다. 디자인, 기능, 색상 또는 특정 요구사항에 대해 말씀해주세요.",
+    "inputPlaceholder": "만들고 싶은 웹사이트를 설명하세요...",
+    "aiThinking": "AI가 생각 중...",
+    "showPreview": "미리보기 표시",
+    "hidePreview": "미리보기 숨기기",
+    "previewTitle": "실시간 미리보기",
+    "startChatting": "AI와 채팅을 시작하여 웹사이트를 생성하세요"
+  },
+  "deploy": {
+    "title": "웹사이트 배포",
+    "subtitle": "배포 플랫폼을 선택하고 몇 분 안에 웹사이트를 라이브로 만드세요.",
+    "backToBuilder": "빌더로 돌아가기",
+    "recommended": "권장",
+    "features": "기능",
+    "step1": {
+      "title": "배포 플랫폼 선택",
+      "subtitle": "웹사이트를 배포할 곳을 선택하세요"
+    },
+    "step2": {
+      "title": "배포 구성",
+      "subtitle": "프로젝트 설정과 도메인을 설정하세요",
+      "projectName": "프로젝트 이름",
+      "projectNameHelp": "이것이 배포 URL에 사용됩니다:",
+      "customDomain": "커스텀 도메인 (선택사항)",
+      "customDomainHelp": "나중에 호스팅 플랫폼 설정에서 이를 구성할 수 있습니다",
+      "importantNote": "중요한 참고사항",
+      "importantNoteText": "배포를 완료하려면 GitHub 계정을 연결하거나 웹사이트 파일을 업로드해야 합니다. 실제 배포 프로세스는 선택한 플랫폼에서 처리됩니다."
+    },
+    "step3": {
+      "title": "배포 성공!",
+      "subtitle": "웹사이트가 성공적으로 배포되었습니다.",
+      "websiteUrl": "웹사이트 URL:",
+      "visitWebsite": "웹사이트 방문",
+      "downloadCode": "코드 다운로드",
+      "nextSteps": "다음 단계:",
+      "nextStepsItems": [
+        "커스텀 도메인 구성",
+        "분석 및 모니터링 설정",
+        "SEO 최적화",
+        "웹사이트 철저히 테스트"
+      ]
+    },
+    "continue": "계속",
+    "back": "뒤로",
+    "deployNow": "지금 배포",
+    "deploying": "배포 중...",
+    "backToHome": "홈으로 돌아가기"
+  },
+  "footer": {
+    "description": "현대적인 개발자를 위한 차세대 AI 기반 웹사이트 빌더입니다.",
+    "product": "제품",
+    "resources": "리소스",
+    "company": "회사",
+    "documentation": "문서",
+    "apiReference": "API 참조",
+    "community": "커뮤니티",
+    "about": "소개",
+    "blog": "블로그",
+    "contact": "연락처",
+    "copyright": "© 2024 Code King Builder. 모든 권리 보유."
+  }
+}

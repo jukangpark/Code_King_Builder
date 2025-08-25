@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "templates": "模板",
+    "builder": "构建器",
+    "deploy": "部署"
+  },
+  "home": {
+    "hero": {
+      "title": "用AI魔法",
+      "titleHighlight": "构建网站",
+      "subtitle": "使用自然语言创建令人惊叹的响应式网站。我们的AI驱动构建器在几分钟内将您的想法变为现实。",
+      "startBuilding": "开始构建",
+      "browseTemplates": "浏览模板"
+    },
+    "features": {
+      "title": "为什么选择Code King Builder？",
+      "subtitle": "为现代开发者和创作者提供的最先进的AI驱动网站构建器。",
+      "aiConversations": {
+        "title": "AI驱动的对话",
+        "description": "通过与我们的高级AI聊天来构建网站。描述您想要的内容，然后看着它变得生动起来。"
+      },
+      "templates": {
+        "title": "专业模板",
+        "description": "访问为各种行业和用例设计的预构建模板的庞大库。"
+      },
+      "deployment": {
+        "title": "即时部署",
+        "description": "一键将您的网站部署到Vercel、Netlify或您自己的托管服务。"
+      }
+    },
+    "cta": {
+      "title": "准备好构建令人惊叹的东西了吗？",
+      "subtitle": "加入已经在使用AI构建的数千名开发者和创作者。",
+      "button": "立即开始"
+    }
+  },
+  "templates": {
+    "title": "选择您的模板",
+    "subtitle": "从我们专业设计的模板集合中选择，并使用AI进行自定义。",
+    "search": "搜索模板...",
+    "categories": {
+      "all": "全部",
+      "portfolio": "作品集",
+      "ecommerce": "电子商务",
+      "business": "商业",
+      "blog": "博客",
+      "food": "餐饮"
+    },
+    "useTemplate": "使用此模板",
+    "noResults": "未找到模板",
+    "noResultsSubtitle": "尝试调整您的搜索或过滤条件。"
+  },
+  "builder": {
+    "title": "AI网站构建器",
+    "subtitle": "与AI聊天创建您的完美网站",
+    "aiGreeting": "您好！我是您的AI网站构建器。描述您想要创建的网站，我会帮助您构建它。您可以告诉我设计、功能、颜色或任何特定要求。",
+    "inputPlaceholder": "描述您想要创建的网站...",
+    "aiThinking": "AI正在思考...",
+    "showPreview": "显示预览",
+    "hidePreview": "隐藏预览",
+    "previewTitle": "实时预览",
+    "startChatting": "开始与AI聊天生成您的网站"
+  },
+  "deploy": {
+    "title": "部署您的网站",
+    "subtitle": "选择您的部署平台，在几分钟内让您的网站上线。",
+    "step1": {
+      "title": "选择部署平台",
+      "subtitle": "选择您想要部署网站的位置"
+    },
+    "step2": {
+      "title": "配置您的部署",
+      "subtitle": "设置您的项目设置和域名",
+      "projectName": "项目名称",
+      "projectNameHelp": "这将用于您的部署URL：",
+      "customDomain": "自定义域名（可选）",
+      "customDomainHelp": "您可以在托管平台设置中稍后配置此选项",
+      "importantNote": "重要提示",
+      "importantNoteText": "您需要连接GitHub账户或上传网站文件以完成部署。实际部署过程将由您选择的平台处理。"
+    },
+    "step3": {
+      "title": "部署成功！",
+      "subtitle": "您的网站已成功部署。",
+      "websiteUrl": "您的网站URL：",
+      "visitWebsite": "访问网站",
+      "downloadCode": "下载代码",
+      "nextSteps": "下一步：",
+      "nextStepsItems": [
+        "配置您的自定义域名",
+        "设置分析和监控",
+        "优化SEO",
+        "彻底测试您的网站"
+      ]
+    },
+    "continue": "继续",
+    "back": "返回",
+    "deployNow": "立即部署",
+    "deploying": "部署中...",
+    "backToHome": "返回首页"
+  },
+  "footer": {
+    "description": "为现代开发者提供的下一代AI驱动网站构建器。",
+    "product": "产品",
+    "resources": "资源",
+    "company": "公司",
+    "documentation": "文档",
+    "apiReference": "API参考",
+    "community": "社区",
+    "about": "关于",
+    "blog": "博客",
+    "contact": "联系",
+    "copyright": "© 2024 Code King Builder. 保留所有权利。"
+  }
+}

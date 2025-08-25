@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "templates": "テンプレート",
+    "builder": "ビルダー",
+    "deploy": "デプロイ"
+  },
+  "home": {
+    "hero": {
+      "title": "AIマジックで",
+      "titleHighlight": "ウェブサイト構築",
+      "subtitle": "自然言語を使用して美しいレスポンシブウェブサイトを作成しましょう。AI駆動のビルダーが数分でアイデアを現実に変えます。",
+      "startBuilding": "ビルド開始",
+      "browseTemplates": "テンプレートを閲覧"
+    },
+    "features": {
+      "title": "Code King Builderを選ぶ理由は？",
+      "subtitle": "現代の開発者とクリエイターのための最も先進的なAI駆動ウェブサイトビルダーです。",
+      "aiConversations": {
+        "title": "AI駆動の会話",
+        "description": "高度なAIとチャットしてウェブサイトを構築しましょう。望むものを説明し、それが命を吹き込まれるのを見守ってください。"
+      },
+      "templates": {
+        "title": "プロフェッショナルテンプレート",
+        "description": "様々な業界とユースケースのために設計された事前構築テンプレートの広大なライブラリにアクセスしてください。"
+      },
+      "deployment": {
+        "title": "即座のデプロイ",
+        "description": "ワンクリックでVercel、Netlify、または独自のホスティングにウェブサイトをデプロイしてください。"
+      }
+    },
+    "cta": {
+      "title": "素晴らしいものを作る準備はできましたか？",
+      "subtitle": "すでにAIで構築している何千人もの開発者とクリエイターに参加してください。",
+      "button": "今すぐ始める"
+    }
+  },
+  "templates": {
+    "title": "テンプレートを選択",
+    "subtitle": "プロフェッショナルにデザインされたテンプレートコレクションから選択し、AIでカスタマイズしてください。",
+    "search": "テンプレートを検索...",
+    "categories": {
+      "all": "すべて",
+      "portfolio": "ポートフォリオ",
+      "ecommerce": "Eコマース",
+      "business": "ビジネス",
+      "blog": "ブログ",
+      "food": "フード＆ダイニング"
+    },
+    "useTemplate": "このテンプレートを使用",
+    "noResults": "テンプレートが見つかりません",
+    "noResultsSubtitle": "検索またはフィルター条件を調整してみてください。"
+  },
+  "builder": {
+    "title": "AIウェブサイトビルダー",
+    "subtitle": "AIとチャットして完璧なウェブサイトを作成",
+    "aiGreeting": "こんにちは！私はあなたのAIウェブサイトビルダーです。作成したいウェブサイトを説明してください。デザイン、機能、色、または特定の要件について教えてください。",
+    "inputPlaceholder": "作成したいウェブサイトを説明してください...",
+    "aiThinking": "AIが考え中...",
+    "showPreview": "プレビューを表示",
+    "hidePreview": "プレビューを非表示",
+    "previewTitle": "ライブプレビュー",
+    "startChatting": "AIとチャットを開始してウェブサイトを生成してください"
+  },
+  "deploy": {
+    "title": "ウェブサイトをデプロイ",
+    "subtitle": "デプロイプラットフォームを選択し、数分でウェブサイトをライブにしましょう。",
+    "step1": {
+      "title": "デプロイプラットフォームを選択",
+      "subtitle": "ウェブサイトをデプロイしたい場所を選択してください"
+    },
+    "step2": {
+      "title": "デプロイを設定",
+      "subtitle": "プロジェクト設定とドメインを設定してください",
+      "projectName": "プロジェクト名",
+      "projectNameHelp": "これはデプロイURLで使用されます：",
+      "customDomain": "カスタムドメイン（オプション）",
+      "customDomainHelp": "後でホスティングプラットフォーム設定でこれを設定できます",
+      "importantNote": "重要な注意事項",
+      "importantNoteText": "デプロイを完了するには、GitHubアカウントを接続するか、ウェブサイトファイルをアップロードする必要があります。実際のデプロイプロセスは選択したプラットフォームで処理されます。"
+    },
+    "step3": {
+      "title": "デプロイ成功！",
+      "subtitle": "ウェブサイトが正常にデプロイされました。",
+      "websiteUrl": "ウェブサイトURL：",
+      "visitWebsite": "ウェブサイトを訪問",
+      "downloadCode": "コードをダウンロード",
+      "nextSteps": "次のステップ：",
+      "nextStepsItems": [
+        "カスタムドメインを設定",
+        "分析とモニタリングを設定",
+        "SEOを最適化",
+        "ウェブサイトを徹底的にテスト"
+      ]
+    },
+    "continue": "続行",
+    "back": "戻る",
+    "deployNow": "今すぐデプロイ",
+    "deploying": "デプロイ中...",
+    "backToHome": "ホームに戻る"
+  },
+  "footer": {
+    "description": "現代の開発者のための次世代AI駆動ウェブサイトビルダーです。",
+    "product": "製品",
+    "resources": "リソース",
+    "company": "会社",
+    "documentation": "ドキュメント",
+    "apiReference": "APIリファレンス",
+    "community": "コミュニティ",
+    "about": "会社概要",
+    "blog": "ブログ",
+    "contact": "お問い合わせ",
+    "copyright": "© 2024 Code King Builder. All rights reserved."
+  }
+}

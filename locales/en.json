@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "templates": "Templates",
+    "builder": "Builder",
+    "deploy": "Deploy"
+  },
+  "home": {
+    "hero": {
+      "title": "Build Websites with",
+      "titleHighlight": "AI Magic",
+      "subtitle": "Create stunning, responsive websites using natural language. Our AI-powered builder turns your ideas into reality in minutes.",
+      "startBuilding": "Start Building",
+      "browseTemplates": "Browse Templates"
+    },
+    "features": {
+      "title": "Why Choose Code King Builder?",
+      "subtitle": "The most advanced AI-powered website builder for modern developers and creators.",
+      "aiConversations": {
+        "title": "AI-Powered Conversations",
+        "description": "Build websites by chatting with our advanced AI. Describe what you want, and watch it come to life."
+      },
+      "templates": {
+        "title": "Professional Templates",
+        "description": "Access a vast library of pre-built templates designed for various industries and use cases."
+      },
+      "deployment": {
+        "title": "Instant Deployment",
+        "description": "Deploy your website to Vercel, Netlify, or your own hosting with just one click."
+      }
+    },
+    "cta": {
+      "title": "Ready to Build Something Amazing?",
+      "subtitle": "Join thousands of developers and creators who are already building with AI.",
+      "button": "Get Started Now"
+    }
+  },
+  "templates": {
+    "title": "Choose Your Template",
+    "subtitle": "Select from our collection of professionally designed templates and customize them with AI.",
+    "backToHome": "Back to Home",
+    "search": "Search templates...",
+    "categories": {
+      "all": "All",
+      "portfolio": "Portfolio",
+      "ecommerce": "E-commerce",
+      "business": "Business",
+      "blog": "Blog",
+      "fooddining": "Food & Dining"
+    },
+    "useTemplate": "Use This Template",
+    "noResults": "No templates found",
+    "noResultsSubtitle": "Try adjusting your search or filter criteria."
+  },
+  "builder": {
+    "title": "AI Website Builder",
+    "subtitle": "Chat with AI to create your perfect website",
+    "backToTemplates": "Back to Templates",
+    "aiGreeting": "Hello! I'm your AI website builder. Describe the website you want to create, and I'll help you build it. You can tell me about the design, features, colors, or any specific requirements you have.",
+    "inputPlaceholder": "Describe the website you want to create...",
+    "aiThinking": "AI is thinking...",
+    "showPreview": "Show Preview",
+    "hidePreview": "Hide Preview",
+    "previewTitle": "Live Preview",
+    "startChatting": "Start chatting with AI to generate your website"
+  },
+  "deploy": {
+    "title": "Deploy Your Website",
+    "subtitle": "Choose your deployment platform and get your website live in minutes.",
+    "backToBuilder": "Back to Builder",
+    "recommended": "Recommended",
+    "features": "Features",
+    "step1": {
+      "title": "Choose Deployment Platform",
+      "subtitle": "Select where you want to deploy your website"
+    },
+    "step2": {
+      "title": "Configure Your Deployment",
+      "subtitle": "Set up your project settings and domain",
+      "projectName": "Project Name",
+      "projectNameHelp": "This will be used in your deployment URL:",
+      "customDomain": "Custom Domain (Optional)",
+      "customDomainHelp": "You can configure this later in your hosting platform settings",
+      "importantNote": "Important Note",
+      "importantNoteText": "You'll need to connect your GitHub account or upload your website files to complete the deployment. The actual deployment process will be handled by your chosen platform."
+    },
+    "step3": {
+      "title": "Deployment Successful!",
+      "subtitle": "Your website has been successfully deployed.",
+      "websiteUrl": "Your Website URL:",
+      "visitWebsite": "Visit Website",
+      "downloadCode": "Download Code",
+      "nextSteps": "Next Steps:",
+      "nextStepsItems": [
+        "Configure your custom domain",
+        "Set up analytics and monitoring",
+        "Optimize for SEO",
+        "Test your website thoroughly"
+      ]
+    },
+    "continue": "Continue",
+    "back": "Back",
+    "deployNow": "Deploy Now",
+    "deploying": "Deploying...",
+    "backToHome": "Back to Home"
+  },
+  "footer": {
+    "description": "The next-generation AI-powered website builder for modern developers.",
+    "product": "Product",
+    "resources": "Resources",
+    "company": "Company",
+    "documentation": "Documentation",
+    "apiReference": "API Reference",
+    "community": "Community",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact",
+    "copyright": "© 2024 Code King Builder. All rights reserved."
+  }
+}
