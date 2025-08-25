@@ -6,6 +6,7 @@ import { CodeBracketIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import LanguageSelector from "./LanguageSelector";
+import Image from "next/image";
 
 interface NavigationProps {
   currentLocale: Locale;
@@ -36,7 +37,12 @@ export default function Navigation({
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href={`/${currentLocale}`} className="flex items-center">
-              <CodeBracketIcon className="h-8 w-8 text-purple-600" />
+              <Image
+                src="/codekingbuilder.png"
+                alt="Code King Builder"
+                width={32}
+                height={32}
+              />
               <span className="ml-2 text-xl font-bold text-gray-900">
                 Code King Builder
               </span>
