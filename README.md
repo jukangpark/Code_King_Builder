@@ -15,12 +15,23 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Framer Motion](https://img.shields.io/badge/FramerMotion-✔️-F24E1E?logo=framer)
 
+# Home
+<img width="1920" height="1080" alt="Screenshot 2025-08-25 at 3 42 23 PM" src="https://github.com/user-attachments/assets/104303c2-3a2e-4809-9ba0-af76a91748a8" />
+
+# Templates
+<img width="1920" height="1080" alt="Screenshot 2025-08-25 at 3 42 38 PM" src="https://github.com/user-attachments/assets/f04acc29-6346-4cd2-9d0f-bb1ed4c35730" />
+
+# Deploy
+<img width="1920" height="1080" alt="Screenshot 2025-08-25 at 3 42 44 PM" src="https://github.com/user-attachments/assets/c3802371-bb67-4a95-8a7f-294c8c52f119" />
+
+
 # 🤖 AI-Powered ✨ Website Builder SaaS
 
 An **AI-driven website builder SaaS** that enables users to build and deploy websites through natural language.  
 With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, assemble components, and deliver production-ready websites in minutes.
 
 ---
+
 
 ## 🚀 Features
 
