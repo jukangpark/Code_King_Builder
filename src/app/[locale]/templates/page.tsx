@@ -239,7 +239,9 @@ export default function TemplatesPage({
                   </div>
 
                   {/* Action Button */}
-                  <Link href={`/builder?template=${template.id}`}>
+                  <Link
+                    href={`/${currentLocale}/builder?template=${template.id}`}
+                  >
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
