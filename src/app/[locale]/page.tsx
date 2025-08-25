@@ -52,22 +52,12 @@ export default function HomePage({
               <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
                 {getTranslation(currentLocale, "home.hero.subtitle")}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href={`/${currentLocale}/builder`}>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center"
-                  >
-                    {getTranslation(currentLocale, "home.hero.startBuilding")}
-                    <ArrowRightIcon className="ml-2 h-5 w-5" />
-                  </motion.button>
-                </Link>
+              <div className="flex flex-col gap-4 justify-center items-center">
                 <Link href={`/${currentLocale}/templates`}>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+                    className="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors w-full sm:w-auto"
                   >
                     {getTranslation(currentLocale, "home.hero.browseTemplates")}
                   </motion.button>
