@@ -2,7 +2,8 @@
   "nav": {
     "templates": "템플릿",
     "builder": "빌더",
-    "deploy": "배포"
+    "deploy": "배포",
+    "contact": "상담문의"
   },
   "home": {
     "hero": {
@@ -102,6 +103,187 @@
     "deployNow": "지금 배포",
     "deploying": "배포 중...",
     "backToHome": "홈으로 돌아가기"
+  },
+  "contact": {
+    "title": "상담문의",
+    "subtitle": "궁금한 점이 있으시거나 특별한 요구사항이 있으시면 언제든지 문의해주세요. 빠른 시일 내에 답변드리겠습니다.",
+    "backToHome": "홈으로 돌아가기",
+    "form": {
+      "name": "이름",
+      "email": "이메일",
+      "phone": "전화번호 (선택사항)",
+      "subject": "문의 제목",
+      "message": "문의 내용",
+      "namePlaceholder": "이름을 입력하세요",
+      "emailPlaceholder": "이메일을 입력하세요",
+      "phonePlaceholder": "전화번호를 입력하세요 (선택사항)",
+      "subjectPlaceholder": "문의 제목을 입력하세요",
+      "messagePlaceholder": "문의 내용을 자세히 입력하세요",
+      "submit": "문의하기",
+      "submitting": "전송 중...",
+      "success": "문의가 성공적으로 전송되었습니다!",
+      "error": "문의 전송 중 오류가 발생했습니다. 다시 시도해주세요."
+    },
+    "info": {
+      "title": "연락처 정보",
+      "email": "이메일",
+      "phone": "전화번호",
+      "address": "주소",
+      "businessHours": "업무 시간",
+      "emailValue": "contact@codekingbuilder.com",
+      "phoneValue": "+82-2-1234-5678",
+      "addressValue": "서울특별시 강남구 테헤란로 123",
+      "businessHoursValue": "월-금: 09:00 - 18:00"
+    },
+    "tips": {
+      "title": "빠른 응답을 위한 팁",
+      "requirement": "구체적인 요구사항을 명시해주세요",
+      "budget": "예산 범위를 미리 알려주시면 더 정확한 제안이 가능합니다",
+      "schedule": "프로젝트 일정이 있다면 함께 언급해주세요",
+      "existing": "기존 웹사이트가 있다면 URL을 공유해주세요"
+    }
+  },
+  "service": {
+    "title": "고객의 비즈니스와 브랜드에 최적화된 맞춤형 반응형 웹사이트를 제작해드립니다",
+    "subtitle": "기획부터 디자인, 개발, 배포까지 원스톱으로 진행하며, 고객과의 긴밀한 커뮤니케이션을 통해 사용성과 디자인 모두를 만족하는 웹사이트를 완성합니다.",
+    "features": {
+      "strategy": {
+        "title": "목적에 맞춘 1:1 전략 설계",
+        "description": "고객 비즈니스의 목적과 방향성에 최적화된 기획을 제공합니다. 홍보, 리드 유도, 예약, 판매 등 사이트의 목표에 맞는 전략적 페이지 구조를 설계합니다."
+      },
+      "copywriting": {
+        "title": "설득력 있는 문구 제공",
+        "description": "사용자가 머무르고, 클릭하고, 행동하게 만드는 문장을 기획합니다. 브랜드의 메시지를 효과적으로 전달하는 카피라이팅을 통해 웹사이트의 전환율을 높입니다."
+      },
+      "design": {
+        "title": "고퀄리티 디자인",
+        "description": "브랜드 아이덴티티에 부합하는 시각적 완성도를 추구합니다. 트렌디하고 세련된 디자인뿐만 아니라, 사용성과 접근성까지 고려한 웹사이트를 제작합니다."
+      },
+      "seo": {
+        "title": "SEO 기본 세팅 + 검색 엔진 등록",
+        "description": "검색 엔진 노출을 고려한 구조 및 키워드 세팅으로 웹사이트 오픈과 동시에 검색 유입을 기대할 수 있도록 설정해드립니다."
+      },
+      "responsive": {
+        "title": "100% 반응형 제작",
+        "description": "PC, 태블릿, 모바일 등 어떤 기기에서도 콘텐츠가 자연스럽게 노출되도록 완벽하게 반응형으로 제작합니다. 모바일 중심의 사용자 환경에서도 최적의 퍼포먼스를 보장합니다."
+      },
+      "performance": {
+        "title": "빠른 웹사이트 성능",
+        "description": "페이지 로딩 속도는 사용자 이탈률과 직결됩니다. 불필요한 리소스를 제거하고 최적화된 코드와 이미지 처리로 속도 빠른 웹사이트를 구축해드립니다."
+      },
+      "aiAssistant": {
+        "title": "AI 비서 연동",
+        "description": "ChatGPT, Claude 등 최신 AI 비서와 연동하여 고객 문의 자동 응답, 상품 추천, 예약 관리 등을 자동화합니다. 24시간 고객 서비스를 제공하여 비즈니스 효율성을 극대화합니다."
+      },
+      "googleWorkspace": {
+        "title": "Google Workspace 연동",
+        "description": "Gmail, Google Calendar, Drive 등 Google Workspace와 완벽 연동으로 업무 자동화를 구현합니다. 이메일 마케팅, 일정 관리, 문서 공유가 원활하게 이루어지는 스마트한 비즈니스 환경을 구축합니다."
+      },
+      "domain": {
+        "title": "도메인 연결 및 관리",
+        "description": "기존 도메인 연결부터 새로운 도메인 등록까지 원스톱으로 처리합니다. SSL 인증서 설치, DNS 설정, 서브도메인 구성 등 전문적인 도메인 관리 서비스를 제공하여 안정적인 웹사이트 운영을 보장합니다."
+      }
+    },
+    "websiteTypes": {
+      "title": "제작 가능한 웹사이트 유형",
+      "corporate": "기업 홈페이지",
+      "brand": "브랜드 사이트",
+      "portfolio": "개인 포트폴리오",
+      "event": "이벤트/프로모션"
+    },
+    "process": {
+      "title": "서비스 제공 절차",
+      "subtitle": "기획부터 배포, AI 연동까지 체계적인 프로세스로 진행됩니다",
+      "steps": {
+        "consultation": {
+          "title": "상담 및 니즈 파악",
+          "description": "제작 목적, 예상 페이지 수, 참고 사이트 등을 공유해주세요."
+        },
+        "quote": {
+          "title": "견적 및 일정 안내",
+          "description": "요청사항을 토대로 정확한 견적과 제작 일정을 제시드립니다."
+        },
+        "planning": {
+          "title": "기획 및 디자인",
+          "description": "와이어프레임 또는 시안 공유 → 피드백 반영 → 확정"
+        },
+        "development": {
+          "title": "개발 및 테스트",
+          "description": "HTML/CSS, JS, CMS 세팅 등 웹사이트 구축 및 다양한 기기에서 테스트 진행"
+        },
+        "integration": {
+          "title": "도메인 연결 및 AI 연동",
+          "description": "도메인 설정, SSL 인증서 설치, AI 비서 및 Google Workspace 연동 구성"
+        },
+        "delivery": {
+          "title": "최종 검수 및 전달",
+          "description": "수정 및 보완 완료 후, 소스 전달 또는 서버에 직접 업로드"
+        }
+      }
+    },
+    "cta": {
+      "title": "\"고객의 브랜드를 가장 잘 표현하는 웹사이트를 만듭니다.\"",
+      "subtitle": "기획부터 배포, AI 연동까지 원스톱으로 진행하며, 고객과의 소통을 최우선으로 생각합니다. 신뢰할 수 있는 웹 제작 파트너, Code King Builder와 함께하세요.",
+      "button": "지금 상담 문의하기"
+    }
+  },
+  "pricing": {
+    "title": "투명한 가격 정책",
+    "subtitle": "고객의 요구사항에 맞는 최적의 패키지를 선택하세요",
+    "packages": {
+      "standard": {
+        "name": "STANDARD",
+        "price": "99,000원",
+        "description": "원페이지 스크롤 반응형 홈페이지",
+        "features": "입력폼, 협업관리, 이메일 연동, 문의폼",
+        "duration": "3일",
+        "revisions": "1회",
+        "pages": "1개",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "STANDARD 선택"
+      },
+      "deluxe": {
+        "name": "DELUXE",
+        "price": "399,000원",
+        "description": "템플릿형 반응형 홈페이지",
+        "features": "입력폼, 협업관리, 이메일 연동, 문의폼",
+        "duration": "7일",
+        "revisions": "3회",
+        "pages": "6개",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "DELUXE 선택",
+        "popular": true
+      },
+      "premium": {
+        "name": "PREMIUM",
+        "price": "990,000원",
+        "description": "고급형 반응형 홈페이지 제작 & 맞춤형 기능 개발",
+        "features": "입력폼, 협업관리, 이메일 연동, 문의폼, 추가 기능 개발 지원",
+        "duration": "14일",
+        "revisions": "5회",
+        "pages": "6개 이상",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 5,
+        "sourceCode": true,
+        "button": "PREMIUM 선택"
+      }
+    },
+    "features": {
+      "duration": "작업기간",
+      "revisions": "수정 횟수",
+      "pages": "페이지수",
+      "responsive": "반응형웹",
+      "crossBrowser": "크로스 브라우징",
+      "additionalFeatures": "기능 추가",
+      "sourceCode": "소스코드 제공"
+    }
   },
   "footer": {
     "description": "현대적인 개발자를 위한 차세대 AI 기반 웹사이트 빌더입니다.",

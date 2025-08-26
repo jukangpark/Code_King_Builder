@@ -2,7 +2,8 @@
   "nav": {
     "templates": "模板",
     "builder": "构建器",
-    "deploy": "部署"
+    "deploy": "部署",
+    "contact": "联系我们"
   },
   "home": {
     "hero": {
@@ -97,6 +98,187 @@
     "deployNow": "立即部署",
     "deploying": "部署中...",
     "backToHome": "返回首页"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "有疑问或特殊要求？随时联系我们。我们会尽快回复您。",
+    "backToHome": "返回首页",
+    "form": {
+      "name": "姓名",
+      "email": "邮箱",
+      "phone": "电话（可选）",
+      "subject": "主题",
+      "message": "消息",
+      "namePlaceholder": "请输入您的姓名",
+      "emailPlaceholder": "请输入您的邮箱",
+      "phonePlaceholder": "请输入您的电话号码（可选）",
+      "subjectPlaceholder": "请输入主题",
+      "messagePlaceholder": "请详细描述您的咨询内容",
+      "submit": "发送消息",
+      "submitting": "发送中...",
+      "success": "您的消息已成功发送！",
+      "error": "发送消息时发生错误。请重试。"
+    },
+    "info": {
+      "title": "联系信息",
+      "email": "邮箱",
+      "phone": "电话",
+      "address": "地址",
+      "businessHours": "营业时间",
+      "emailValue": "contact@codekingbuilder.com",
+      "phoneValue": "+82-2-1234-5678",
+      "addressValue": "首尔特别市江南区德黑兰路123号",
+      "businessHoursValue": "周一-周五: 09:00 - 18:00"
+    },
+    "tips": {
+      "title": "快速回复提示",
+      "requirement": "请详细说明您的具体需求",
+      "budget": "提前告知预算范围，以便提供更准确的建议",
+      "schedule": "如果您有项目时间表，请一并提及",
+      "existing": "如果您有现有网站，请分享URL"
+    }
+  },
+  "service": {
+    "title": "我们为您的业务和品牌创建优化的定制响应式网站",
+    "subtitle": "我们从规划到设计、开发和部署一站式进行，通过与客户的密切沟通，完成满足可用性和设计的网站。",
+    "features": {
+      "strategy": {
+        "title": "目标驱动的1:1战略规划",
+        "description": "我们提供针对您业务目标和方向优化的规划。我们设计符合您网站目标的战略页面结构，如推广、潜在客户生成、预订和销售。"
+      },
+      "copywriting": {
+        "title": "有说服力的文案",
+        "description": "我们规划让用户停留、点击和采取行动的句子。通过有效传达您品牌信息的文案，我们提高您网站的转化率。"
+      },
+      "design": {
+        "title": "高质量设计",
+        "description": "我们追求符合您品牌身份的视觉完美。我们创建不仅考虑时尚和精致设计，还考虑可用性和可访问性的网站。"
+      },
+      "seo": {
+        "title": "SEO基础设置 + 搜索引擎注册",
+        "description": "我们考虑搜索引擎曝光的结构和关键词设置，让您从网站开通的那一刻起就能期待搜索流量。"
+      },
+      "responsive": {
+        "title": "100%响应式设计",
+        "description": "我们创建完美的响应式网站，让内容在PC、平板和手机等任何设备上自然显示。我们确保即使在移动优先的用户环境中也能获得最佳性能。"
+      },
+      "performance": {
+        "title": "快速网站性能",
+        "description": "页面加载速度直接影响用户跳出率。我们通过移除不必要的资源并优化代码和图像处理来构建快速网站。"
+      },
+      "aiAssistant": {
+        "title": "AI助手集成",
+        "description": "我们与ChatGPT和Claude等最新AI助手集成，自动化客户咨询响应、产品推荐和预订管理。我们提供24/7客户服务以最大化业务效率。"
+      },
+      "googleWorkspace": {
+        "title": "Google Workspace集成",
+        "description": "我们通过与Gmail、Google Calendar和Drive等Google Workspace的完美集成来实现业务自动化。我们构建电子邮件营销、日程管理和文档共享无缝进行的智能商业环境。"
+      },
+      "domain": {
+        "title": "域名连接和管理",
+        "description": "我们一站式处理从连接现有域名到注册新域名的一切。我们提供专业的域名管理服务，包括SSL证书安装、DNS设置和子域名配置，确保稳定的网站运营。"
+      }
+    },
+    "websiteTypes": {
+      "title": "我们可以创建的网站类型",
+      "corporate": "企业主页",
+      "brand": "品牌网站",
+      "portfolio": "个人作品集",
+      "event": "活动/促销"
+    },
+    "process": {
+      "title": "服务流程",
+      "subtitle": "我们从规划到部署和AI集成的系统化流程进行",
+      "steps": {
+        "consultation": {
+          "title": "咨询和需求分析",
+          "description": "请分享您的创建目的、预期页面数量、参考网站等。"
+        },
+        "quote": {
+          "title": "报价和时间安排",
+          "description": "我们根据您的要求提供准确的报价和生产时间表。"
+        },
+        "planning": {
+          "title": "规划和设计",
+          "description": "线框图或设计稿分享 → 反馈反映 → 确认"
+        },
+        "development": {
+          "title": "开发和测试",
+          "description": "包括HTML/CSS、JS、CMS设置的网站构建和各种设备上的测试"
+        },
+        "integration": {
+          "title": "域名连接和AI集成",
+          "description": "域名设置、SSL证书安装、AI助手和Google Workspace集成配置"
+        },
+        "delivery": {
+          "title": "最终审查和交付",
+          "description": "修改和完善完成后，源代码交付或直接上传到服务器"
+        }
+      }
+    },
+    "cta": {
+      "title": "\"我们创建最能表达您品牌的网站。\"",
+      "subtitle": "我们一站式处理从规划到部署和AI集成的一切，优先考虑与客户的沟通。与可靠的网站开发合作伙伴Code King Builder合作。",
+      "button": "立即联系我们"
+    }
+  },
+  "pricing": {
+    "title": "透明定价",
+    "subtitle": "选择适合您需求的最佳套餐",
+    "packages": {
+      "standard": {
+        "name": "STANDARD",
+        "price": "¥99",
+        "description": "单页滚动响应式主页",
+        "features": "联系表单、协作管理、邮件集成、咨询表单",
+        "duration": "3天",
+        "revisions": "1次",
+        "pages": "1页",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "选择STANDARD"
+      },
+      "deluxe": {
+        "name": "DELUXE",
+        "price": "¥399",
+        "description": "模板型响应式主页",
+        "features": "联系表单、协作管理、邮件集成、咨询表单",
+        "duration": "7天",
+        "revisions": "3次",
+        "pages": "6页",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "选择DELUXE",
+        "popular": true
+      },
+      "premium": {
+        "name": "PREMIUM",
+        "price": "¥990",
+        "description": "高级响应式主页制作 & 定制功能开发",
+        "features": "联系表单、协作管理、邮件集成、咨询表单、额外功能开发支持",
+        "duration": "14天",
+        "revisions": "5次",
+        "pages": "6页以上",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 5,
+        "sourceCode": true,
+        "button": "选择PREMIUM"
+      }
+    },
+    "features": {
+      "duration": "制作周期",
+      "revisions": "修改次数",
+      "pages": "页面数",
+      "responsive": "响应式网页",
+      "crossBrowser": "跨浏览器",
+      "additionalFeatures": "功能添加",
+      "sourceCode": "源代码提供"
+    }
   },
   "footer": {
     "description": "为现代开发者提供的下一代AI驱动网站构建器。",

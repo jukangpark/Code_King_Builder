@@ -1,5 +1,6 @@
 import { Locale } from "@/lib/i18n";
 import { use } from "react";
+import Footer from "@/components/Footer";
 
 export async function generateMetadata({
   params,
@@ -21,7 +22,12 @@ export default function LocaleLayout({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = use(params);
-  return <div lang={locale}>{children}</div>;
+  return (
+    <div lang={locale}>
+      {children}
+      <Footer currentLocale={locale} />
+    </div>
+  );
 }
 
 export async function generateStaticParams() {

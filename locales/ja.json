@@ -2,7 +2,8 @@
   "nav": {
     "templates": "テンプレート",
     "builder": "ビルダー",
-    "deploy": "デプロイ"
+    "deploy": "デプロイ",
+    "contact": "お問い合わせ"
   },
   "home": {
     "hero": {
@@ -97,6 +98,187 @@
     "deployNow": "今すぐデプロイ",
     "deploying": "デプロイ中...",
     "backToHome": "ホームに戻る"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "subtitle": "ご質問や特別なご要望がございましたら、いつでもお気軽にお問い合わせください。できるだけ早くご返信いたします。",
+    "backToHome": "ホームに戻る",
+    "form": {
+      "name": "お名前",
+      "email": "メールアドレス",
+      "phone": "電話番号（任意）",
+      "subject": "件名",
+      "message": "メッセージ",
+      "namePlaceholder": "お名前を入力してください",
+      "emailPlaceholder": "メールアドレスを入力してください",
+      "phonePlaceholder": "電話番号を入力してください（任意）",
+      "subjectPlaceholder": "件名を入力してください",
+      "messagePlaceholder": "お問い合わせ内容を詳しく入力してください",
+      "submit": "送信する",
+      "submitting": "送信中...",
+      "success": "お問い合わせが正常に送信されました！",
+      "error": "メッセージ送信中にエラーが発生しました。もう一度お試しください。"
+    },
+    "info": {
+      "title": "連絡先情報",
+      "email": "メールアドレス",
+      "phone": "電話番号",
+      "address": "住所",
+      "businessHours": "営業時間",
+      "emailValue": "contact@codekingbuilder.com",
+      "phoneValue": "+82-2-1234-5678",
+      "addressValue": "ソウル特別市江南区テヘラン路123",
+      "businessHoursValue": "月-金: 09:00 - 18:00"
+    },
+    "tips": {
+      "title": "迅速な返信のためのヒント",
+      "requirement": "具体的なご要望を明記してください",
+      "budget": "予算範囲を事前にお知らせいただければ、より正確な提案が可能です",
+      "schedule": "プロジェクトのスケジュールがある場合は、一緒にお知らせください",
+      "existing": "既存のウェブサイトがある場合は、URLを共有してください"
+    }
+  },
+  "service": {
+    "title": "お客様のビジネスとブランドに最適化されたカスタムレスポンシブウェブサイトを制作いたします",
+    "subtitle": "企画からデザイン、開発、デプロイまでワンストップで進行し、お客様との密接なコミュニケーションを通じて、使いやすさとデザインの両方を満たすウェブサイトを完成させます。",
+    "features": {
+      "strategy": {
+        "title": "目的に合わせた1:1戦略設計",
+        "description": "お客様のビジネスの目的と方向性に最適化された企画を提供します。プロモーション、リード獲得、予約、販売など、サイトの目標に合わせた戦略的なページ構造を設計します。"
+      },
+      "copywriting": {
+        "title": "説得力のある文章提供",
+        "description": "ユーザーが留まり、クリックし、行動を起こす文章を企画します。ブランドのメッセージを効果的に伝えるコピーライティングを通じて、ウェブサイトのコンバージョン率を向上させます。"
+      },
+      "design": {
+        "title": "高品質デザイン",
+        "description": "ブランドアイデンティティに合致する視覚的完成度を追求します。トレンディで洗練されたデザインだけでなく、使いやすさとアクセシビリティまで考慮したウェブサイトを制作します。"
+      },
+      "seo": {
+        "title": "SEO基本設定 + 検索エンジン登録",
+        "description": "検索エンジン露出を考慮した構造とキーワード設定により、ウェブサイトオープンと同時に検索流入を期待できるよう設定いたします。"
+      },
+      "responsive": {
+        "title": "100%レスポンシブ制作",
+        "description": "PC、タブレット、モバイルなど、どのデバイスでもコンテンツが自然に表示されるよう、完璧にレスポンシブで制作します。モバイル中心のユーザー環境でも最適なパフォーマンスを保証します。"
+      },
+      "performance": {
+        "title": "高速ウェブサイトパフォーマンス",
+        "description": "ページ読み込み速度はユーザーの離脱率に直結します。不要なリソースを削除し、最適化されたコードと画像処理で高速なウェブサイトを構築いたします。"
+      },
+      "aiAssistant": {
+        "title": "AIアシスタント連携",
+        "description": "ChatGPT、Claudeなどの最新AIアシスタントと連携し、お客様からの問い合わせ自動応答、商品推薦、予約管理などを自動化します。24時間お客様サービスを提供し、ビジネス効率を最大化します。"
+      },
+      "googleWorkspace": {
+        "title": "Google Workspace連携",
+        "description": "Gmail、Google Calendar、DriveなどのGoogle Workspaceと完璧に連携し、業務自動化を実現します。メールマーケティング、スケジュール管理、文書共有が円滑に行われるスマートなビジネス環境を構築します。"
+      },
+      "domain": {
+        "title": "ドメイン接続と管理",
+        "description": "既存ドメインの接続から新規ドメイン登録までワンストップで処理します。SSL証明書インストール、DNS設定、サブドメイン構成など、専門的なドメイン管理サービスを提供し、安定したウェブサイト運用を保証します。"
+      }
+    },
+    "websiteTypes": {
+      "title": "制作可能なウェブサイトタイプ",
+      "corporate": "企業ホームページ",
+      "brand": "ブランドサイト",
+      "portfolio": "個人ポートフォリオ",
+      "event": "イベント/プロモーション"
+    },
+    "process": {
+      "title": "サービス提供手順",
+      "subtitle": "企画からデプロイ、AI連携まで体系的なプロセスで進行します",
+      "steps": {
+        "consultation": {
+          "title": "相談とニーズ把握",
+          "description": "制作目的、予想ページ数、参考サイトなどを共有してください。"
+        },
+        "quote": {
+          "title": "見積もりとスケジュール案内",
+          "description": "ご要望に基づいて正確な見積もりと制作スケジュールをご提示いたします。"
+        },
+        "planning": {
+          "title": "企画とデザイン",
+          "description": "ワイヤーフレームまたはデザイン案共有 → フィードバック反映 → 確定"
+        },
+        "development": {
+          "title": "開発とテスト",
+          "description": "HTML/CSS、JS、CMS設定などウェブサイト構築と様々なデバイスでのテスト進行"
+        },
+        "integration": {
+          "title": "ドメイン接続とAI連携",
+          "description": "ドメイン設定、SSL証明書インストール、AIアシスタントとGoogle Workspace連携構成"
+        },
+        "delivery": {
+          "title": "最終検収と納品",
+          "description": "修正と補完完了後、ソース納品またはサーバーに直接アップロード"
+        }
+      }
+    },
+    "cta": {
+      "title": "\"お客様のブランドを最もよく表現するウェブサイトを作ります。\"",
+      "subtitle": "企画からデプロイ、AI連携までワンストップで進行し、お客様とのコミュニケーションを最優先に考えます。信頼できるウェブ制作パートナー、Code King Builderと一緒にいきましょう。",
+      "button": "今すぐ相談する"
+    }
+  },
+  "pricing": {
+    "title": "透明な価格体系",
+    "subtitle": "お客様のご要望に合わせた最適なパッケージをお選びください",
+    "packages": {
+      "standard": {
+        "name": "STANDARD",
+        "price": "99,000円",
+        "description": "ワンページスクロールレスポンシブホームページ",
+        "features": "入力フォーム、協働管理、メール連携、お問い合わせフォーム",
+        "duration": "3日",
+        "revisions": "1回",
+        "pages": "1ページ",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "STANDARD選択"
+      },
+      "deluxe": {
+        "name": "DELUXE",
+        "price": "399,000円",
+        "description": "テンプレート型レスポンシブホームページ",
+        "features": "入力フォーム、協働管理、メール連携、お問い合わせフォーム",
+        "duration": "7日",
+        "revisions": "3回",
+        "pages": "6ページ",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "DELUXE選択",
+        "popular": true
+      },
+      "premium": {
+        "name": "PREMIUM",
+        "price": "990,000円",
+        "description": "高級型レスポンシブホームページ制作 & カスタム機能開発",
+        "features": "入力フォーム、協働管理、メール連携、お問い合わせフォーム、追加機能開発サポート",
+        "duration": "14日",
+        "revisions": "5回",
+        "pages": "6ページ以上",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 5,
+        "sourceCode": true,
+        "button": "PREMIUM選択"
+      }
+    },
+    "features": {
+      "duration": "制作期間",
+      "revisions": "修正回数",
+      "pages": "ページ数",
+      "responsive": "レスポンシブウェブ",
+      "crossBrowser": "クロスブラウザ",
+      "additionalFeatures": "機能追加",
+      "sourceCode": "ソースコード提供"
+    }
   },
   "footer": {
     "description": "現代の開発者のための次世代AI駆動ウェブサイトビルダーです。",

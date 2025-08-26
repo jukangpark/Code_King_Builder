@@ -11,7 +11,7 @@ import Image from "next/image";
 interface NavigationProps {
   currentLocale: Locale;
   onLocaleChange: (locale: Locale) => void;
-  activePage?: "home" | "templates" | "deploy";
+  activePage?: "home" | "templates" | "deploy" | "contact";
 }
 
 export default function Navigation({
@@ -69,6 +69,16 @@ export default function Navigation({
               }`}
             >
               {getTranslation(currentLocale, "nav.deploy")}
+            </Link>
+            <Link
+              href={`/${currentLocale}/contact`}
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                activePage === "contact"
+                  ? "text-purple-600 bg-purple-50"
+                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+              }`}
+            >
+              {getTranslation(currentLocale, "nav.contact")}
             </Link>
 
             {/* Language Selector */}
@@ -137,6 +147,17 @@ export default function Navigation({
               }`}
             >
               {getTranslation(currentLocale, "nav.deploy")}
+            </Link>
+            <Link
+              href={`/${currentLocale}/contact`}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                activePage === "contact"
+                  ? "text-purple-600 bg-purple-50"
+                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+              }`}
+            >
+              {getTranslation(currentLocale, "nav.contact")}
             </Link>
           </div>
         </div>

@@ -2,7 +2,8 @@
   "nav": {
     "templates": "Templates",
     "builder": "Builder",
-    "deploy": "Deploy"
+    "deploy": "Deploy",
+    "contact": "Contact"
   },
   "home": {
     "hero": {
@@ -102,6 +103,187 @@
     "deployNow": "Deploy Now",
     "deploying": "Deploying...",
     "backToHome": "Back to Home"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions or special requirements? Feel free to reach out anytime. We'll get back to you as soon as possible.",
+    "backToHome": "Back to Home",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone (Optional)",
+      "subject": "Subject",
+      "message": "Message",
+      "namePlaceholder": "Enter your name",
+      "emailPlaceholder": "Enter your email",
+      "phonePlaceholder": "Enter your phone number (optional)",
+      "subjectPlaceholder": "Enter subject",
+      "messagePlaceholder": "Please describe your inquiry in detail",
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "success": "Your message has been sent successfully!",
+      "error": "An error occurred while sending your message. Please try again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "businessHours": "Business Hours",
+      "emailValue": "contact@codekingbuilder.com",
+      "phoneValue": "+82-2-1234-5678",
+      "addressValue": "123 Teheran-ro, Gangnam-gu, Seoul",
+      "businessHoursValue": "Mon-Fri: 09:00 - 18:00"
+    },
+    "tips": {
+      "title": "Tips for Quick Response",
+      "requirement": "Please specify your detailed requirements",
+      "budget": "Let us know your budget range in advance for more accurate proposals",
+      "schedule": "If you have a project timeline, please mention it",
+      "existing": "If you have an existing website, please share the URL"
+    }
+  },
+  "service": {
+    "title": "We create customized responsive websites optimized for your business and brand",
+    "subtitle": "We handle everything from planning to design, development, and deployment in a one-stop process, and through close communication with clients, we complete websites that satisfy both usability and design.",
+    "features": {
+      "strategy": {
+        "title": "Purpose-driven 1:1 Strategic Planning",
+        "description": "We provide planning optimized for your business goals and direction. We design strategic page structures that align with your site's objectives such as promotion, lead generation, reservations, and sales."
+      },
+      "copywriting": {
+        "title": "Persuasive Copywriting",
+        "description": "We plan sentences that make users stay, click, and take action. Through effective copywriting that delivers your brand message, we increase your website's conversion rate."
+      },
+      "design": {
+        "title": "High-Quality Design",
+        "description": "We pursue visual perfection that aligns with your brand identity. We create websites that consider not only trendy and sophisticated design but also usability and accessibility."
+      },
+      "seo": {
+        "title": "SEO Basic Setup + Search Engine Registration",
+        "description": "We set up structure and keywords considering search engine exposure, so you can expect search traffic from the moment your website opens."
+      },
+      "responsive": {
+        "title": "100% Responsive Design",
+        "description": "We create perfectly responsive websites so content appears naturally on any device including PC, tablet, and mobile. We ensure optimal performance even in mobile-first user environments."
+      },
+      "performance": {
+        "title": "Fast Website Performance",
+        "description": "Page loading speed directly affects user bounce rate. We build fast websites by removing unnecessary resources and optimizing code and image processing."
+      },
+      "aiAssistant": {
+        "title": "AI Assistant Integration",
+        "description": "We integrate with the latest AI assistants like ChatGPT and Claude to automate customer inquiry responses, product recommendations, and reservation management. We provide 24/7 customer service to maximize business efficiency."
+      },
+      "googleWorkspace": {
+        "title": "Google Workspace Integration",
+        "description": "We implement business automation through perfect integration with Google Workspace including Gmail, Google Calendar, and Drive. We build smart business environments where email marketing, schedule management, and document sharing work seamlessly."
+      },
+      "domain": {
+        "title": "Domain Connection and Management",
+        "description": "We handle everything from connecting existing domains to registering new domains in a one-stop process. We provide professional domain management services including SSL certificate installation, DNS setup, and subdomain configuration to ensure stable website operation."
+      }
+    },
+    "websiteTypes": {
+      "title": "Website Types We Can Create",
+      "corporate": "Corporate Homepage",
+      "brand": "Brand Site",
+      "portfolio": "Personal Portfolio",
+      "event": "Event/Promotion"
+    },
+    "process": {
+      "title": "Service Process",
+      "subtitle": "We proceed with a systematic process from planning to deployment and AI integration",
+      "steps": {
+        "consultation": {
+          "title": "Consultation and Needs Analysis",
+          "description": "Please share your creation purpose, expected number of pages, reference sites, etc."
+        },
+        "quote": {
+          "title": "Quote and Schedule",
+          "description": "We provide accurate quotes and production schedules based on your requirements."
+        },
+        "planning": {
+          "title": "Planning and Design",
+          "description": "Wireframe or mockup sharing → Feedback reflection → Confirmation"
+        },
+        "development": {
+          "title": "Development and Testing",
+          "description": "Website construction including HTML/CSS, JS, CMS setup and testing on various devices"
+        },
+        "integration": {
+          "title": "Domain Connection and AI Integration",
+          "description": "Domain setup, SSL certificate installation, AI assistant and Google Workspace integration configuration"
+        },
+        "delivery": {
+          "title": "Final Review and Delivery",
+          "description": "After completion of modifications and improvements, source delivery or direct upload to server"
+        }
+      }
+    },
+    "cta": {
+      "title": "\"We create websites that best express your brand.\"",
+      "subtitle": "We handle everything from planning to deployment and AI integration in a one-stop process, prioritizing communication with clients. Partner with Code King Builder, a reliable web development partner.",
+      "button": "Contact Us Now"
+    }
+  },
+  "pricing": {
+    "title": "Transparent Pricing",
+    "subtitle": "Choose the optimal package for your requirements",
+    "packages": {
+      "standard": {
+        "name": "STANDARD",
+        "price": "$99",
+        "description": "One-page scroll responsive homepage",
+        "features": "Contact forms, collaboration management, email integration, inquiry forms",
+        "duration": "3 days",
+        "revisions": "1 time",
+        "pages": "1 page",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "Choose STANDARD"
+      },
+      "deluxe": {
+        "name": "DELUXE",
+        "price": "$399",
+        "description": "Template-based responsive homepage",
+        "features": "Contact forms, collaboration management, email integration, inquiry forms",
+        "duration": "7 days",
+        "revisions": "3 times",
+        "pages": "6 pages",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 0,
+        "sourceCode": true,
+        "button": "Choose DELUXE",
+        "popular": true
+      },
+      "premium": {
+        "name": "PREMIUM",
+        "price": "$990",
+        "description": "Advanced responsive homepage & custom feature development",
+        "features": "Contact forms, collaboration management, email integration, inquiry forms, additional feature development support",
+        "duration": "14 days",
+        "revisions": "5 times",
+        "pages": "6+ pages",
+        "responsive": true,
+        "crossBrowser": true,
+        "additionalFeatures": 5,
+        "sourceCode": true,
+        "button": "Choose PREMIUM"
+      }
+    },
+    "features": {
+      "duration": "Duration",
+      "revisions": "Revisions",
+      "pages": "Pages",
+      "responsive": "Responsive Web",
+      "crossBrowser": "Cross Browser",
+      "additionalFeatures": "Additional Features",
+      "sourceCode": "Source Code"
+    }
   },
   "footer": {
     "description": "The next-generation AI-powered website builder for modern developers.",
