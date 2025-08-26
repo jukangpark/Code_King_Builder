@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
+    "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.23.12",
     "next": "15.5.0",
     "react": "19.1.0",
