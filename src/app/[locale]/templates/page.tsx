@@ -172,7 +172,9 @@ export default function TemplatesPage({
                     currentLocale,
                     `templates.categories.${category
                       .toLowerCase()
-                      .replace(/\s+/g, "")}`
+                      .replace(/\s+/g, "")
+                      .replace(/&/g, "")
+                      .replace(/-/g, "")}`
                   )}
                 </button>
               ))}
