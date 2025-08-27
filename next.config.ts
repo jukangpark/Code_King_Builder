@@ -9,6 +9,10 @@ const nextConfig = {
       },
     },
   },
+  // 이미지 최적화 설정
+  images: {
+    unoptimized: true,
+  },
   // ESLint 에러를 무시하고 빌드
   eslint: {
     ignoreDuringBuilds: true,

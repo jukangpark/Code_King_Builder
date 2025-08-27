@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CodeBracketIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import LanguageSelector from "./LanguageSelector";
@@ -11,7 +11,7 @@ import Image from "next/image";
 interface NavigationProps {
   currentLocale: Locale;
   onLocaleChange: (locale: Locale) => void;
-  activePage?: "home" | "templates" | "deploy" | "contact";
+  activePage?: "home" | "templates" | "deploy" | "contact" | "portfolio";
 }
 
 export default function Navigation({
@@ -59,6 +59,16 @@ export default function Navigation({
               }`}
             >
               {getTranslation(currentLocale, "nav.templates")}
+            </Link>
+            <Link
+              href={`/${currentLocale}/portfolio`}
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                activePage === "portfolio"
+                  ? "text-purple-600 bg-purple-50"
+                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+              }`}
+            >
+              포트폴리오
             </Link>
             <Link
               href={`/${currentLocale}/deploy`}
@@ -136,6 +146,17 @@ export default function Navigation({
               }`}
             >
               {getTranslation(currentLocale, "nav.templates")}
+            </Link>
+            <Link
+              href={`/${currentLocale}/portfolio`}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                activePage === "portfolio"
+                  ? "text-purple-600 bg-purple-50"
+                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+              }`}
+            >
+              포트폴리오
             </Link>
             <Link
               href={`/${currentLocale}/deploy`}
