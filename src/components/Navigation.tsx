@@ -40,8 +40,8 @@ export default function Navigation({
               <Image
                 src="/codekingbuilder.png"
                 alt="Code King Builder"
-                width={32}
-                height={32}
+                width={40}
+                height={40}
               />
               <span className="ml-2 text-xl font-bold text-gray-900">
                 Code King Builder
