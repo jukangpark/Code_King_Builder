@@ -3,6 +3,7 @@
 import { use, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
 import {
   ArrowLeftIcon,
   EnvelopeIcon,
@@ -28,7 +29,8 @@ interface ContactForm {
   name: string;
   email: string;
   phone: string;
-  subject: string;
+  phoneCountry: string;
+  package: string;
   message: string;
 }
 
@@ -39,44 +41,49 @@ export default function ContactPage({
 }) {
   const { locale } = use(params);
   const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
-  const [formData, setFormData] = useState<ContactForm>({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    watch,
+  } = useForm<ContactForm>({
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      phoneCountry: "+82",
+      package: "STANDARD",
+      message: "",
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: ContactForm) => {
     setIsSubmitting(true);
     setSubmitStatus("idle");
+
+    // 폼 데이터를 콘솔에 출력
+    console.log("=== 폼 제출 데이터 ===");
+    console.log("이름:", data.name);
+    console.log("이메일:", data.email);
+    console.log("전화번호:", data.phone);
+    console.log("국가 코드:", data.phoneCountry);
+    console.log("선택한 패키지:", data.package);
+    console.log("메시지:", data.message);
+    console.log("전체 데이터:", data);
+    console.log("=====================");
 
     // Simulate form submission
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setSubmitStatus("success");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-      });
+      reset();
     } catch (error) {
       setSubmitStatus("error");
     } finally {
@@ -161,7 +168,7 @@ export default function ContactPage({
                 </motion.div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label
@@ -173,16 +180,18 @@ export default function ContactPage({
                     <input
                       type="text"
                       id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
+                      {...register("name", { required: "이름을 입력해주세요" })}
                       placeholder={getTranslation(
                         currentLocale,
                         "contact.form.namePlaceholder"
                       )}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500 text-gray-900"
                     />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label
@@ -194,60 +203,122 @@ export default function ContactPage({
                     <input
                       type="email"
                       id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
+                      {...register("email", {
+                        required: "이메일을 입력해주세요",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "올바른 이메일 형식을 입력해주세요",
+                        },
+                      })}
                       placeholder={getTranslation(
                         currentLocale,
                         "contact.form.emailPlaceholder"
                       )}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500 text-gray-900"
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div>
+                <div className="mb-3">
                   <label
                     htmlFor="phone"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    {getTranslation(currentLocale, "contact.form.phone")}
+                    {getTranslation(currentLocale, "contact.form.phone")} *
                   </label>
+
+                  {/* 국가 선택 */}
+                  <div className="mb-3">
+                    <select
+                      {...register("phoneCountry")}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors text-gray-900"
+                    >
+                      <option value="+82">🇰🇷 한국 (+82)</option>
+                      <option value="+1">🇺🇸 미국 (+1)</option>
+                      <option value="+81">🇯🇵 일본 (+81)</option>
+                      <option value="+86">🇨🇳 중국 (+86)</option>
+                      <option value="+44">🇬🇧 영국 (+44)</option>
+                      <option value="+49">🇩🇪 독일 (+49)</option>
+                      <option value="+33">🇫🇷 프랑스 (+33)</option>
+                      <option value="+39">🇮🇹 이탈리아 (+39)</option>
+                      <option value="+34">🇪🇸 스페인 (+34)</option>
+                      <option value="+31">🇳🇱 네덜란드 (+31)</option>
+                      <option value="+61">🇦🇺 호주 (+61)</option>
+                      <option value="+91">🇮🇳 인도 (+91)</option>
+                      <option value="+55">🇧🇷 브라질 (+55)</option>
+                      <option value="+52">🇲🇽 멕시코 (+52)</option>
+                      <option value="+971">🇦🇪 UAE (+971)</option>
+                    </select>
+                  </div>
+
+                  {/* 전화번호 입력 (하나의 필드) */}
                   <input
                     type="tel"
                     id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder={getTranslation(
-                      currentLocale,
-                      "contact.form.phonePlaceholder"
-                    )}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
+                    {...register("phone", {
+                      required: "전화번호를 입력해주세요",
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "숫자만 입력 가능합니다",
+                      },
+                      validate: (value) => {
+                        // 숫자 길이 검증
+                        if (value.length < 10 || value.length > 11) {
+                          return "전화번호는 10-11자리여야 합니다";
+                        }
+
+                        // 010으로 시작하는지 검증
+                        if (!value.startsWith("010")) {
+                          return "010으로 시작하는 전화번호를 입력해주세요";
+                        }
+
+                        return true;
+                      },
+                    })}
+                    onChange={(e) => {
+                      // 숫자만 입력 가능하도록 필터링
+                      const value = e.target.value.replace(/[^\d]/g, "");
+                      setValue("phone", value);
+                    }}
+                    placeholder="01012345678"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500 text-gray-900"
+                    maxLength={11}
                   />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.phone.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
                   <label
-                    htmlFor="subject"
+                    htmlFor="package"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    {getTranslation(currentLocale, "contact.form.subject")} *
+                    패키지 선택 *
                   </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    placeholder={getTranslation(
-                      currentLocale,
-                      "contact.form.subjectPlaceholder"
-                    )}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
-                  />
+                  <select
+                    id="package"
+                    {...register("package", {
+                      required: "패키지를 선택해주세요",
+                    })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors text-gray-900"
+                  >
+                    <option value="STANDARD">STANDARD - (99,000원)</option>
+                    <option value="DELUXE">DELUXE - (399,000원)</option>
+                    <option value="PREMIUM">PREMIUM - (990,000원)</option>
+                  </select>
+                  {errors.package && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.package.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -259,17 +330,21 @@ export default function ContactPage({
                   </label>
                   <textarea
                     id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
+                    {...register("message", {
+                      required: "메시지를 입력해주세요",
+                    })}
                     placeholder={getTranslation(
                       currentLocale,
                       "contact.form.messagePlaceholder"
                     )}
-                    required
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-none placeholder-gray-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-none placeholder-gray-500 text-gray-900"
                   />
+                  {errors.message && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
 
                 <motion.button

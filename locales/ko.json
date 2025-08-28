@@ -111,7 +111,7 @@
     "form": {
       "name": "이름",
       "email": "이메일",
-      "phone": "전화번호 (선택사항)",
+      "phone": "전화번호",
       "subject": "문의 제목",
       "message": "문의 내용",
       "namePlaceholder": "이름을 입력하세요",
