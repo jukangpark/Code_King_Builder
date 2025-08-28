@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Editor from "@monaco-editor/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
@@ -14,7 +14,7 @@ export default function CodeEditorPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = use(params);
-  const searchParams = useSearchParams();
+  const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
