@@ -11,7 +11,13 @@ import Image from "next/image";
 interface NavigationProps {
   currentLocale: Locale;
   onLocaleChange: (locale: Locale) => void;
-  activePage?: "home" | "templates" | "deploy" | "contact" | "portfolio";
+  activePage?:
+    | "home"
+    | "templates"
+    | "deploy"
+    | "contact"
+    | "portfolio"
+    | "builder";
 }
 
 export default function Navigation({
