@@ -2,6 +2,7 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   RocketLaunchIcon,
@@ -16,6 +17,7 @@ import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 import LogoSlider from "@/components/LogoSlider";
+import { SOCIAL_PLATFORMS } from "@/constants/social";
 
 export default function HomePage({
   params,
@@ -395,48 +397,30 @@ export default function HomePage({
           </motion.div>
 
           <div className="grid md:grid-cols-4 gap-8">
-            {[
-              {
-                name: "GitHub",
-                description: "오픈소스 프로젝트",
-                icon: "🐙",
-                color: "hover:bg-gray-800",
-                link: "#",
-              },
-              {
-                name: "Discord",
-                description: "개발자 커뮤니티",
-                icon: "💬",
-                color: "hover:bg-indigo-800",
-                link: "#",
-              },
-              {
-                name: "Twitter",
-                description: "최신 소식",
-                icon: "🐦",
-                color: "hover:bg-blue-800",
-                link: "#",
-              },
-              {
-                name: "Blog",
-                description: "기술 블로그",
-                icon: "📝",
-                color: "hover:bg-green-800",
-                link: "#",
-              },
-            ].map((platform, index) => (
+            {SOCIAL_PLATFORMS.map((platform, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className={`bg-gray-800 rounded-lg p-6 text-center cursor-pointer transition-colors ${platform.color}`}
+                onClick={() => window.open(platform.link, "_blank")}
               >
-                <div className="text-4xl mb-4">{platform.icon}</div>
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <div className="flex justify-center items-center mb-4 h-16">
+                  <Image
+                    src={platform.icon}
+                    alt={platform.name}
+                    width={platform.width}
+                    height={platform.height}
+                    className="max-h-12 w-auto object-contain"
+                  />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2 min-h-[28px] flex items-center justify-center">
                   {platform.name}
                 </h3>
-                <p className="text-gray-400">{platform.description}</p>
+                <p className="text-gray-400 min-h-[20px] flex items-center justify-center text-sm">
+                  {platform.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -450,13 +434,6 @@ export default function HomePage({
             <p className="text-gray-400 mb-6">
               더 많은 개발자들과 소통하고 최신 정보를 받아보세요
             </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
-            >
-              커뮤니티 참여하기
-            </motion.button>
           </motion.div>
         </div>
       </section>
