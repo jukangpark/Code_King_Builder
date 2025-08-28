@@ -181,7 +181,7 @@ export default function ContactPage({
                         "contact.form.namePlaceholder"
                       )}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
                     />
                   </div>
                   <div>
@@ -202,7 +202,7 @@ export default function ContactPage({
                         "contact.form.emailPlaceholder"
                       )}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
                     />
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export default function ContactPage({
                       currentLocale,
                       "contact.form.phonePlaceholder"
                     )}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
                   />
                 </div>
 
@@ -246,7 +246,7 @@ export default function ContactPage({
                       "contact.form.subjectPlaceholder"
                     )}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors placeholder-gray-500"
                   />
                 </div>
 
@@ -268,7 +268,7 @@ export default function ContactPage({
                     )}
                     required
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-none placeholder-gray-500"
                   />
                 </div>
 
@@ -293,66 +293,81 @@ export default function ContactPage({
               transition={{ duration: 0.8, delay: 0.4 }}
               className="space-y-8"
             >
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  {getTranslation(currentLocale, "contact.info.title")}
-                </h2>
+              {/* Company Info with Logo */}
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100">
+                <div className="flex items-center mb-6">
+                  <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center mr-4">
+                    <img
+                      src="/codekingbuilder.png"
+                      alt="Code King Builder Logo"
+                      className="w-12 h-12 object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Code King Builder
+                    </h2>
+                    <p className="text-purple-600 font-medium">
+                      혁신적인 웹 개발 솔루션
+                    </p>
+                  </div>
+                </div>
+
                 <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <EnvelopeIcon className="h-6 w-6 text-purple-600 mt-1" />
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <EnvelopeIcon className="h-5 w-5 text-purple-600" />
+                    </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-semibold text-gray-900 mb-1">
                         {getTranslation(currentLocale, "contact.info.email")}
                       </h3>
-                      <p className="text-gray-600">
-                        {getTranslation(
-                          currentLocale,
-                          "contact.info.emailValue"
-                        )}
+                      <p className="text-gray-600 hover:text-purple-600 transition-colors">
+                        codeking@codekingbuilder.com
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4">
-                    <PhoneIcon className="h-6 w-6 text-purple-600 mt-1" />
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <PhoneIcon className="h-5 w-5 text-purple-600" />
+                    </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-semibold text-gray-900 mb-1">
                         {getTranslation(currentLocale, "contact.info.phone")}
                       </h3>
-                      <p className="text-gray-600">
-                        {getTranslation(
-                          currentLocale,
-                          "contact.info.phoneValue"
-                        )}
+                      <p className="text-gray-600 hover:text-purple-600 transition-colors">
+                        010-4292-9339
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4">
-                    <MapPinIcon className="h-6 w-6 text-purple-600 mt-1" />
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <MapPinIcon className="h-5 w-5 text-purple-600" />
+                    </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-semibold text-gray-900 mb-1">
                         {getTranslation(currentLocale, "contact.info.address")}
                       </h3>
-                      <p className="text-gray-600">
-                        {getTranslation(
-                          currentLocale,
-                          "contact.info.addressValue"
-                        )}
+                      <p className="text-gray-600 hover:text-purple-600 transition-colors">
+                        경기도 성남시 분당구 판교동
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4">
-                    <ClockIcon className="h-6 w-6 text-purple-600 mt-1" />
+                  <div className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <ClockIcon className="h-5 w-5 text-purple-600" />
+                    </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-semibold text-gray-900 mb-1">
                         {getTranslation(
                           currentLocale,
                           "contact.info.businessHours"
                         )}
                       </h3>
-                      <p className="text-gray-600">
+                      <p className="text-gray-600 hover:text-purple-600 transition-colors">
                         {getTranslation(
                           currentLocale,
                           "contact.info.businessHoursValue"
