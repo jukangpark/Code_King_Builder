@@ -290,15 +290,31 @@ export default function Navigation({
               </div>
             ) : (
               <div className="px-3 py-4 border-b border-gray-200">
-                <button
-                  onClick={() => {
-                    handleLogin();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors"
-                >
-                  로그인
-                </button>
+                <div className="text-center mb-3">
+                  <p className="text-sm text-gray-600 mb-3">
+                    로그인하여 더 많은 기능을 이용하세요
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => {
+                      handleLogin();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors font-medium"
+                  >
+                    로그인
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleSignUp();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full border border-purple-600 text-purple-600 py-2 px-4 rounded-md hover:bg-purple-50 transition-colors font-medium"
+                  >
+                    회원가입
+                  </button>
+                </div>
               </div>
             )}
 
