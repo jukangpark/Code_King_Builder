@@ -18,6 +18,7 @@ import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 import LogoSlider from "@/components/LogoSlider";
 import { SOCIAL_PLATFORMS } from "@/constants/social";
+import techLogos from "@/constants/techLogos";
 
 export default function HomePage({
   params,
@@ -26,42 +27,6 @@ export default function HomePage({
 }) {
   const { locale } = use(params);
   const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
-
-  // 기술 스택 로고 데이터
-  const techLogos = [
-    {
-      src: "https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white",
-      alt: "Next.js",
-    },
-    {
-      src: "https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB",
-      alt: "React",
-    },
-    {
-      src: "https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white",
-      alt: "TypeScript",
-    },
-    {
-      src: "https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white",
-      alt: "Tailwind CSS",
-    },
-    {
-      src: "https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white",
-      alt: "Supabase",
-    },
-    {
-      src: "https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white",
-      alt: "Node.js",
-    },
-    {
-      src: "https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white",
-      alt: "PostgreSQL",
-    },
-    {
-      src: "https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white",
-      alt: "Vercel",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-white">
