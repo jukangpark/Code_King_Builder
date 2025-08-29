@@ -93,6 +93,12 @@ With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, 
 - [인증 시스템 구조](./authentication-structure.md) - Supabase 기반 인증 시스템 상세 가이드
 - [이메일 인증 템플릿](./email-verification-template.md) - 커스텀 이메일 인증 템플릿
 
+### 🤖 AI Builder System
+
+- [AI 웹사이트 빌더 아키텍처](./ai-builder-architecture.md) - AI 프롬프트 기반 웹사이트 생성 시스템 기술 가이드
+- [시장 분석 2025](./market-analysis-2025.md) - AI 웹사이트 빌더 시장 분석 및 경쟁사 벤치마크
+- [비즈니스 모델 2025](./business-model-2025.md) - 수익화 전략 및 가격 정책 상세 분석
+
 ---
 
 ## 🛠️ Getting Started
