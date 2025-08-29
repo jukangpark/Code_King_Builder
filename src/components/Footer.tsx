@@ -34,7 +34,7 @@ const Footer = ({ currentLocale }: { currentLocale: Locale }) => {
                   href={platform.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`bg-gray-800 ${platform.color} p-2 rounded-lg transition-colors`}
+                  className={`bg-gray-400 ${platform.color} p-2 rounded-lg transition-colors`}
                 >
                   <Image
                     src={platform.icon}
