@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -24,6 +24,7 @@ import {
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
+// EmailJS 관련 import 제거 - Nodemailer로 대체됨
 
 interface ContactForm {
   name: string;
@@ -45,6 +46,8 @@ export default function ContactPage({
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+
+  // EmailJS 초기화 제거 - Nodemailer로 대체됨
 
   const {
     register,
@@ -68,23 +71,28 @@ export default function ContactPage({
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    // 폼 데이터를 콘솔에 출력
-    console.log("=== 폼 제출 데이터 ===");
-    console.log("이름:", data.name);
-    console.log("이메일:", data.email);
-    console.log("전화번호:", data.phone);
-    console.log("국가 코드:", data.phoneCountry);
-    console.log("선택한 패키지:", data.package);
-    console.log("메시지:", data.message);
-    console.log("전체 데이터:", data);
-    console.log("=====================");
-
-    // Simulate form submission
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setSubmitStatus("success");
-      reset();
+      // Nodemailer API 호출
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus("success");
+        reset();
+        console.log("✅ 상담문의 성공:", result.message);
+      } else {
+        setSubmitStatus("error");
+        console.error("❌ 상담문의 실패:", result.message);
+      }
     } catch (error) {
+      console.error("❌ 상담문의 처리 중 오류:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -146,12 +154,21 @@ export default function ContactPage({
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center"
+                  className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg"
                 >
-                  <CheckCircleIcon className="h-5 w-5 text-green-600 mr-3" />
-                  <span className="text-green-800">
-                    {getTranslation(currentLocale, "contact.form.success")}
-                  </span>
+                  <div className="flex items-center mb-2">
+                    <CheckCircleIcon className="h-5 w-5 text-green-600 mr-3" />
+                    <span className="text-green-800 font-semibold">
+                      상담문의가 성공적으로 접수되었습니다!
+                    </span>
+                  </div>
+                  <div className="text-green-700 text-sm space-y-1">
+                    <p>
+                      ✓ 이메일이 codeking@codekingbuilder.com으로 전송되었습니다
+                    </p>
+                    <p>✓ Discord 알림이 전송되었습니다</p>
+                    <p>✓ 빠른 시일 내에 연락드리겠습니다</p>
+                  </div>
                 </motion.div>
               )}
 

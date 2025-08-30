@@ -99,7 +99,16 @@ With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, 
 - [시장 분석 2025](./market-analysis-2025.md) - AI 웹사이트 빌더 시장 분석 및 경쟁사 벤치마크
 - [비즈니스 모델 2025](./business-model-2025.md) - 수익화 전략 및 가격 정책 상세 분석
 
+### 💼 Business & Strategy
+
+- [사업계획서 2025](./business-plan-2025.md) - 종합적인 사업 전략 및 실행 계획
+
 ---
+
+### 📧 Email Service
+
+- [Gmail SMTP 설정 가이드](./gmail-smtp-setup-guide.md) - Gmail SMTP 설정 방법
+- [Discord 웹훅 설정 가이드](./discord-webhook-setup-guide.md) - Discord 웹훅 설정 방법
 
 ## 🛠️ Getting Started
 
