@@ -167,6 +167,7 @@ export default function ContactPage({
                       ✓ 이메일이 codeking@codekingbuilder.com으로 전송되었습니다
                     </p>
                     <p>✓ Discord 알림이 전송되었습니다</p>
+                    <p>✓ Google Sheets에 문의 내용이 저장되었습니다</p>
                     <p>✓ 빠른 시일 내에 연락드리겠습니다</p>
                   </div>
                 </motion.div>

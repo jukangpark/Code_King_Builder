@@ -110,6 +110,10 @@ With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, 
 - [Gmail SMTP 설정 가이드](./gmail-smtp-setup-guide.md) - Gmail SMTP 설정 방법
 - [Discord 웹훅 설정 가이드](./discord-webhook-setup-guide.md) - Discord 웹훅 설정 방법
 
+### 📊 Google Apps Script
+
+- [Google Apps Script 설정 가이드](./google-apps-script-integration-guide.md) - Google Apps Script 설정 방법
+
 ## 🛠️ Getting Started
 
 ### 1. Clone repository
