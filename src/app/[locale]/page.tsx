@@ -65,14 +65,13 @@ export default function HomePage({
                 <Image
                   src="/codekingbuilder.png"
                   alt="Code King Builder"
-                  width={100}
-                  height={100}
+                  width={80}
+                  height={80}
                 />
               </div>
 
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-                당신의 웹사이트
-                <div>Code King Builder</div> 와 함께
+              <h1 className="text-2xl md:text-2xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+                당신의 웹사이트<div>Code King Builder AI</div> 와 함께
               </h1>
               <div className="h-14 md:h-20 lg:h-24 mb-10 flex items-center justify-center overflow-hidden">
                 <motion.div
