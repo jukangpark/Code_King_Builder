@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
+import {
+  XMarkIcon,
+  UserIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import LanguageSelector from "./LanguageSelector";
@@ -20,7 +24,9 @@ interface NavigationProps {
     | "deploy"
     | "contact"
     | "portfolio"
-    | "builder";
+    | "builder"
+    | "support"
+    | "about";
 }
 
 export default function Navigation({
@@ -31,6 +37,7 @@ export default function Navigation({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
 
   const { user, signOut, loading } = useAuth();
 
@@ -64,6 +71,23 @@ export default function Navigation({
     setIsLoginModalOpen(true);
   };
 
+  // 드롭다운 메뉴 데이터
+  const supportSubmenu = [
+    { name: "고객 가이드 (FAQ)", href: `/${currentLocale}/support/faq` },
+    { name: "교육", href: `/${currentLocale}/support/education` },
+    { name: "소식", href: `/${currentLocale}/support/news` },
+    { name: "개발자 센터", href: `/${currentLocale}/support/developer` },
+  ];
+
+  const aboutSubmenu = [
+    { name: "팀", href: `/${currentLocale}/about/team` },
+    { name: "특허 - 인증서", href: `/${currentLocale}/about/patents` },
+    { name: "채용", href: `/${currentLocale}/about/careers` },
+    { name: "뉴스룸", href: `/${currentLocale}/about/newsroom` },
+    { name: "디자인 리소스 센터", href: `/${currentLocale}/about/resources` },
+    { name: "IR 공고", href: `/${currentLocale}/about/ir` },
+  ];
+
   return (
     <nav className="bg-white shadow-sm border-b border-purple-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,10 +102,43 @@ export default function Navigation({
                 width={40}
                 height={40}
               />
-              <span className="ml-2 text-xl font-bold text-gray-900 hidden md:block">
+              <span className="ml-2 text-xl font-bold text-gray-900">
                 Code King Builder
               </span>
             </Link>
+
+            {/* 기업소개 드롭다운 */}
+            <div
+              className="hidden md:flex relative"
+              onMouseEnter={() => setHoveredMenu("about")}
+              onMouseLeave={() => setHoveredMenu(null)}
+            >
+              <button
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
+                  activePage === "about"
+                    ? "text-purple-600 bg-purple-50"
+                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+                }`}
+              >
+                <span>{getTranslation(currentLocale, "nav.about")}</span>
+                <ChevronDownIcon className="w-4 h-4" />
+              </button>
+              {hoveredMenu === "about" && (
+                <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                  <div className="py-1">
+                    {aboutSubmenu.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* 페이지 메뉴 */}
             <div className="hidden md:flex items-center space-x-4">
@@ -115,6 +172,7 @@ export default function Navigation({
               >
                 {getTranslation(currentLocale, "nav.deploy")}
               </Link>
+
               <Link
                 href={`/${currentLocale}/contact`}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -125,6 +183,39 @@ export default function Navigation({
               >
                 {getTranslation(currentLocale, "nav.contact")}
               </Link>
+
+              {/* 고객지원 드롭다운 */}
+              <div
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("support")}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <button
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
+                    activePage === "support"
+                      ? "text-purple-600 bg-purple-50"
+                      : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+                  }`}
+                >
+                  <span>{getTranslation(currentLocale, "nav.support")}</span>
+                  <ChevronDownIcon className="w-4 h-4" />
+                </button>
+                {hoveredMenu === "support" && (
+                  <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                    <div className="py-1">
+                      {supportSubmenu.map((item, index) => (
+                        <Link
+                          key={index}
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -352,6 +443,41 @@ export default function Navigation({
             >
               {getTranslation(currentLocale, "nav.deploy")}
             </Link>
+
+            {/* 고객지원 섹션 */}
+            <div className="border-t border-gray-200 pt-4">
+              <div className="px-3 py-2 text-sm font-medium text-gray-500 uppercase tracking-wider">
+                {getTranslation(currentLocale, "nav.support")}
+              </div>
+              {supportSubmenu.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+
+            {/* 기업소개 섹션 */}
+            <div className="border-t border-gray-200 pt-4">
+              <div className="px-3 py-2 text-sm font-medium text-gray-500 uppercase tracking-wider">
+                {getTranslation(currentLocale, "nav.about")}
+              </div>
+              {aboutSubmenu.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+
             <Link
               href={`/${currentLocale}/contact`}
               onClick={() => setIsMobileMenuOpen(false)}

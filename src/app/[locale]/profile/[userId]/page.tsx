@@ -3,15 +3,12 @@
 import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  ArrowLeftIcon,
   CreditCardIcon,
   GlobeAltIcon,
-  PencilIcon,
   CogIcon,
   ChartBarIcon,
 } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
-import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 import { useAuth } from "@/app/contexts/AuthContext";
 import mockPaymentHistory from "@/mock/mockPaymentHistory";
@@ -24,6 +21,7 @@ import PaymentsTab from "./components/PaymentsTab";
 import PaymentMethodsTab from "./components/PaymentMethodsTab";
 import WebsitesTab from "./components/WebsitesTab";
 import SettingsTab from "./components/SettingsTab";
+import Banner from "@/components/Banner";
 
 export default function ProfilePage({
   params,
@@ -114,36 +112,11 @@ export default function ProfilePage({
         onLocaleChange={setCurrentLocale}
       />
 
-      {/* Header */}
-      <section className="bg-gradient-to-br from-purple-50 to-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => router.back()}
-                className="flex items-center text-purple-600 hover:text-purple-700"
-              >
-                <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                돌아가기
-              </button>
-            </div>
-            {isOwnProfile && (
-              <button className="flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                <PencilIcon className="h-4 w-4" />
-                <span>정보 편집</span>
-              </button>
-            )}
-          </div>
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              마이 페이지
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              계정 정보와 설정을 관리하세요
-            </p>
-          </div>
-        </div>
-      </section>
+      <Banner
+        title="마이 페이지"
+        subtitle="마이 페이지에서 내 정보를 관리하세요"
+        params={params}
+      />
 
       {/* Main Content */}
       <section className="py-12 bg-gray-50">

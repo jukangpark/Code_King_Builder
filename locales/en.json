@@ -3,6 +3,8 @@
     "templates": "Templates",
     "builder": "Builder",
     "deploy": "Deploy",
+    "support": "Support",
+    "about": "About",
     "contact": "Contact"
   },
   "home": {

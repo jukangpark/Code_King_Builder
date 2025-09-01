@@ -1,11 +1,9 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
-import Link from "next/link";
+import { use, useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import {
-  ArrowLeftIcon,
   EnvelopeIcon,
   PhoneIcon,
   MapPinIcon,
@@ -24,6 +22,7 @@ import {
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
+import Banner from "@/components/Banner";
 // EmailJS 관련 import 제거 - Nodemailer로 대체됨
 
 interface ContactForm {
@@ -108,32 +107,11 @@ export default function ContactPage({
         activePage="contact"
       />
 
-      {/* Header */}
-      <section className="bg-gradient-to-br from-purple-50 to-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <Link
-              href={`/${currentLocale}`}
-              className="inline-flex items-center text-purple-600 hover:text-purple-700 mb-6"
-            >
-              <ArrowLeftIcon className="h-5 w-5 mr-2" />
-              {getTranslation(currentLocale, "contact.backToHome")}
-            </Link>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                {getTranslation(currentLocale, "contact.title")}
-              </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                {getTranslation(currentLocale, "contact.subtitle")}
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <Banner
+        title={getTranslation(currentLocale, "contact.title")}
+        subtitle={getTranslation(currentLocale, "contact.subtitle")}
+        params={params}
+      />
 
       {/* Contact Form and Info */}
       <section className="py-16 bg-white">

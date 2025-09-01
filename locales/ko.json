@@ -3,6 +3,8 @@
     "templates": "템플릿",
     "builder": "빌더",
     "deploy": "배포",
+    "support": "고객지원",
+    "about": "기업소개",
     "contact": "상담문의"
   },
   "home": {

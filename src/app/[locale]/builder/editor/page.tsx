@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Editor from "@monaco-editor/react";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
 import { use } from "react";
 import generateBusinessCode from "../generateBusinessCode";
@@ -31,13 +30,6 @@ export default function CodeEditorPage({
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center space-x-4">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center text-gray-300 hover:text-white transition-colors"
-          >
-            <ArrowLeftIcon className="h-5 w-5 mr-2" />
-            <span className="text-sm">Back</span>
-          </button>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>

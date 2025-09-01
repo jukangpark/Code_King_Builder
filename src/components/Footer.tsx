@@ -6,6 +6,23 @@ import Image from "next/image";
 import { SOCIAL_PLATFORMS } from "@/constants/social";
 
 const Footer = ({ currentLocale }: { currentLocale: Locale }) => {
+  // Navigation.tsx와 동일한 서브메뉴 구조
+  const supportSubmenu = [
+    { name: "고객 가이드 (FAQ)", href: `/${currentLocale}/support/faq` },
+    { name: "교육", href: `/${currentLocale}/support/education` },
+    { name: "소식", href: `/${currentLocale}/support/news` },
+    { name: "개발자 센터", href: `/${currentLocale}/support/developer` },
+  ];
+
+  const aboutSubmenu = [
+    { name: "팀", href: `/${currentLocale}/about/team` },
+    { name: "특허 - 인증서", href: `/${currentLocale}/about/patents` },
+    { name: "채용", href: `/${currentLocale}/about/careers` },
+    { name: "뉴스룸", href: `/${currentLocale}/about/newsroom` },
+    { name: "디자인 리소스 센터", href: `/${currentLocale}/about/resources` },
+    { name: "IR 공고", href: `/${currentLocale}/about/ir` },
+  ];
+
   return (
     <footer className="bg-gray-50 text-gray-900 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -48,7 +65,7 @@ const Footer = ({ currentLocale }: { currentLocale: Locale }) => {
             </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation Links - Navigation.tsx와 동일한 순서 */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               바로가기
@@ -86,6 +103,44 @@ const Footer = ({ currentLocale }: { currentLocale: Locale }) => {
                   {getTranslation(currentLocale, "nav.contact")}
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* Support Links */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {getTranslation(currentLocale, "nav.support")}
+            </h3>
+            <ul className="space-y-3">
+              {supportSubmenu.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    href={item.href}
+                    className="text-gray-600 hover:text-purple-600 transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* About Links */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {getTranslation(currentLocale, "nav.about")}
+            </h3>
+            <ul className="space-y-3">
+              {aboutSubmenu.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    href={item.href}
+                    className="text-gray-600 hover:text-purple-600 transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

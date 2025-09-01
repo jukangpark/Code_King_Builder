@@ -5,15 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
-  ArrowLeftIcon,
   GlobeAltIcon,
   EyeIcon,
   CodeBracketIcon,
   StarIcon,
 } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
-import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
+import Banner from "@/components/Banner";
 
 const portfolioProjects = [
   {
@@ -99,28 +98,11 @@ export default function PortfolioPage({
         activePage="portfolio"
       />
 
-      {/* Header */}
-      <section className="bg-gradient-to-br from-purple-50 to-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center mb-6">
-            <Link
-              href={`/${currentLocale}`}
-              className="flex items-center text-purple-600 hover:text-purple-700"
-            >
-              <ArrowLeftIcon className="h-5 w-5 mr-2" />
-              홈으로 돌아가기
-            </Link>
-          </div>
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              포트폴리오
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Code King Builder로 제작된 다양한 웹사이트들을 확인해보세요
-            </p>
-          </div>
-        </div>
-      </section>
+      <Banner
+        title="포트폴리오"
+        subtitle="Code King Builder로 제작된 다양한 웹사이트들을 확인해보세요"
+        params={params}
+      />
 
       {/* Category Filters */}
       <section className="py-8 bg-white border-b border-gray-200">

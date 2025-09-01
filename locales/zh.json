@@ -3,6 +3,8 @@
     "templates": "模板",
     "builder": "构建器",
     "deploy": "部署",
+    "support": "客户支持",
+    "about": "关于我们",
     "contact": "联系我们"
   },
   "home": {

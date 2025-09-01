@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect, use } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   CodeBracketIcon,
-  ArrowLeftIcon,
   PaperAirplaneIcon,
   SparklesIcon,
   EyeIcon,
@@ -120,16 +118,6 @@ export default function BuilderPage({
           {/* Header */}
           <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 p-4 lg:p-6">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-              <Link
-                href={`/${currentLocale}/templates`}
-                className="flex items-center text-white hover:text-purple-100 transition-colors w-fit"
-              >
-                <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                <span className="text-sm lg:text-base">
-                  {getTranslation(currentLocale, "builder.backToTemplates")}
-                </span>
-              </Link>
-
               <div className="flex-1 text-center lg:text-left">
                 <h1 className="text-xl lg:text-2xl font-bold text-white mb-1">
                   {getTranslation(currentLocale, "builder.title")}

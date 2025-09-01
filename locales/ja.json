@@ -3,6 +3,8 @@
     "templates": "テンプレート",
     "builder": "ビルダー",
     "deploy": "デプロイ",
+    "support": "サポート",
+    "about": "会社概要",
     "contact": "お問い合わせ"
   },
   "home": {

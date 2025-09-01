@@ -4,7 +4,6 @@ import { use, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  ArrowLeftIcon,
   RocketLaunchIcon,
   GlobeAltIcon,
   CheckCircleIcon,
@@ -15,6 +14,7 @@ import {
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
+import Banner from "@/components/Banner";
 
 const deploymentPlatforms = [
   {
@@ -109,28 +109,11 @@ export default function DeployPage({
         activePage="deploy"
       />
 
-      {/* Header */}
-      <section className="bg-gradient-to-br from-purple-50 to-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center mb-6">
-            <Link
-              href={`/${currentLocale}/builder`}
-              className="flex items-center text-purple-600 hover:text-purple-700"
-            >
-              <ArrowLeftIcon className="h-5 w-5 mr-2" />
-              {getTranslation(currentLocale, "deploy.backToBuilder")}
-            </Link>
-          </div>
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              {getTranslation(currentLocale, "deploy.title")}
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              {getTranslation(currentLocale, "deploy.subtitle")}
-            </p>
-          </div>
-        </div>
-      </section>
+      <Banner
+        title={getTranslation(currentLocale, "deploy.title")}
+        subtitle={getTranslation(currentLocale, "deploy.subtitle")}
+        params={params}
+      />
 
       {/* Deployment Steps */}
       <section className="py-12 bg-white">
