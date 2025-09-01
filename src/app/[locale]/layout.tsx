@@ -1,6 +1,7 @@
 import { Locale } from "@/lib/i18n";
 import { use } from "react";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import SimpleChatBot from "@/components/SimpleChatBot";
 
 export async function generateMetadata({
   params,
@@ -27,6 +28,7 @@ export default function LocaleLayout({
     <div lang={locale}>
       {children}
       <ConditionalFooter currentLocale={locale} />
+      <SimpleChatBot />
     </div>
   );
 }
