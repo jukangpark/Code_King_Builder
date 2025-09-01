@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -28,6 +28,21 @@ export default function HomePage({
   const { locale } = use(params);
   const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
 
+  // Rotating phrases for hero banner
+  const phrases = [
+    `"쇼핑몰"을 만들어보세요`,
+    `"비즈니스"를 만들어보세요`,
+    `"브랜드"를 만들어보세요`,
+    `"아이디어"를 현실로 만드세요`,
+  ];
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPhraseIndex((i) => (i + 1) % phrases.length);
+    }, 2500);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -37,46 +52,75 @@ export default function HomePage({
         activePage="home"
       />
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-purple-50 to-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section - Full banner, white background */}
+      <section className="relative bg-white min-h-[calc(100vh-4rem)] flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="flex justify-center mb-6">
-                <CodeBracketIcon className="h-15 w-15 text-purple-600" />
+              <div className="flex items-center justify-center">
+                <Image
+                  src="/codekingbuilder.png"
+                  alt="Code King Builder"
+                  width={100}
+                  height={100}
+                />
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                {getTranslation(currentLocale, "home.hero.title")}
-                <span className="text-purple-600">
-                  {getTranslation(currentLocale, "home.hero.titleHighlight")}
-                </span>
+
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+                당신의 웹사이트
+                <div>Code King Builder</div> 와 함께
               </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                {getTranslation(currentLocale, "home.hero.subtitle")}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link href={`/${currentLocale}/templates`}>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors w-full sm:w-auto"
-                  >
-                    {getTranslation(currentLocale, "home.hero.browseTemplates")}
-                  </motion.button>
-                </Link>
-                <Link href={`/${currentLocale}/portfolio`}>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors w-full sm:w-auto"
-                  >
-                    포트폴리오 보기
-                  </motion.button>
-                </Link>
+              <div className="h-14 md:h-20 lg:h-24 mb-10 flex items-center justify-center overflow-hidden">
+                <motion.div
+                  key={phraseIndex}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-purple-600"
+                >
+                  {phrases[phraseIndex]}
+                </motion.div>
+              </div>
+
+              {/* Chat-like input box */}
+              <div className="max-w-3xl mx-auto">
+                <div className="rounded-2xl  shadow-md overflow-hidden bg-white">
+                  <div className="flex items-center gap-3 p-4 bg-white">
+                    <div className="relative w-7 h-7">
+                      <Image
+                        src="/codekingbuilder.png"
+                        alt="Code King Builder"
+                        width={28}
+                        height={28}
+                        className="object-contain"
+                      />
+                    </div>
+                    <span className="text-gray-800 font-semibold">
+                      Code King Builder AI
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center gap-2">
+                      <textarea
+                        placeholder="최소 25자 이상으로 필요한 웹사이트 컨셉을 구체적으로 알려주세요. 참고 URL 도 첨부가능해요. AI 로 당신의 웹사이트를 만드세요!"
+                        className="flex-1 px-4 py-3 md:py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-700 placeholder:text-gray-400 h-50 resize-none"
+                      />
+                      <button
+                        className="px-4 py-3 md:py-4 bg-white-600 text-white rounded-xl"
+                        aria-label="시작"
+                      >
+                        <ChatBubbleLeftRightIcon
+                          className="w-5 h-5"
+                          color="gray"
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
