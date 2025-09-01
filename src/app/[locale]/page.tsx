@@ -3,11 +3,12 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   RocketLaunchIcon,
   CodeBracketIcon,
   ChatBubbleLeftRightIcon,
+  PaperAirplaneIcon,
   StarIcon,
   UserGroupIcon,
   HeartIcon,
@@ -43,6 +44,10 @@ export default function HomePage({
     return () => clearInterval(id);
   }, []);
 
+  // Hero textarea state
+  const [heroPrompt, setHeroPrompt] = useState("");
+  const maxChars = 1000;
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -69,25 +74,28 @@ export default function HomePage({
                   height={80}
                 />
               </div>
-
               <h1 className="text-2xl md:text-2xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                당신의 웹사이트<div>Code King Builder AI</div> 와 함께
+                당신의 웹사이트
+                <div className="ml-2">Code King Builder</div> 와 함께
               </h1>
               <div className="h-14 md:h-20 lg:h-24 mb-10 flex items-center justify-center overflow-hidden">
-                <motion.div
-                  key={phraseIndex}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-purple-600"
-                >
-                  {phrases[phraseIndex]}
-                </motion.div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={phraseIndex}
+                    initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: -12, filter: "blur(8px)" }}
+                    transition={{ duration: 0.45 }}
+                    className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-purple-600"
+                  >
+                    {phrases[phraseIndex]}
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
               {/* Chat-like input box */}
               <div className="max-w-3xl mx-auto">
-                <div className="rounded-2xl  shadow-md overflow-hidden bg-white">
+                <div className="rounded-2xl shadow-xl overflow-hidden bg-white">
                   <div className="flex items-center gap-3 p-4 bg-white">
                     <div className="relative w-7 h-7">
                       <Image
@@ -102,20 +110,25 @@ export default function HomePage({
                       Code King Builder AI
                     </span>
                   </div>
-                  <div className="p-4">
-                    <div className="flex items-center gap-2">
+                  <div>
+                    <div className="relative">
                       <textarea
                         placeholder="최소 25자 이상으로 필요한 웹사이트 컨셉을 구체적으로 알려주세요. 참고 URL 도 첨부가능해요. AI 로 당신의 웹사이트를 만드세요!"
-                        className="flex-1 px-4 py-3 md:py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-700 placeholder:text-gray-400 h-50 resize-none"
+                        className="w-full pr-20 px-4 rounded-xl focus:outline-none focus:ring-0 text-gray-700 placeholder:text-gray-400 h-40 resize-none"
+                        maxLength={maxChars}
+                        value={heroPrompt}
+                        onChange={(e) => setHeroPrompt(e.target.value)}
                       />
+                      {/* Counter */}
+                      <div className="absolute bottom-5.5 right-16 text-[11px] md:text-xs text-gray-400 select-none">
+                        최소 25자 {heroPrompt.length}/{maxChars}
+                      </div>
                       <button
-                        className="px-4 py-3 md:py-4 bg-white-600 text-white rounded-xl"
+                        type="button"
                         aria-label="시작"
+                        className="absolute bottom-3 right-3 rounded-full bg-gray-600 text-white p-3 hover:bg-gray-700 transition-colors"
                       >
-                        <ChatBubbleLeftRightIcon
-                          className="w-5 h-5"
-                          color="gray"
-                        />
+                        <PaperAirplaneIcon className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
