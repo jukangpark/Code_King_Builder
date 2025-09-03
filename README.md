@@ -116,36 +116,30 @@ With the power of **MCP (Model Context Protocol)**, the AI can fetch templates, 
 
 ## 🛠️ Getting Started
 
-### 1. Clone repository
+#### 1. Clone repository
 
 ```bash
 git clone https://github.com/jukangpark/Code_King_Builder.git
 ```
 
-2. Install dependencies
+#### 2. Install dependencies
 
 ```bash
-npm install
+yarn install
 ```
 
-3. Run MCP server
+#### 3. Start the builder
 
 ```bash
-npm run mcp
-```
-
-4. Start the builder
-
-```bash
-npm run dev
+yarn dev
 ```
 
 ## Roadmap
 
-    •	Drag & Drop visual editor
-    •	Multi-language template support
-    •	AI-driven SEO optimization
-    •	Custom domain & hosting integrations
+• Drag & Drop visual editor
+• Multi-language template support
+• AI-driven SEO optimization
+• Custom domain & hosting integrations
 
 ## 🤝 Contributing
 
