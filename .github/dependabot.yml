@@ -1,0 +1,7 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" # yarn도 npm 생태계로 설정
+    directory: "/"           # package.json 위치 (루트면 "/")
+    schedule:
+      interval: "weekly"     # 매주 업데이트 확인
+    open-pull-requests-limit: 5 # 동시에 열릴 수 있는 PR 수 제한
