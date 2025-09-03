@@ -3417,10 +3417,10 @@ next@15.5.0:
     "@next/swc-win32-x64-msvc" "15.5.0"
     sharp "^0.34.3"
 
-nodemailer@^7.0.5:
-  version "7.0.5"
-  resolved "https://registry.npmjs.org/nodemailer/-/nodemailer-7.0.5.tgz#3fa6607cab42401e4bedac9297e0aaa9ff84544b"
-  integrity sha512-nsrh2lO3j4GkLLXoeEksAMgAOqxOv6QumNRVQTJwKH4nuiww6iC2y7GyANs9kRAxCexg3+lTWM3PZ91iLlVjfg==
+nodemailer@^7.0.6:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-7.0.6.tgz#e850630242e28c64fd666c7f6ca8382baf5a5661"
+  integrity sha512-F44uVzgwo49xboqbFgBGkRaiMgtoBrBEWCVincJPK9+S9Adkzt/wXCLKbf7dxucmxfTI5gHGB+bEmdyzN6QKjw==
 
 object-assign@^4.1.1:
   version "4.1.1"
