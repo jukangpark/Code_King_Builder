@@ -19,7 +19,7 @@
 
 ## 🎯 개요
 
-이 프로젝트는 사용자가 **템플릿을 선택**하고, **AI와 대화**하며 웹사이트를 점진적으로 설계/편집/생성할 수 있는 **SaaS 빌더**입니다.
+이 프로젝트는 사용자가 **템플릿을 선택**하고, **AI와 대화**하며 웹사이트를 점진적으로 설계/편집/생성할 수 **있는** **SaaS 빌더**입니다.
 
 ### 🔄 핵심 워크플로우
 
@@ -469,7 +469,7 @@ export async function POST(req: Request) {
   const { messages, system } = await req.json();
 
   const anthropic = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY!,
+    apiKey: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY!,
   });
 
   // Claude Messages API 호출
