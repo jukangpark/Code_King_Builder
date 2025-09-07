@@ -32,6 +32,7 @@ const portfolioProjects = [
     tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
     rating: 4.9,
     views: 2156,
+    isCompleted: true,
   },
   {
     id: 2,
@@ -45,6 +46,7 @@ const portfolioProjects = [
     tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
     rating: 4.8,
     views: 1890,
+    isCompleted: false,
   },
   {
     id: 3,
@@ -58,6 +60,7 @@ const portfolioProjects = [
     tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
     rating: 4.9,
     views: 3240,
+    isCompleted: true,
   },
   {
     id: 4,
@@ -71,10 +74,36 @@ const portfolioProjects = [
     tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
     rating: 4.7,
     views: 1567,
+    isCompleted: false,
+  },
+  {
+    id: 5,
+    name: "한소망교회",
+    category: "종교 & 교회",
+    description: "하나님의 사랑과 소망을 전하는 교회의 공식 웹사이트",
+    image: "/images/hanSoMangChurch.png",
+    url: "https://han-so-mang-church-duam.vercel.app",
+    features: [
+      "예배 시간표",
+      "교회 소개",
+      "부서별 사역",
+      "온라인 헌금",
+      "소식 & 일정",
+    ],
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    rating: 4.8,
+    views: 1890,
+    isCompleted: false,
   },
 ];
 
-const categories = ["All", "소셜 네트워킹", "음식 & 다이닝", "교육"];
+const categories = [
+  "All",
+  "소셜 네트워킹",
+  "음식 & 다이닝",
+  "교육",
+  "종교 & 교회",
+];
 
 export default function PortfolioPage({
   params,
@@ -149,6 +178,11 @@ export default function PortfolioPage({
                   <div className="absolute top-4 right-4 bg-white rounded-full px-2 py-1 text-xs font-medium text-gray-700">
                     {project.category}
                   </div>
+                  {!project.isCompleted && (
+                    <div className="absolute top-4 left-4 bg-black text-white rounded-full px-3 py-1 text-xs font-medium animate-pulse">
+                      진행중...
+                    </div>
+                  )}
                 </div>
 
                 {/* Project Info */}
