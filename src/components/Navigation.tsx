@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  XMarkIcon,
-  UserIcon,
-  ChevronDownIcon,
-} from "@heroicons/react/24/outline";
+import { XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/i18n";
 import LanguageSelector from "./LanguageSelector";
@@ -21,12 +17,12 @@ interface NavigationProps {
   activePage?:
     | "home"
     | "templates"
-    | "deploy"
     | "contact"
     | "portfolio"
     | "builder"
     | "support"
-    | "about";
+    | "about"
+    | "monitoring";
 }
 
 export default function Navigation({
@@ -73,6 +69,29 @@ export default function Navigation({
   };
 
   // 드롭다운 메뉴 데이터
+  const monitoringSubmenu = [
+    {
+      name: "서비스 소개",
+      href: `/${currentLocale}/monitoring/service-intro`,
+    },
+    {
+      name: "대시보드 빌더",
+      href: `/${currentLocale}/monitoring/dashboard-builder`,
+    },
+    {
+      name: "3D 대시보드 빌더",
+      href: `/${currentLocale}/monitoring/3d-dashboard-builder`,
+    },
+    {
+      name: "데이터 통합 솔루션",
+      href: `/${currentLocale}/monitoring/data-integration`,
+    },
+    {
+      name: "대시보드 갤러리",
+      href: `/${currentLocale}/monitoring/dashboard-gallery`,
+    },
+  ];
+
   const supportSubmenu = [
     { name: "고객 가이드 (FAQ)", href: `/${currentLocale}/support/faq` },
     { name: "교육", href: `/${currentLocale}/support/education` },
@@ -122,7 +141,6 @@ export default function Navigation({
                 }`}
               >
                 <span>{getTranslation(currentLocale, "nav.about")}</span>
-                <ChevronDownIcon className="w-4 h-4" />
               </button>
               {hoveredMenu === "about" && (
                 <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
@@ -163,16 +181,38 @@ export default function Navigation({
               >
                 포트폴리오
               </Link>
-              <Link
-                href={`/${currentLocale}/deploy`}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activePage === "deploy"
-                    ? "text-purple-600 bg-purple-50"
-                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-                }`}
+
+              {/* 데이터 모니터링 드롭다운 */}
+              <div
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("monitoring")}
+                onMouseLeave={() => setHoveredMenu(null)}
               >
-                {getTranslation(currentLocale, "nav.deploy")}
-              </Link>
+                <button
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
+                    activePage === "monitoring"
+                      ? "text-purple-600 bg-purple-50"
+                      : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
+                  }`}
+                >
+                  <span>데이터 모니터링</span>
+                </button>
+                {hoveredMenu === "monitoring" && (
+                  <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                    <div className="py-1">
+                      {monitoringSubmenu.map((item, index) => (
+                        <Link
+                          key={index}
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <Link
                 href={`/${currentLocale}/contact`}
@@ -199,7 +239,6 @@ export default function Navigation({
                   }`}
                 >
                   <span>{getTranslation(currentLocale, "nav.support")}</span>
-                  <ChevronDownIcon className="w-4 h-4" />
                 </button>
                 {hoveredMenu === "support" && (
                   <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
@@ -433,17 +472,23 @@ export default function Navigation({
             >
               포트폴리오
             </Link>
-            <Link
-              href={`/${currentLocale}/deploy`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                activePage === "deploy"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-              }`}
-            >
-              {getTranslation(currentLocale, "nav.deploy")}
-            </Link>
+
+            {/* 데이터 모니터링 섹션 */}
+            <div className="border-t border-gray-200 pt-4">
+              <div className="px-3 py-2 text-sm font-medium text-gray-500 uppercase tracking-wider">
+                데이터 모니터링
+              </div>
+              {monitoringSubmenu.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
 
             {/* 고객지원 섹션 */}
             <div className="border-t border-gray-200 pt-4">
