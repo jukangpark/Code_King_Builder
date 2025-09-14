@@ -1,0 +1,309 @@
+---
+alwaysApply: true
+---
+
+# README Auto-Update Agent
+
+## 📋 Agent Overview
+
+This agent automatically analyzes project structure changes and updates the README.md file to reflect the current state of the project.
+
+## 🔍 Analysis Triggers
+
+### File Structure Changes
+
+- [ ] New directories added/removed
+- [ ] New components created
+- [ ] API routes added/modified
+- [ ] Configuration files updated
+- [ ] Dependencies added/removed
+
+### Code Changes
+
+- [ ] New features implemented
+- [ ] Tech stack modifications
+- [ ] Architecture pattern changes
+- [ ] New integrations added
+
+## 📝 README Update Rules
+
+### 1. Project Structure Section
+
+```markdown
+## 📁 Project Structure
+```
+
+src/
+├── app/ # Next.js App Router
+│ ├── [locale]/ # Internationalized routes
+│ │ ├── about/ # About pages
+│ │ ├── builder/ # Website builder
+│ │ ├── contact/ # Contact pages
+│ │ ├── deploy/ # Deployment pages
+│ │ ├── monitoring/ # Dashboard & monitoring
+│ │ ├── portfolio/ # Portfolio showcase
+│ │ ├── profile/ # User profiles
+│ │ ├── support/ # Support pages
+│ │ └── templates/ # Template gallery
+│ ├── api/ # API routes
+│ │ ├── ai/ # AI generation endpoints
+│ │ ├── contact/ # Contact form handling
+│ │ └── deploy/ # Deployment endpoints
+│ ├── auth/ # Authentication pages
+│ ├── contexts/ # React contexts
+│ ├── types/ # TypeScript type definitions
+│ └── layout.tsx # Root layout
+├── components/ # Reusable UI components
+│ ├── auth/ # Authentication components
+│ ├── Banner.tsx # Site banners
+│ ├── ChatBot.tsx # AI chat interface
+│ ├── Footer.tsx # Site footer
+│ ├── Navigation.tsx # Site navigation
+│ └── ... # Other UI components
+├── lib/ # Business logic & utilities
+│ ├── supabase/ # Supabase configuration
+│ ├── discord-service.ts # Discord integration
+│ ├── email-service.ts # Email handling
+│ ├── i18n.ts # Internationalization
+│ └── ... # Other utilities
+├── constants/ # Application constants
+│ ├── index.ts # Main constants
+│ ├── portfolioProjects.ts # Portfolio data
+│ ├── social.ts # Social media links
+│ └── tech.ts # Technology stack
+└── mock/ # Mock data for development
+├── mockPaymentHistory.ts
+├── mockPaymentMethods.ts
+└── mockWebsites.ts
+
+```
+
+```
+
+### 2. Tech Stack Section
+
+```markdown
+## 📦 Tech Stack
+
+### Frontend
+
+- **Next.js 15.5.0** - React framework with App Router
+- **React 19.1.0** - UI library
+- **TypeScript 5** - Type safety
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+
+### Backend & Services
+
+- **Supabase** - Database and authentication
+- **Anthropic Claude** - AI code generation
+- **Nodemailer** - Email service
+- **Discord Webhooks** - Notifications
+
+### Development Tools
+
+- **Turbopack** - Fast bundler
+- **ESLint** - Code linting
+- **PostCSS** - CSS processing
+```
+
+### 3. Features Section
+
+```markdown
+## 🚀 Features
+
+### Core Features
+
+- 🧠 **AI-Powered Code Generation** - Generate websites using natural language
+- 🏗️ **Template System** - Pre-built website templates
+- 🎨 **Customizable Designs** - Colors, layouts, and branding
+- ⚡ **Fast Deployment** - Deploy to Vercel with one click
+- 🔒 **Secure Authentication** - Supabase-based user management
+
+### Advanced Features
+
+- 🌍 **Internationalization** - Multi-language support (KO, EN, JA, ZH)
+- 📊 **Dashboard & Monitoring** - 3D dashboard builder
+- 💼 **Portfolio Management** - Showcase your work
+- 📧 **Email Integration** - Automated email services
+- 🔔 **Discord Notifications** - Real-time alerts
+```
+
+### 4. Getting Started Section
+
+````markdown
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Yarn package manager
+- Supabase account
+- Anthropic API key
+
+### Installation
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/jukangpark/Code_King_Builder.git
+cd Code_King_Builder
+```
+````
+
+2. **Install dependencies**
+
+```bash
+yarn install
+```
+
+3. **Set up environment variables**
+
+```bash
+cp .env.example .env.local
+# Edit .env.local with your configuration
+```
+
+4. **Start development server**
+
+```bash
+yarn dev
+```
+
+5. **Open in browser**
+
+```
+http://localhost:3000
+```
+
+````
+
+### 5. API Documentation Section
+```markdown
+## 📡 API Endpoints
+
+### AI Generation
+- `POST /api/ai/generate` - Generate code using AI
+- `POST /api/test/ai-generator` - Test AI generation
+
+### Contact & Support
+- `POST /api/contact` - Submit contact form
+- `POST /api/contact/update-status` - Update contact status
+
+### Deployment
+- `POST /api/deploy/vercel` - Deploy to Vercel
+````
+
+## 🔄 Auto-Update Process
+
+### 1. Structure Analysis
+
+```typescript
+// Analyze current project structure
+const analyzeProjectStructure = () => {
+  // Scan src/ directory
+  // Identify new components, pages, APIs
+  // Compare with README structure
+  // Generate updated structure
+};
+```
+
+### 2. Dependency Analysis
+
+```typescript
+// Analyze package.json changes
+const analyzeDependencies = () => {
+  // Read package.json
+  // Identify new/removed dependencies
+  // Update tech stack section
+  // Update installation instructions
+};
+```
+
+### 3. Feature Detection
+
+```typescript
+// Detect new features from code
+const detectFeatures = () => {
+  // Scan for new components
+  // Identify new API endpoints
+  // Detect new integrations
+  // Update features list
+};
+```
+
+### 4. Documentation Links
+
+```typescript
+// Update documentation links
+const updateDocumentationLinks = () => {
+  // Scan for .md files
+  // Update documentation section
+  // Ensure all links are valid
+  // Add new documentation
+};
+```
+
+## 📊 Update Triggers
+
+### Automatic Triggers
+
+- [ ] New file added to `src/`
+- [ ] New API route created
+- [ ] New component added
+- [ ] Package.json modified
+- [ ] New documentation file added
+
+### Manual Triggers
+
+- [ ] Major feature release
+- [ ] Architecture change
+- [ ] Tech stack update
+- [ ] Breaking changes
+
+## 🎯 Quality Checks
+
+### Content Validation
+
+- [ ] All links are valid
+- [ ] Code examples are current
+- [ ] Screenshots are up-to-date
+- [ ] Installation steps work
+- [ ] API endpoints are accurate
+
+### Formatting Standards
+
+- [ ] Consistent emoji usage
+- [ ] Proper markdown formatting
+- [ ] Code blocks have syntax highlighting
+- [ ] Badges are current
+- [ ] Table of contents is updated
+
+## 🚀 Implementation
+
+### Agent Commands
+
+```bash
+# Analyze and update README
+cursor-agent readme-update
+
+# Check for outdated sections
+cursor-agent readme-check
+
+# Generate new sections
+cursor-agent readme-generate --section=api
+
+# Validate README content
+cursor-agent readme-validate
+```
+
+### Integration Points
+
+- **Git Hooks**: Update README on major commits
+- **CI/CD**: Validate README in build process
+- **Development**: Auto-update during development
+- **Release**: Update for new versions
+
+---
+
+_This agent ensures your README stays current with your evolving project structure and features._

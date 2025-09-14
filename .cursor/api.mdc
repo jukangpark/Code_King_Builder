@@ -1,0 +1,693 @@
+# API & Data Management
+
+## API Architecture
+
+### API Route Structure
+
+```
+src/app/api/
+├── ai/
+│   └── generate/
+│       └── route.ts          # AI code generation
+├── contact/
+│   ├── route.ts              # Contact form submission
+│   └── update-status/
+│       └── route.ts          # Update contact status
+├── deploy/
+│   └── vercel/
+│       └── route.ts          # Vercel deployment
+└── test/
+    └── ai-generator/
+        └── route.ts          # AI generator testing
+```
+
+### API Route Pattern
+
+```typescript
+// app/api/example/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+// Request validation schema
+const requestSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  message: z.string().min(10),
+});
+
+// Response types
+interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+}
+
+// GET handler
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "ID parameter is required" },
+        { status: 400 }
+      );
+    }
+
+    // Fetch data logic here
+    const data = await fetchDataById(id);
+
+    return NextResponse.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error("GET /api/example error:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+// POST handler
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+
+    // Validate request body
+    const validatedData = requestSchema.parse(body);
+
+    // Process data
+    const result = await processData(validatedData);
+
+    return NextResponse.json({
+      success: true,
+      data: result,
+      message: "Data processed successfully",
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Validation error",
+          details: error.errors,
+        },
+        { status: 400 }
+      );
+    }
+
+    console.error("POST /api/example error:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Service Layer
+
+### Base Service Class
+
+```typescript
+// lib/services/BaseService.ts
+export abstract class BaseService {
+  protected baseUrl: string;
+  protected headers: Record<string, string>;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+    this.headers = {
+      "Content-Type": "application/json",
+    };
+  }
+
+  protected async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+
+    const config: RequestInit = {
+      ...options,
+      headers: {
+        ...this.headers,
+        ...options.headers,
+      },
+    };
+
+    try {
+      const response = await fetch(url, config);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`API request failed: ${url}`, error);
+      throw error;
+    }
+  }
+
+  protected async get<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, { method: "GET" });
+  }
+
+  protected async post<T>(endpoint: string, data: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  protected async put<T>(endpoint: string, data: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  protected async delete<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, { method: "DELETE" });
+  }
+}
+```
+
+### User Service
+
+```typescript
+// lib/services/UserService.ts
+import { BaseService } from "./BaseService";
+import type { IUser, CreateUserRequest, UpdateUserRequest } from "@/app/types";
+
+export class UserService extends BaseService {
+  constructor() {
+    super("/api/users");
+  }
+
+  async getUsers(): Promise<IUser[]> {
+    return this.get<IUser[]>("");
+  }
+
+  async getUserById(id: string): Promise<IUser> {
+    return this.get<IUser>(`/${id}`);
+  }
+
+  async createUser(data: CreateUserRequest): Promise<IUser> {
+    return this.post<IUser>("", data);
+  }
+
+  async updateUser(id: string, data: UpdateUserRequest): Promise<IUser> {
+    return this.put<IUser>(`/${id}`, data);
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    return this.delete<void>(`/${id}`);
+  }
+
+  async getUserProfile(id: string): Promise<IUserProfile> {
+    return this.get<IUserProfile>(`/${id}/profile`);
+  }
+}
+
+export const userService = new UserService();
+```
+
+### AI Service
+
+```typescript
+// lib/services/AIService.ts
+import { BaseService } from "./BaseService";
+
+export interface CodeGenerationRequest {
+  prompt: string;
+  language: string;
+  framework?: string;
+  features?: string[];
+}
+
+export interface CodeGenerationResponse {
+  code: string;
+  explanation: string;
+  suggestions: string[];
+}
+
+export class AIService extends BaseService {
+  constructor() {
+    super("/api/ai");
+  }
+
+  async generateCode(
+    request: CodeGenerationRequest
+  ): Promise<CodeGenerationResponse> {
+    return this.post<CodeGenerationResponse>("/generate", request);
+  }
+
+  async generateBusinessCode(prompt: string): Promise<CodeGenerationResponse> {
+    return this.post<CodeGenerationResponse>("/generate/business", { prompt });
+  }
+
+  async optimizeCode(
+    code: string,
+    language: string
+  ): Promise<CodeGenerationResponse> {
+    return this.post<CodeGenerationResponse>("/optimize", { code, language });
+  }
+}
+
+export const aiService = new AIService();
+```
+
+## Data Fetching Patterns
+
+### React Query Integration
+
+```typescript
+// hooks/useUsers.ts
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { userService } from "@/lib/services/UserService";
+
+export function useUsers() {
+  return useQuery({
+    queryKey: ["users"],
+    queryFn: () => userService.getUsers(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}
+
+export function useUser(id: string) {
+  return useQuery({
+    queryKey: ["users", id],
+    queryFn: () => userService.getUserById(id),
+    enabled: !!id,
+  });
+}
+
+export function useCreateUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateUserRequest) => userService.createUser(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+}
+
+export function useUpdateUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateUserRequest }) =>
+      userService.updateUser(id, data),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["users", id] });
+    },
+  });
+}
+```
+
+### SWR Integration
+
+```typescript
+// hooks/useSWRUsers.ts
+import useSWR from "swr";
+import { userService } from "@/lib/services/UserService";
+
+const fetcher = (url: string) => userService.getUsers();
+
+export function useSWRUsers() {
+  const { data, error, isLoading, mutate } = useSWR("/api/users", fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    refreshInterval: 0,
+  });
+
+  return {
+    users: data,
+    isLoading,
+    isError: error,
+    mutate,
+  };
+}
+
+export function useSWRUser(id: string) {
+  const { data, error, isLoading, mutate } = useSWR(
+    id ? `/api/users/${id}` : null,
+    () => userService.getUserById(id),
+    {
+      revalidateOnFocus: false,
+    }
+  );
+
+  return {
+    user: data,
+    isLoading,
+    isError: error,
+    mutate,
+  };
+}
+```
+
+## Error Handling
+
+### API Error Types
+
+```typescript
+// types/ApiError.ts
+export interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+  statusCode: number;
+}
+
+export class ApiError extends Error {
+  public code: string;
+  public statusCode: number;
+  public details?: Record<string, unknown>;
+
+  constructor(
+    message: string,
+    code: string = "UNKNOWN_ERROR",
+    statusCode: number = 500,
+    details?: Record<string, unknown>
+  ) {
+    super(message);
+    this.name = "ApiError";
+    this.code = code;
+    this.statusCode = statusCode;
+    this.details = details;
+  }
+}
+
+export const createApiError = (
+  message: string,
+  code: string,
+  statusCode: number = 500,
+  details?: Record<string, unknown>
+): ApiError => {
+  return new ApiError(message, code, statusCode, details);
+};
+```
+
+### Error Handling Utility
+
+```typescript
+// utils/errorHandler.ts
+import { ApiError } from "@/types/ApiError";
+
+export const handleApiError = (error: unknown): ApiError => {
+  if (error instanceof ApiError) {
+    return error;
+  }
+
+  if (error instanceof Error) {
+    return new ApiError(error.message, "UNKNOWN_ERROR", 500);
+  }
+
+  return new ApiError("An unknown error occurred", "UNKNOWN_ERROR", 500);
+};
+
+export const getErrorMessage = (error: unknown): string => {
+  const apiError = handleApiError(error);
+  return apiError.message;
+};
+
+export const isApiError = (error: unknown): error is ApiError => {
+  return error instanceof ApiError;
+};
+```
+
+## Request/Response Types
+
+### Generic API Types
+
+```typescript
+// types/ApiTypes.ts
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+  pagination?: PaginationInfo;
+}
+
+export interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface PaginatedResponse<T> extends ApiResponse<T[]> {
+  pagination: PaginationInfo;
+}
+
+export interface ApiRequest {
+  [key: string]: any;
+}
+
+export interface CreateRequest<T> {
+  data: T;
+}
+
+export interface UpdateRequest<T> {
+  id: string;
+  data: Partial<T>;
+}
+
+export interface DeleteRequest {
+  id: string;
+}
+```
+
+### Specific API Types
+
+```typescript
+// types/UserApiTypes.ts
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+  role?: "admin" | "user";
+}
+
+export interface UpdateUserRequest {
+  name?: string;
+  email?: string;
+  role?: "admin" | "user";
+  isActive?: boolean;
+}
+
+export interface UserListRequest {
+  page?: number;
+  limit?: number;
+  search?: string;
+  role?: string;
+  sortBy?: "name" | "email" | "createdAt";
+  sortOrder?: "asc" | "desc";
+}
+
+export interface UserListResponse extends PaginatedResponse<IUser> {
+  data: IUser[];
+}
+```
+
+## Caching Strategy
+
+### Cache Configuration
+
+```typescript
+// lib/cache.ts
+interface CacheConfig {
+  ttl: number; // Time to live in milliseconds
+  maxSize: number; // Maximum number of items
+}
+
+class MemoryCache<T> {
+  private cache = new Map<string, { value: T; expires: number }>();
+  private config: CacheConfig;
+
+  constructor(config: CacheConfig) {
+    this.config = config;
+  }
+
+  set(key: string, value: T): void {
+    // Remove expired entries
+    this.cleanup();
+
+    // Remove oldest entries if cache is full
+    if (this.cache.size >= this.config.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
+
+    this.cache.set(key, {
+      value,
+      expires: Date.now() + this.config.ttl,
+    });
+  }
+
+  get(key: string): T | null {
+    const item = this.cache.get(key);
+
+    if (!item) {
+      return null;
+    }
+
+    if (Date.now() > item.expires) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return item.value;
+  }
+
+  delete(key: string): void {
+    this.cache.delete(key);
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+
+  private cleanup(): void {
+    const now = Date.now();
+    for (const [key, item] of this.cache.entries()) {
+      if (now > item.expires) {
+        this.cache.delete(key);
+      }
+    }
+  }
+}
+
+export const apiCache = new MemoryCache<any>({
+  ttl: 5 * 60 * 1000, // 5 minutes
+  maxSize: 100,
+});
+```
+
+## Rate Limiting
+
+### Rate Limiting Implementation
+
+```typescript
+// lib/rateLimiting.ts
+interface RateLimitConfig {
+  windowMs: number;
+  maxRequests: number;
+}
+
+class RateLimiter {
+  private requests = new Map<string, { count: number; resetTime: number }>();
+  private config: RateLimitConfig;
+
+  constructor(config: RateLimitConfig) {
+    this.config = config;
+  }
+
+  isAllowed(identifier: string): boolean {
+    const now = Date.now();
+    const key = identifier;
+
+    const current = this.requests.get(key);
+
+    if (!current || now > current.resetTime) {
+      this.requests.set(key, {
+        count: 1,
+        resetTime: now + this.config.windowMs,
+      });
+      return true;
+    }
+
+    if (current.count >= this.config.maxRequests) {
+      return false;
+    }
+
+    current.count++;
+    return true;
+  }
+
+  getRemainingRequests(identifier: string): number {
+    const current = this.requests.get(identifier);
+    if (!current) {
+      return this.config.maxRequests;
+    }
+
+    return Math.max(0, this.config.maxRequests - current.count);
+  }
+
+  getResetTime(identifier: string): number {
+    const current = this.requests.get(identifier);
+    return current?.resetTime || 0;
+  }
+}
+
+export const rateLimiter = new RateLimiter({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 100,
+});
+```
+
+## Best Practices
+
+### 1. API Design
+
+- Use RESTful conventions
+- Implement proper HTTP status codes
+- Use consistent response formats
+- Validate all inputs
+- Handle errors gracefully
+
+### 2. Performance
+
+- Implement caching strategies
+- Use pagination for large datasets
+- Optimize database queries
+- Implement rate limiting
+- Use compression for large responses
+
+### 3. Security
+
+- Validate and sanitize inputs
+- Implement authentication and authorization
+- Use HTTPS in production
+- Implement rate limiting
+- Log security events
+
+### 4. Error Handling
+
+- Use consistent error formats
+- Provide meaningful error messages
+- Log errors appropriately
+- Implement proper fallbacks
+- Handle network failures
+
+### 5. Testing
+
+- Write unit tests for services
+- Test API endpoints
+- Mock external dependencies
+- Test error scenarios
+- Implement integration tests
+
+### 6. Documentation
+
+- Document API endpoints
+- Provide request/response examples
+- Use OpenAPI/Swagger
+- Keep documentation up to date
+- Include error codes and messages
+
+---
+
+_Follow these API and data management guidelines for robust and scalable backend services._

@@ -1,0 +1,72 @@
+---
+alwaysApply: true
+---
+
+## 🚀 Quick Start
+
+1. **New to the project?** Start with [Architecture](./architecture.mdc) to understand the project structure
+2. **Working on components?** Check [React & Next.js](./react.mdc) and [Styling & UI](./styling.mdc)
+3. **Building APIs?** Review [API & Data Management](./api.mdc) and [Authentication & Security](./auth.mdc)
+4. **Adding features?** Ensure you follow [Quality Assurance](./quality.mdc) standards
+
+---
+
+## 🔗 Module Dependencies
+
+```mermaid
+graph TD
+    A[Architecture] --> B[TypeScript]
+    A --> C[React & Next.js]
+    B --> D[API & Data Management]
+    C --> E[Styling & UI]
+    C --> F[Internationalization]
+    D --> G[Authentication & Security]
+    D --> H[External Integrations]
+    E --> I[Performance & Optimization]
+    F --> I
+    G --> I
+    H --> I
+    I --> J[Quality Assurance]
+```
+
+---
+
+## 📖 How to Use These Rules
+
+1. **Read the relevant module** for your current task
+2. **Follow the specific guidelines** outlined in each module
+3. **Cross-reference related modules** when working on complex features
+4. **Update modules** when adding new patterns or changing existing ones
+5. **Maintain consistency** across all modules
+
+---
+
+## 📋 General Guidelines
+
+### Development Principles
+
+- Maintain consistency with existing architecture
+- Add all user-facing text to translation files
+- Implement proper protection for auth-required features
+- Consider performance in component design
+- Include accessibility considerations
+
+### Code Organization
+
+- Follow established patterns and conventions
+- Keep related functionality grouped together
+- Maintain clear separation of concerns
+- Document complex business logic
+
+### Best Practices
+
+- Write self-documenting code
+- Use meaningful variable and function names
+- Keep functions small and focused
+- Avoid deep nesting and complex logic
+- Regular refactoring and code cleanup
+
+---
+
+_Last updated: $(date)_
+_For questions or suggestions about these rules, please refer to the project documentation or team guidelines._

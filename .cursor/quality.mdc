@@ -1,0 +1,782 @@
+# Testing & Quality Assurance
+
+## Testing Strategy
+
+### Testing Pyramid
+
+```
+    /\
+   /  \
+  / E2E \     <- Few, high-level tests
+ /______\
+/        \
+/Integration\ <- Some, medium-level tests
+/____________\
+/              \
+/   Unit Tests   \ <- Many, low-level tests
+/________________\
+```
+
+### Test Types
+
+- **Unit Tests**: Test individual functions and components
+- **Integration Tests**: Test component interactions and API endpoints
+- **End-to-End Tests**: Test complete user workflows
+- **Visual Regression Tests**: Test UI consistency
+- **Performance Tests**: Test application performance
+
+## Unit Testing
+
+### Jest Configuration
+
+```javascript
+// jest.config.js
+const nextJest = require("next/jest");
+
+const createJestConfig = nextJest({
+  dir: "./",
+});
+
+const customJestConfig = {
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testEnvironment: "jest-environment-jsdom",
+  moduleNameMapping: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
+  collectCoverageFrom: [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.d.ts",
+    "!src/**/*.stories.{js,jsx,ts,tsx}",
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
+};
+
+module.exports = createJestConfig(customJestConfig);
+```
+
+### Testing Utilities
+
+```typescript
+// __tests__/utils/test-utils.tsx
+import React from "react";
+import { render, RenderOptions } from "@testing-library/react";
+import { AuthProvider } from "@/app/contexts/AuthContext";
+
+interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
+  user?: any;
+}
+
+const AllTheProviders: React.FC<{ children: React.ReactNode; user?: any }> = ({
+  children,
+  user,
+}) => {
+  return <AuthProvider>{children}</AuthProvider>;
+};
+
+const customRender = (
+  ui: React.ReactElement,
+  options: CustomRenderOptions = {}
+) => {
+  const { user, ...renderOptions } = options;
+
+  return render(ui, {
+    wrapper: ({ children }) => (
+      <AllTheProviders user={user}>{children}</AllTheProviders>
+    ),
+    ...renderOptions,
+  });
+};
+
+export * from "@testing-library/react";
+export { customRender as render };
+```
+
+### Component Testing
+
+```typescript
+// __tests__/components/Button.test.tsx
+import { render, screen, fireEvent } from "@/__tests__/utils/test-utils";
+import { Button } from "@/components/ui/Button";
+
+describe("Button Component", () => {
+  it("renders with correct text", () => {
+    render(<Button>Click me</Button>);
+    expect(
+      screen.getByRole("button", { name: /click me/i })
+    ).toBeInTheDocument();
+  });
+
+  it("calls onClick handler when clicked", () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+
+    fireEvent.click(screen.getByRole("button"));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("applies correct variant styles", () => {
+    render(<Button variant="primary">Primary Button</Button>);
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("bg-blue-600");
+  });
+
+  it("is disabled when disabled prop is true", () => {
+    render(<Button disabled>Disabled Button</Button>);
+    const button = screen.getByRole("button");
+    expect(button).toBeDisabled();
+  });
+
+  it("shows loading state", () => {
+    render(<Button loading>Loading Button</Button>);
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  });
+});
+```
+
+### Hook Testing
+
+```typescript
+// __tests__/hooks/useAuth.test.ts
+import { renderHook, act } from "@testing-library/react";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { AuthProvider } from "@/app/contexts/AuthContext";
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <AuthProvider>{children}</AuthProvider>
+);
+
+describe("useAuth Hook", () => {
+  it("should return initial state", () => {
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    expect(result.current.user).toBeNull();
+    expect(result.current.loading).toBe(true);
+  });
+
+  it("should sign in user", async () => {
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      const response = await result.current.signIn({
+        email: "test@example.com",
+        password: "password123",
+      });
+
+      expect(response.success).toBe(true);
+    });
+  });
+
+  it("should handle sign in error", async () => {
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    await act(async () => {
+      const response = await result.current.signIn({
+        email: "invalid@example.com",
+        password: "wrongpassword",
+      });
+
+      expect(response.success).toBe(false);
+      expect(response.error).toBeDefined();
+    });
+  });
+});
+```
+
+### Service Testing
+
+```typescript
+// __tests__/services/UserService.test.ts
+import { userService } from "@/lib/services/UserService";
+
+// Mock fetch
+global.fetch = jest.fn();
+
+describe("UserService", () => {
+  beforeEach(() => {
+    (fetch as jest.Mock).mockClear();
+  });
+
+  it("should fetch users successfully", async () => {
+    const mockUsers = [
+      { id: "1", name: "John Doe", email: "john@example.com" },
+      { id: "2", name: "Jane Smith", email: "jane@example.com" },
+    ];
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockUsers,
+    });
+
+    const users = await userService.getUsers();
+    expect(users).toEqual(mockUsers);
+    expect(fetch).toHaveBeenCalledWith("/api/users", expect.any(Object));
+  });
+
+  it("should handle fetch error", async () => {
+    (fetch as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
+
+    await expect(userService.getUsers()).rejects.toThrow("Network error");
+  });
+
+  it("should create user successfully", async () => {
+    const newUser = { name: "John Doe", email: "john@example.com" };
+    const createdUser = { id: "1", ...newUser };
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => createdUser,
+    });
+
+    const result = await userService.createUser(newUser);
+    expect(result).toEqual(createdUser);
+  });
+});
+```
+
+## Integration Testing
+
+### API Route Testing
+
+```typescript
+// __tests__/api/users.test.ts
+import { createMocks } from "node-mocks-http";
+import handler from "@/app/api/users/route";
+
+describe("/api/users", () => {
+  it("should return users list", async () => {
+    const { req, res } = createMocks({
+      method: "GET",
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(200);
+    const data = JSON.parse(res._getData());
+    expect(data.success).toBe(true);
+    expect(Array.isArray(data.data)).toBe(true);
+  });
+
+  it("should create new user", async () => {
+    const { req, res } = createMocks({
+      method: "POST",
+      body: {
+        name: "John Doe",
+        email: "john@example.com",
+        password: "password123",
+      },
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(201);
+    const data = JSON.parse(res._getData());
+    expect(data.success).toBe(true);
+    expect(data.data.name).toBe("John Doe");
+  });
+
+  it("should validate required fields", async () => {
+    const { req, res } = createMocks({
+      method: "POST",
+      body: {
+        name: "John Doe",
+        // Missing email and password
+      },
+    });
+
+    await handler(req, res);
+
+    expect(res._getStatusCode()).toBe(400);
+    const data = JSON.parse(res._getData());
+    expect(data.success).toBe(false);
+    expect(data.error).toBeDefined();
+  });
+});
+```
+
+### Database Testing
+
+```typescript
+// __tests__/database/user.test.ts
+import { supabase } from "@/lib/supabase/client";
+
+describe("User Database Operations", () => {
+  beforeEach(async () => {
+    // Clean up test data
+    await supabase.from("users").delete().neq("id", "");
+  });
+
+  it("should create user in database", async () => {
+    const userData = {
+      name: "Test User",
+      email: "test@example.com",
+      password: "hashedpassword",
+    };
+
+    const { data, error } = await supabase
+      .from("users")
+      .insert(userData)
+      .select()
+      .single();
+
+    expect(error).toBeNull();
+    expect(data).toMatchObject({
+      name: userData.name,
+      email: userData.email,
+    });
+    expect(data.id).toBeDefined();
+  });
+
+  it("should fetch user from database", async () => {
+    // First create a user
+    const { data: createdUser } = await supabase
+      .from("users")
+      .insert({ name: "Test User", email: "test@example.com" })
+      .select()
+      .single();
+
+    // Then fetch it
+    const { data: fetchedUser, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", createdUser.id)
+      .single();
+
+    expect(error).toBeNull();
+    expect(fetchedUser).toEqual(createdUser);
+  });
+});
+```
+
+## End-to-End Testing
+
+### Playwright Configuration
+
+```typescript
+// playwright.config.ts
+import { defineConfig, devices } from "@playwright/test";
+
+export default defineConfig({
+  testDir: "./e2e",
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: "html",
+  use: {
+    baseURL: "http://localhost:3000",
+    trace: "on-first-retry",
+  },
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
+    {
+      name: "Mobile Chrome",
+      use: { ...devices["Pixel 5"] },
+    },
+    {
+      name: "Mobile Safari",
+      use: { ...devices["iPhone 12"] },
+    },
+  ],
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost:3000",
+    reuseExistingServer: !process.env.CI,
+  },
+});
+```
+
+### E2E Test Examples
+
+```typescript
+// e2e/auth.spec.ts
+import { test, expect } from "@playwright/test";
+
+test.describe("Authentication Flow", () => {
+  test("should sign up new user", async ({ page }) => {
+    await page.goto("/auth/signup");
+
+    await page.fill('[name="name"]', "Test User");
+    await page.fill('[name="email"]', "test@example.com");
+    await page.fill('[name="password"]', "password123");
+    await page.fill('[name="confirmPassword"]', "password123");
+
+    await page.click('button[type="submit"]');
+
+    await expect(page).toHaveURL("/dashboard");
+    await expect(page.locator("text=Welcome, Test User")).toBeVisible();
+  });
+
+  test("should sign in existing user", async ({ page }) => {
+    await page.goto("/auth/login");
+
+    await page.fill('[name="email"]', "test@example.com");
+    await page.fill('[name="password"]', "password123");
+
+    await page.click('button[type="submit"]');
+
+    await expect(page).toHaveURL("/dashboard");
+  });
+
+  test("should show validation errors", async ({ page }) => {
+    await page.goto("/auth/signup");
+
+    await page.click('button[type="submit"]');
+
+    await expect(page.locator("text=Name is required")).toBeVisible();
+    await expect(page.locator("text=Email is required")).toBeVisible();
+    await expect(page.locator("text=Password is required")).toBeVisible();
+  });
+});
+
+// e2e/ai-builder.spec.ts
+import { test, expect } from "@playwright/test";
+
+test.describe("AI Builder", () => {
+  test("should generate website code", async ({ page }) => {
+    await page.goto("/builder");
+
+    await page.fill(
+      '[data-testid="prompt-input"]',
+      "Create a landing page for a tech startup"
+    );
+    await page.selectOption('[data-testid="framework-select"]', "react");
+
+    await page.click('[data-testid="generate-button"]');
+
+    await expect(page.locator('[data-testid="generated-code"]')).toBeVisible();
+    await expect(
+      page.locator("text=Code generated successfully")
+    ).toBeVisible();
+  });
+
+  test("should show loading state during generation", async ({ page }) => {
+    await page.goto("/builder");
+
+    await page.fill('[data-testid="prompt-input"]', "Create a blog website");
+    await page.click('[data-testid="generate-button"]');
+
+    await expect(page.locator("text=Generating code...")).toBeVisible();
+  });
+});
+```
+
+## Visual Regression Testing
+
+### Chromatic Configuration
+
+```typescript
+// .storybook/main.ts
+import type { StorybookConfig } from "@storybook/nextjs";
+
+const config: StorybookConfig = {
+  stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
+  addons: [
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
+    "@storybook/addon-a11y",
+  ],
+  framework: {
+    name: "@storybook/nextjs",
+    options: {},
+  },
+  staticDirs: ["../public"],
+};
+
+export default config;
+```
+
+### Story Examples
+
+```typescript
+// src/components/ui/Button.stories.tsx
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./Button";
+
+const meta: Meta<typeof Button> = {
+  title: "UI/Button",
+  component: Button,
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+  argTypes: {
+    variant: {
+      control: { type: "select" },
+      options: ["primary", "secondary", "danger"],
+    },
+    size: {
+      control: { type: "select" },
+      options: ["sm", "md", "lg"],
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {
+    variant: "primary",
+    children: "Button",
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    variant: "secondary",
+    children: "Button",
+  },
+};
+
+export const Danger: Story = {
+  args: {
+    variant: "danger",
+    children: "Button",
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    loading: true,
+    children: "Loading...",
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    children: "Disabled",
+  },
+};
+```
+
+## Performance Testing
+
+### Lighthouse CI
+
+```yaml
+# lighthouserc.js
+module.exports = {
+  ci: {
+    collect: {
+      url: ['http://localhost:3000'],
+      startServerCommand: 'npm run dev',
+    },
+    assert: {
+      assertions: {
+        'categories:performance': ['error', { minScore: 0.9 }],
+        'categories:accessibility': ['error', { minScore: 0.9 }],
+        'categories:best-practices': ['error', { minScore: 0.9 }],
+        'categories:seo': ['error', { minScore: 0.9 }],
+      },
+    },
+    upload: {
+      target: 'temporary-public-storage',
+    },
+  },
+};
+```
+
+### Performance Test Examples
+
+```typescript
+// __tests__/performance/lighthouse.test.ts
+import { test, expect } from "@playwright/test";
+
+test.describe("Performance Tests", () => {
+  test("should meet performance standards", async ({ page }) => {
+    await page.goto("/");
+
+    const metrics = await page.evaluate(() => {
+      return new Promise((resolve) => {
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const navigation = entries.find(
+            (entry) => entry.entryType === "navigation"
+          ) as PerformanceNavigationTiming;
+
+          resolve({
+            loadTime: navigation.loadEventEnd - navigation.loadEventStart,
+            domContentLoaded:
+              navigation.domContentLoadedEventEnd -
+              navigation.domContentLoadedEventStart,
+            firstPaint:
+              performance.getEntriesByName("first-paint")[0]?.startTime,
+            firstContentfulPaint: performance.getEntriesByName(
+              "first-contentful-paint"
+            )[0]?.startTime,
+          });
+        }).observe({ entryTypes: ["navigation", "paint"] });
+      });
+    });
+
+    expect(metrics.loadTime).toBeLessThan(3000);
+    expect(metrics.domContentLoaded).toBeLessThan(1500);
+    expect(metrics.firstContentfulPaint).toBeLessThan(2000);
+  });
+});
+```
+
+## Code Quality Tools
+
+### ESLint Configuration
+
+```javascript
+// eslint.config.mjs
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react-hooks/exhaustive-deps": "warn",
+      "prefer-const": "error",
+      "no-var": "error",
+    },
+  },
+  {
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "next-env.d.ts",
+    ],
+  },
+];
+
+export default eslintConfig;
+```
+
+### Prettier Configuration
+
+```json
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "endOfLine": "lf"
+}
+```
+
+### Husky Pre-commit Hooks
+
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test:ci"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{json,md}": ["prettier --write"]
+  }
+}
+```
+
+## Test Scripts
+
+### Package.json Scripts
+
+```json
+{
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:visual": "chromatic",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit",
+    "build": "next build",
+    "build:analyze": "ANALYZE=true npm run build"
+  }
+}
+```
+
+## Best Practices
+
+### 1. Test Organization
+
+- Group tests by feature or component
+- Use descriptive test names
+- Follow AAA pattern (Arrange, Act, Assert)
+- Keep tests independent and isolated
+
+### 2. Test Coverage
+
+- Aim for 80%+ code coverage
+- Focus on critical business logic
+- Test edge cases and error scenarios
+- Don't test implementation details
+
+### 3. Test Data
+
+- Use factories for test data generation
+- Mock external dependencies
+- Use realistic test data
+- Clean up test data after tests
+
+### 4. Performance
+
+- Run tests in parallel when possible
+- Use appropriate test timeouts
+- Mock heavy operations
+- Optimize test setup and teardown
+
+### 5. Maintenance
+
+- Keep tests up to date with code changes
+- Refactor tests when refactoring code
+- Remove obsolete tests
+- Document complex test scenarios
+
+### 6. CI/CD Integration
+
+- Run tests on every commit
+- Fail builds on test failures
+- Generate test reports
+- Use test results for deployment decisions
+
+---
+
+_Follow these quality assurance guidelines for reliable and maintainable code._

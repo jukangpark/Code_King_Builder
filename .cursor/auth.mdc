@@ -1,0 +1,701 @@
+# Authentication & Security
+
+## Supabase Integration
+
+### Client Configuration
+
+```typescript
+// lib/supabase/client.ts
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+  },
+});
+```
+
+### Authentication Service
+
+```typescript
+// lib/supabase/api/auth.ts
+import { supabase } from "../client";
+import type { SignInData, SignupData } from "@/app/types/Auth";
+
+export const auth = {
+  // Get current user
+  async getCurrentUser() {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    return { user, error };
+  },
+
+  // Sign in with email and password
+  async signIn({ email, password }: SignInData) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    return { data, error };
+  },
+
+  // Sign up with email and password
+  async signUp({ email, password, name }: SignupData) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+        },
+      },
+    });
+    return { data, error };
+  },
+
+  // Sign out
+  async signOut() {
+    const { error } = await supabase.auth.signOut();
+    return { error };
+  },
+
+  // Reset password
+  async resetPassword(email: string) {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+    return { data, error };
+  },
+
+  // Update password
+  async updatePassword(newPassword: string) {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+    return { data, error };
+  },
+
+  // Listen to auth state changes
+  onAuthStateChange(callback: (event: string, session: any) => void) {
+    return supabase.auth.onAuthStateChange(callback);
+  },
+};
+```
+
+## Type Definitions
+
+### Authentication Types
+
+```typescript
+// app/types/Auth.ts
+export interface SignInData {
+  email: string;
+  password: string;
+}
+
+export interface SignupData {
+  email: string;
+  password: string;
+  name: string;
+}
+
+export interface ResetPasswordData {
+  email: string;
+}
+
+export interface UpdatePasswordData {
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface AuthResult {
+  success: boolean;
+  error?: string;
+  user?: IUser;
+}
+
+export interface AuthError {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+}
+```
+
+### User Types
+
+```typescript
+// app/types/IUser.ts
+export interface IUser {
+  id: string;
+  email: string;
+  name: string;
+  avatar_url?: string;
+  created_at: string;
+  updated_at: string;
+  last_sign_in_at?: string;
+  email_confirmed_at?: string;
+  role?: "admin" | "user" | "guest";
+  metadata?: Record<string, unknown>;
+}
+
+export interface IUserProfile extends IUser {
+  bio?: string;
+  website?: string;
+  location?: string;
+  social_links?: {
+    twitter?: string;
+    github?: string;
+    linkedin?: string;
+  };
+}
+```
+
+### Context Types
+
+```typescript
+// app/types/IAuthContext.ts
+import type { IUser } from "./IUser";
+import type { SignInData, SignupData } from "./Auth";
+
+export interface IAuthContext {
+  user: IUser | null;
+  loading: boolean;
+  signIn: (data: SignInData) => Promise<AuthResult>;
+  signUp: (data: SignupData) => Promise<AuthResult>;
+  signOut: () => Promise<AuthResult>;
+  resetPassword: (email: string) => Promise<AuthResult>;
+  updatePassword: (newPassword: string) => Promise<AuthResult>;
+}
+```
+
+## Authentication Context
+
+### Context Implementation
+
+```typescript
+// app/contexts/AuthContext.tsx
+"use client";
+
+import React, { createContext, useContext, useEffect, useState } from "react";
+import auth from "@/lib/supabase/api/auth";
+import type { IUser } from "@/app/types/IUser";
+import type { SignInData, SignupData, AuthResult } from "@/app/types/Auth";
+import type { IAuthContext } from "@/app/types/IAuthContext";
+
+const AuthContext = createContext<IAuthContext | undefined>(undefined);
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Initial user state check
+    const checkUser = async () => {
+      try {
+        const { user } = await auth.getCurrentUser();
+        setUser(user as IUser);
+      } catch (error) {
+        console.error("Error checking user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUser();
+
+    // Listen to auth state changes
+    const {
+      data: { subscription },
+    } = auth.onAuthStateChange((event, session) => {
+      setUser((session?.user as IUser) ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const signIn = async (signInData: SignInData): Promise<AuthResult> => {
+    try {
+      const { data, error } = await auth.signIn(signInData);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true, user: data.user as IUser };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Sign in failed",
+      };
+    }
+  };
+
+  const signUp = async (signUpData: SignupData): Promise<AuthResult> => {
+    try {
+      const { data, error } = await auth.signUp(signUpData);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true, user: data.user as IUser };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Sign up failed",
+      };
+    }
+  };
+
+  const signOut = async (): Promise<AuthResult> => {
+    try {
+      const { error } = await auth.signOut();
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Sign out failed",
+      };
+    }
+  };
+
+  const resetPassword = async (email: string): Promise<AuthResult> => {
+    try {
+      const { error } = await auth.resetPassword(email);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Password reset failed",
+      };
+    }
+  };
+
+  const updatePassword = async (newPassword: string): Promise<AuthResult> => {
+    try {
+      const { error } = await auth.updatePassword(newPassword);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Password update failed",
+      };
+    }
+  };
+
+  const value: IAuthContext = {
+    user,
+    loading,
+    signIn,
+    signUp,
+    signOut,
+    resetPassword,
+    updatePassword,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+```
+
+## Protected Routes
+
+### Route Protection Middleware
+
+```typescript
+// middleware.ts
+import { NextRequest, NextResponse } from "next/server";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+
+export async function middleware(request: NextRequest) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req: request, res });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  // Protected routes that require authentication
+  const protectedRoutes = ["/dashboard", "/profile", "/settings"];
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  // Admin routes that require admin role
+  const adminRoutes = ["/admin"];
+  const isAdminRoute = adminRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  if (isProtectedRoute && !session) {
+    // Redirect to login if not authenticated
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
+
+  if (isAdminRoute && (!session || session.user.role !== "admin")) {
+    // Redirect to dashboard if not admin
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  return res;
+}
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|auth).*)"],
+};
+```
+
+### Route Protection Component
+
+```typescript
+// components/ProtectedRoute.tsx
+import { useAuth } from "@/app/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  requireAuth?: boolean;
+  requireAdmin?: boolean;
+  redirectTo?: string;
+}
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requireAuth = true,
+  requireAdmin = false,
+  redirectTo = "/auth/login",
+}) => {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (requireAuth && !user) {
+      router.push(redirectTo);
+      return;
+    }
+
+    if (requireAdmin && user?.role !== "admin") {
+      router.push("/dashboard");
+      return;
+    }
+  }, [user, loading, requireAuth, requireAdmin, redirectTo, router]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (requireAuth && !user) {
+    return null;
+  }
+
+  if (requireAdmin && user?.role !== "admin") {
+    return null;
+  }
+
+  return <>{children}</>;
+};
+```
+
+## Authentication Components
+
+### Login Form
+
+```typescript
+// components/auth/LoginModal.tsx
+"use client";
+
+import { useState } from "react";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { useTranslation } from "@/hooks/useTranslation";
+
+export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
+  const { signIn } = useAuth();
+  const { t } = useTranslation();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await signIn(formData);
+      if (result.success) {
+        onClose();
+      } else {
+        setError(result.error || "Login failed");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">{t("auth.signIn.title")}</h2>
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("auth.signIn.email")}
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("auth.signIn.password")}
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="flex space-x-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            >
+              {loading ? t("common.loading") : t("auth.signIn.submit")}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400"
+            >
+              {t("common.cancel")}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+```
+
+## Security Best Practices
+
+### Input Validation
+
+```typescript
+// utils/validation.ts
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const validatePassword = (
+  password: string
+): {
+  isValid: boolean;
+  errors: string[];
+} => {
+  const errors: string[] = [];
+
+  if (password.length < 8) {
+    errors.push("Password must be at least 8 characters long");
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    errors.push("Password must contain at least one uppercase letter");
+  }
+
+  if (!/[a-z]/.test(password)) {
+    errors.push("Password must contain at least one lowercase letter");
+  }
+
+  if (!/\d/.test(password)) {
+    errors.push("Password must contain at least one number");
+  }
+
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    errors.push("Password must contain at least one special character");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
+};
+
+export const sanitizeInput = (input: string): string => {
+  return input.trim().replace(/[<>]/g, "");
+};
+```
+
+### Rate Limiting
+
+```typescript
+// utils/rateLimiting.ts
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+export const rateLimit = (
+  identifier: string,
+  maxRequests: number = 5,
+  windowMs: number = 15 * 60 * 1000 // 15 minutes
+): boolean => {
+  const now = Date.now();
+  const key = identifier;
+
+  const current = rateLimitMap.get(key);
+
+  if (!current || now > current.resetTime) {
+    rateLimitMap.set(key, {
+      count: 1,
+      resetTime: now + windowMs,
+    });
+    return true;
+  }
+
+  if (current.count >= maxRequests) {
+    return false;
+  }
+
+  current.count++;
+  return true;
+};
+```
+
+### Environment Variables
+
+```bash
+# .env.local
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# JWT Secret for additional security
+JWT_SECRET=your_jwt_secret
+
+# Rate limiting
+RATE_LIMIT_MAX_REQUESTS=100
+RATE_LIMIT_WINDOW_MS=900000
+```
+
+## Error Handling
+
+### Authentication Error Handling
+
+```typescript
+// utils/authErrors.ts
+export const getAuthErrorMessage = (error: any): string => {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (error?.message) {
+    switch (error.message) {
+      case "Invalid login credentials":
+        return "Invalid email or password";
+      case "Email not confirmed":
+        return "Please check your email and confirm your account";
+      case "User already registered":
+        return "An account with this email already exists";
+      case "Password should be at least 6 characters":
+        return "Password must be at least 6 characters long";
+      default:
+        return error.message;
+    }
+  }
+
+  return "An unexpected error occurred";
+};
+```
+
+## Best Practices
+
+### 1. Security
+
+- Always validate user inputs
+- Use HTTPS in production
+- Implement proper session management
+- Use environment variables for sensitive data
+- Implement rate limiting for auth endpoints
+
+### 2. User Experience
+
+- Provide clear error messages
+- Implement loading states
+- Use proper form validation
+- Support password reset functionality
+- Remember user sessions appropriately
+
+### 3. Code Organization
+
+- Separate auth logic into services
+- Use TypeScript for type safety
+- Implement proper error handling
+- Use context for global auth state
+- Keep auth components reusable
+
+### 4. Testing
+
+- Test authentication flows
+- Mock external auth services
+- Test error scenarios
+- Verify protected routes
+- Test session management
+
+---
+
+_Follow these authentication and security guidelines for secure user management._

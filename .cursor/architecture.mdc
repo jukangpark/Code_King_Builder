@@ -1,0 +1,239 @@
+# Architecture & File Structure
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── [locale]/          # Internationalized routes
+│   │   ├── about/         # About pages
+│   │   ├── builder/       # Website builder
+│   │   ├── contact/       # Contact pages
+│   │   ├── deploy/        # Deployment pages
+│   │   ├── monitoring/    # Dashboard & monitoring
+│   │   ├── portfolio/     # Portfolio showcase
+│   │   ├── profile/       # User profiles
+│   │   ├── support/       # Support pages
+│   │   └── templates/     # Template gallery
+│   ├── api/               # API routes
+│   │   ├── ai/            # AI generation endpoints
+│   │   ├── contact/       # Contact form handling
+│   │   └── deploy/        # Deployment endpoints
+│   ├── auth/              # Authentication pages
+│   ├── contexts/          # React contexts
+│   ├── types/             # TypeScript type definitions
+│   └── layout.tsx         # Root layout
+├── components/            # Reusable UI components
+│   ├── auth/              # Authentication components
+│   ├── Banner.tsx         # Site banners
+│   ├── ChatBot.tsx        # AI chat interface
+│   ├── Footer.tsx         # Site footer
+│   ├── Navigation.tsx     # Site navigation
+│   └── ...                # Other UI components
+├── lib/                   # Business logic & utilities
+│   ├── supabase/          # Supabase configuration
+│   ├── discord-service.ts # Discord integration
+│   ├── email-service.ts   # Email handling
+│   ├── i18n.ts           # Internationalization
+│   └── ...               # Other utilities
+├── constants/             # Application constants
+│   ├── index.ts          # Main constants
+│   ├── portfolioProjects.ts # Portfolio data
+│   ├── social.ts         # Social media links
+│   └── tech.ts           # Technology stack
+└── mock/                  # Mock data for development
+    ├── mockPaymentHistory.ts
+    ├── mockPaymentMethods.ts
+    └── mockWebsites.ts
+```
+
+## Naming Conventions
+
+### File Naming
+- **Page Components**: `page.tsx` (App Router convention)
+- **Layouts**: `layout.tsx`
+- **Error Pages**: `error.tsx`, `global-error.tsx`
+- **Not Found**: `not-found.tsx`
+- **Loading**: `loading.tsx`
+
+### Component Naming
+- **React Components**: PascalCase (e.g., `LoginModal.tsx`, `UserProfile.tsx`)
+- **Utility Functions**: camelCase (e.g., `emailService.ts`, `authHelper.ts`)
+- **Constants**: camelCase (e.g., `portfolioProjects.ts`, `apiEndpoints.ts`)
+- **Types**: PascalCase with descriptive names (e.g., `UserTypes.ts`, `ApiTypes.ts`)
+
+### Directory Naming
+- **Feature Directories**: kebab-case (e.g., `user-profile/`, `payment-methods/`)
+- **Component Directories**: camelCase (e.g., `components/`, `utils/`)
+- **API Directories**: kebab-case (e.g., `api/`, `auth/`)
+
+## File Organization Principles
+
+### 1. Feature-Based Organization
+```
+src/app/[locale]/profile/[userId]/
+├── components/           # Profile-specific components
+│   ├── OverviewTab.tsx
+│   ├── SettingsTab.tsx
+│   └── ProfileSidebar.tsx
+├── page.tsx             # Main profile page
+└── types.ts             # Profile-specific types
+```
+
+### 2. Shared Components
+```
+src/components/
+├── auth/                # Authentication components
+├── ui/                  # Generic UI components
+├── forms/               # Form components
+└── layout/              # Layout components
+```
+
+### 3. Business Logic Separation
+```
+src/lib/
+├── services/            # External service integrations
+├── utils/               # Pure utility functions
+├── hooks/               # Custom React hooks
+└── validators/          # Input validation logic
+```
+
+## Import/Export Conventions
+
+### Import Order
+1. React and Next.js imports
+2. Third-party library imports
+3. Internal component imports
+4. Utility and service imports
+5. Type imports
+6. Relative imports
+
+```typescript
+// Example import order
+import React from 'react';
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { emailService } from '@/lib/services/emailService';
+
+import type { User } from '@/app/types/User';
+import type { ApiResponse } from './types';
+```
+
+### Export Patterns
+- **Default Exports**: For main components and pages
+- **Named Exports**: For utilities, types, and multiple exports
+- **Barrel Exports**: Use `index.ts` files for clean imports
+
+```typescript
+// components/index.ts
+export { Button } from './Button';
+export { Modal } from './Modal';
+export { Input } from './Input';
+
+// Usage
+import { Button, Modal, Input } from '@/components';
+```
+
+## Path Aliases
+
+### Configured Aliases
+- `@/*` → `src/*`
+- `@/components/*` → `src/components/*`
+- `@/lib/*` → `src/lib/*`
+- `@/app/*` → `src/app/*`
+
+### Usage Examples
+```typescript
+// Instead of
+import { Button } from '../../../components/ui/Button';
+
+// Use
+import { Button } from '@/components/ui/Button';
+```
+
+## Asset Organization
+
+### Public Assets
+```
+public/
+├── images/              # Static images
+│   ├── logos/          # Company logos
+│   ├── icons/          # UI icons
+│   └── backgrounds/    # Background images
+├── icons/              # Favicon and app icons
+└── fonts/              # Custom fonts
+```
+
+### Asset Naming
+- **Images**: kebab-case (e.g., `user-avatar.png`, `hero-banner.jpg`)
+- **Icons**: kebab-case (e.g., `arrow-right.svg`, `close-icon.svg`)
+- **Fonts**: kebab-case (e.g., `inter-regular.woff2`)
+
+## Environment Configuration
+
+### Environment Files
+- `.env.local` - Local development
+- `.env.example` - Template for required variables
+- `.env.production` - Production configuration
+
+### Environment Variables Naming
+- **Prefix**: Use `NEXT_PUBLIC_` for client-side variables
+- **Naming**: SCREAMING_SNAKE_CASE
+- **Grouping**: Use prefixes for related variables
+
+```bash
+# Database
+DATABASE_URL=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+
+# External Services
+NEXT_PUBLIC_ANTHROPIC_API_KEY=
+DISCORD_WEBHOOK_URL=
+
+# App Configuration
+NEXT_PUBLIC_APP_URL=
+NEXT_PUBLIC_APP_NAME=
+```
+
+## Documentation Structure
+
+### Code Documentation
+- **README.md**: Project overview and setup
+- **ARCHITECTURE.md**: Detailed architecture documentation
+- **API.md**: API documentation
+- **DEPLOYMENT.md**: Deployment instructions
+
+### Inline Documentation
+- **JSDoc**: For functions and classes
+- **Comments**: For complex business logic
+- **Type Definitions**: Self-documenting through TypeScript
+
+## Best Practices
+
+### 1. Consistency
+- Follow established patterns throughout the project
+- Use consistent naming conventions
+- Maintain similar file structures across features
+
+### 2. Scalability
+- Design for future growth
+- Keep components small and focused
+- Use proper separation of concerns
+
+### 3. Maintainability
+- Write self-documenting code
+- Use meaningful names
+- Keep related code together
+
+### 4. Performance
+- Optimize imports and exports
+- Use proper code splitting
+- Minimize bundle size
+
+---
+
+*This architecture guide should be followed for all new features and refactoring efforts.*

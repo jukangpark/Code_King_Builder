@@ -1,0 +1,679 @@
+# Styling & UI Guidelines
+
+## Tailwind CSS
+
+### Configuration
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: "#eff6ff",
+          500: "#3b82f6",
+          900: "#1e3a8a",
+        },
+        secondary: {
+          50: "#f8fafc",
+          500: "#64748b",
+          900: "#0f172a",
+        },
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
+      },
+    },
+  },
+  plugins: [],
+};
+```
+
+### Utility-First Approach
+
+```typescript
+// ✅ Good - Utility classes
+const Button: React.FC<ButtonProps> = ({
+  variant,
+  size,
+  children,
+  ...props
+}) => {
+  const baseClasses =
+    "font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
+
+  const variantClasses = {
+    primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
+    secondary:
+      "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500",
+    danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
+  };
+
+  const sizeClasses = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-base",
+    lg: "px-6 py-3 text-lg",
+  };
+
+  return (
+    <button
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ❌ Bad - Custom CSS for everything
+const BadButton: React.FC<ButtonProps> = ({ children, ...props }) => {
+  return (
+    <button className="custom-button" {...props}>
+      {children}
+    </button>
+  );
+};
+```
+
+### Responsive Design
+
+```typescript
+// ✅ Good - Mobile-first responsive design
+const Card: React.FC<CardProps> = ({ title, content, image }) => {
+  return (
+    <div
+      className="
+      w-full
+      sm:w-1/2
+      lg:w-1/3
+      xl:w-1/4
+      p-4
+      sm:p-6
+      lg:p-8
+      bg-white
+      rounded-lg
+      shadow-md
+      hover:shadow-lg
+      transition-shadow
+    "
+    >
+      <img
+        src={image}
+        alt={title}
+        className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-md mb-4"
+      />
+      <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-2">
+        {title}
+      </h3>
+      <p className="text-sm sm:text-base text-gray-600">{content}</p>
+    </div>
+  );
+};
+```
+
+### Dark Mode Support
+
+```typescript
+// ✅ Good - Dark mode with Tailwind
+const ThemeToggle: React.FC = () => {
+  const [isDark, setIsDark] = useState(false);
+
+  return (
+    <button
+      onClick={() => setIsDark(!isDark)}
+      className="
+        p-2
+        rounded-lg
+        bg-gray-100
+        dark:bg-gray-800
+        text-gray-900
+        dark:text-gray-100
+        hover:bg-gray-200
+        dark:hover:bg-gray-700
+        transition-colors
+      "
+    >
+      {isDark ? "☀️" : "🌙"}
+    </button>
+  );
+};
+
+// Global dark mode styles
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      {children}
+    </div>
+  );
+};
+```
+
+## Component Styling Patterns
+
+### Styled Components
+
+```typescript
+// ✅ Good - Component with consistent styling
+interface CardProps {
+  variant?: "default" | "elevated" | "outlined";
+  size?: "sm" | "md" | "lg";
+  children: React.ReactNode;
+}
+
+const Card: React.FC<CardProps> = ({
+  variant = "default",
+  size = "md",
+  children,
+}) => {
+  const baseClasses = "rounded-lg transition-all duration-200";
+
+  const variantClasses = {
+    default: "bg-white shadow-sm border border-gray-200",
+    elevated: "bg-white shadow-lg border-0",
+    outlined: "bg-transparent border-2 border-gray-300",
+  };
+
+  const sizeClasses = {
+    sm: "p-4",
+    md: "p-6",
+    lg: "p-8",
+  };
+
+  return (
+    <div
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`}
+    >
+      {children}
+    </div>
+  );
+};
+```
+
+### Form Styling
+
+```typescript
+// ✅ Good - Consistent form styling
+const FormField: React.FC<FormFieldProps> = ({
+  label,
+  error,
+  required,
+  children,
+}) => {
+  return (
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+      <div className="relative">{children}</div>
+      {error && (
+        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+      )}
+    </div>
+  );
+};
+
+const Input: React.FC<InputProps> = ({ error, ...props }) => {
+  return (
+    <input
+      className={`
+        w-full
+        px-3
+        py-2
+        border
+        rounded-md
+        shadow-sm
+        focus:outline-none
+        focus:ring-2
+        focus:ring-blue-500
+        focus:border-blue-500
+        dark:bg-gray-800
+        dark:border-gray-600
+        dark:text-white
+        ${
+          error
+            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+            : "border-gray-300"
+        }
+      `}
+      {...props}
+    />
+  );
+};
+```
+
+## Layout Patterns
+
+### Grid Layouts
+
+```typescript
+// ✅ Good - Responsive grid
+const ProductGrid: React.FC<{ products: Product[] }> = ({ products }) => {
+  return (
+    <div
+      className="
+      grid
+      grid-cols-1
+      sm:grid-cols-2
+      lg:grid-cols-3
+      xl:grid-cols-4
+      gap-4
+      sm:gap-6
+      lg:gap-8
+    "
+    >
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  );
+};
+
+// ✅ Good - Flexible grid with auto-fit
+const DashboardGrid: React.FC<{ widgets: Widget[] }> = ({ widgets }) => {
+  return (
+    <div
+      className="
+      grid
+      grid-cols-1
+      md:grid-cols-2
+      lg:grid-cols-3
+      xl:grid-cols-4
+      2xl:grid-cols-5
+      gap-6
+      auto-rows-min
+    "
+    >
+      {widgets.map((widget) => (
+        <Widget key={widget.id} widget={widget} />
+      ))}
+    </div>
+  );
+};
+```
+
+### Flexbox Layouts
+
+```typescript
+// ✅ Good - Flexbox for component layouts
+const Header: React.FC = () => {
+  return (
+    <header
+      className="
+      flex
+      items-center
+      justify-between
+      px-4
+      py-3
+      bg-white
+      border-b
+      border-gray-200
+      dark:bg-gray-800
+      dark:border-gray-700
+    "
+    >
+      <div className="flex items-center space-x-4">
+        <Logo />
+        <Navigation />
+      </div>
+      <div className="flex items-center space-x-2">
+        <ThemeToggle />
+        <UserMenu />
+      </div>
+    </header>
+  );
+};
+
+// ✅ Good - Centered content
+const CenteredLayout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  return (
+    <div
+      className="
+      min-h-screen
+      flex
+      items-center
+      justify-center
+      bg-gray-50
+      dark:bg-gray-900
+    "
+    >
+      <div
+        className="
+        w-full
+        max-w-md
+        p-6
+        bg-white
+        rounded-lg
+        shadow-lg
+        dark:bg-gray-800
+      "
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+```
+
+## Animation & Transitions
+
+### CSS Transitions
+
+```typescript
+// ✅ Good - Smooth transitions
+const AnimatedCard: React.FC<CardProps> = ({ children, onClick }) => {
+  return (
+    <div
+      onClick={onClick}
+      className="
+        p-6
+        bg-white
+        rounded-lg
+        shadow-md
+        cursor-pointer
+        transform
+        transition-all
+        duration-200
+        ease-in-out
+        hover:scale-105
+        hover:shadow-lg
+        active:scale-95
+      "
+    >
+      {children}
+    </div>
+  );
+};
+
+// ✅ Good - Loading states
+const LoadingButton: React.FC<ButtonProps> = ({
+  loading,
+  children,
+  ...props
+}) => {
+  return (
+    <button
+      className={`
+        px-4
+        py-2
+        bg-blue-600
+        text-white
+        rounded-md
+        transition-all
+        duration-200
+        ${
+          loading
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+        }
+      `}
+      disabled={loading}
+      {...props}
+    >
+      {loading ? (
+        <div className="flex items-center space-x-2">
+          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          <span>Loading...</span>
+        </div>
+      ) : (
+        children
+      )}
+    </button>
+  );
+};
+```
+
+### Framer Motion Integration
+
+```typescript
+// ✅ Good - Framer Motion animations
+import { motion } from "framer-motion";
+
+const AnimatedModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isOpen ? 1 : 0 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: isOpen ? 1 : 0.9, opacity: isOpen ? 1 : 0 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="bg-white rounded-lg p-6 max-w-md w-full mx-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
+```
+
+## Accessibility (a11y)
+
+### Focus Management
+
+```typescript
+// ✅ Good - Proper focus management
+const AccessibleButton: React.FC<ButtonProps> = ({ children, ...props }) => {
+  return (
+    <button
+      className="
+        px-4
+        py-2
+        bg-blue-600
+        text-white
+        rounded-md
+        focus:outline-none
+        focus:ring-2
+        focus:ring-blue-500
+        focus:ring-offset-2
+        hover:bg-blue-700
+        disabled:opacity-50
+        disabled:cursor-not-allowed
+      "
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ✅ Good - Skip links
+const SkipLink: React.FC = () => {
+  return (
+    <a
+      href="#main-content"
+      className="
+        sr-only
+        focus:not-sr-only
+        focus:absolute
+        focus:top-4
+        focus:left-4
+        bg-blue-600
+        text-white
+        px-4
+        py-2
+        rounded-md
+        z-50
+      "
+    >
+      Skip to main content
+    </a>
+  );
+};
+```
+
+### Screen Reader Support
+
+```typescript
+// ✅ Good - ARIA labels and descriptions
+const FormField: React.FC<FormFieldProps> = ({
+  label,
+  error,
+  description,
+  required,
+  children,
+}) => {
+  const fieldId = useId();
+  const errorId = useId();
+  const descriptionId = useId();
+
+  return (
+    <div className="space-y-2">
+      <label
+        htmlFor={fieldId}
+        className="block text-sm font-medium text-gray-700"
+      >
+        {label}
+        {required && (
+          <span className="text-red-500 ml-1" aria-label="required">
+            *
+          </span>
+        )}
+      </label>
+
+      {description && (
+        <p id={descriptionId} className="text-sm text-gray-500">
+          {description}
+        </p>
+      )}
+
+      <div className="relative">
+        {React.cloneElement(children, {
+          id: fieldId,
+          "aria-describedby": `${description ? descriptionId : ""} ${
+            error ? errorId : ""
+          }`.trim(),
+          "aria-invalid": !!error,
+          "aria-required": required,
+        })}
+      </div>
+
+      {error && (
+        <p id={errorId} className="text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+};
+```
+
+## Design System
+
+### Color Palette
+
+```typescript
+// ✅ Good - Consistent color usage
+const colorClasses = {
+  primary: {
+    bg: "bg-blue-600",
+    text: "text-blue-600",
+    border: "border-blue-600",
+    hover: "hover:bg-blue-700",
+  },
+  secondary: {
+    bg: "bg-gray-600",
+    text: "text-gray-600",
+    border: "border-gray-600",
+    hover: "hover:bg-gray-700",
+  },
+  success: {
+    bg: "bg-green-600",
+    text: "text-green-600",
+    border: "border-green-600",
+    hover: "hover:bg-green-700",
+  },
+  danger: {
+    bg: "bg-red-600",
+    text: "text-red-600",
+    border: "border-red-600",
+    hover: "hover:bg-red-700",
+  },
+};
+```
+
+### Typography Scale
+
+```typescript
+// ✅ Good - Consistent typography
+const Typography: React.FC<TypographyProps> = ({
+  variant,
+  children,
+  className = "",
+}) => {
+  const variantClasses = {
+    h1: "text-4xl font-bold text-gray-900 dark:text-gray-100",
+    h2: "text-3xl font-semibold text-gray-900 dark:text-gray-100",
+    h3: "text-2xl font-semibold text-gray-900 dark:text-gray-100",
+    h4: "text-xl font-medium text-gray-900 dark:text-gray-100",
+    body: "text-base text-gray-700 dark:text-gray-300",
+    caption: "text-sm text-gray-500 dark:text-gray-400",
+  };
+
+  const Component = variant.startsWith("h") ? variant : "p";
+
+  return (
+    <Component className={`${variantClasses[variant]} ${className}`}>
+      {children}
+    </Component>
+  );
+};
+```
+
+## Best Practices
+
+### 1. Utility-First Approach
+
+- Use Tailwind utilities instead of custom CSS
+- Create component variants with utility classes
+- Use consistent spacing and sizing scales
+
+### 2. Responsive Design
+
+- Start with mobile-first approach
+- Use responsive prefixes (sm:, md:, lg:, xl:)
+- Test on multiple screen sizes
+
+### 3. Dark Mode
+
+- Use dark: prefix for dark mode styles
+- Provide theme toggle functionality
+- Test both light and dark modes
+
+### 4. Performance
+
+- Use CSS transitions instead of JavaScript animations when possible
+- Optimize images and assets
+- Minimize custom CSS
+
+### 5. Accessibility
+
+- Use semantic HTML elements
+- Provide proper focus management
+- Include ARIA labels and descriptions
+- Test with screen readers
+
+### 6. Consistency
+
+- Follow design system guidelines
+- Use consistent spacing and typography
+- Maintain color palette consistency
+- Create reusable component patterns
+
+---
+
+_Follow these styling guidelines for consistent, accessible, and maintainable UI components._

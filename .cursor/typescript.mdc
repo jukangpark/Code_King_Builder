@@ -1,0 +1,400 @@
+# TypeScript & Development Standards
+
+## TypeScript Configuration
+
+### Strict Mode Settings
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true
+  }
+}
+```
+
+### Path Mapping
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/app/*": ["./src/app/*"]
+    }
+  }
+}
+```
+
+## Type Definitions
+
+### Interface Naming Convention
+
+- **Prefix**: Use `I` prefix for interfaces (e.g., `IUser`, `IAuthContext`)
+- **Naming**: PascalCase with descriptive names
+- **Location**: Store in `src/app/types/` directory
+
+```typescript
+// ✅ Good
+interface IUser {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: Date;
+}
+
+interface IAuthContext {
+  user: IUser | null;
+  loading: boolean;
+  signIn: (data: SignInData) => Promise<AuthResult>;
+  signOut: () => Promise<void>;
+}
+
+// ❌ Bad
+interface user {
+  id: string;
+  email: string;
+}
+
+interface AuthContext {
+  user: user | null;
+}
+```
+
+### Type Definitions
+
+```typescript
+// Union types
+type Locale = "ko" | "en" | "ja" | "zh";
+type UserRole = "admin" | "user" | "guest";
+
+// Utility types
+type PartialUser = Partial<IUser>;
+type UserEmail = Pick<IUser, "email">;
+type UserWithoutId = Omit<IUser, "id">;
+
+// Generic types
+interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+  message?: string;
+}
+
+// Function types
+type EventHandler<T = HTMLElement> = (event: React.ChangeEvent<T>) => void;
+type AsyncFunction<T, R> = (param: T) => Promise<R>;
+```
+
+## Function Typing
+
+### Function Signatures
+
+```typescript
+// ✅ Good - Explicit return types
+function calculateTotal(items: Item[]): number {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+
+// ✅ Good - Async functions
+async function fetchUser(id: string): Promise<IUser> {
+  const response = await api.get(`/users/${id}`);
+  return response.data;
+}
+
+// ✅ Good - Arrow functions
+const formatDate = (date: Date): string => {
+  return date.toLocaleDateString("ko-KR");
+};
+
+// ❌ Bad - Missing return types
+function calculateTotal(items: Item[]) {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+```
+
+### Generic Functions
+
+```typescript
+// Generic utility functions
+function createApiResponse<T>(data: T, success = true): ApiResponse<T> {
+  return { data, success };
+}
+
+// Generic hooks
+function useApi<T>(url: string): {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+} {
+  // Implementation
+}
+```
+
+## Component Typing
+
+### React Component Props
+
+```typescript
+// ✅ Good - Explicit props interface
+interface ButtonProps {
+  children: React.ReactNode;
+  variant?: "primary" | "secondary" | "danger";
+  size?: "sm" | "md" | "lg";
+  disabled?: boolean;
+  onClick?: () => void;
+  className?: string;
+}
+
+const Button: React.FC<ButtonProps> = ({
+  children,
+  variant = "primary",
+  size = "md",
+  disabled = false,
+  onClick,
+  className = "",
+}) => {
+  // Component implementation
+};
+
+// ✅ Good - With forwardRef
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, ...props }, ref) => {
+    return (
+      <div>
+        <label>{label}</label>
+        <input ref={ref} {...props} />
+        {error && <span className="error">{error}</span>}
+      </div>
+    );
+  }
+);
+```
+
+### Event Handlers
+
+```typescript
+// Form events
+const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+  // Handle form submission
+};
+
+// Input events
+const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = event.target;
+  setFormData((prev) => ({ ...prev, [name]: value }));
+};
+
+// Click events
+const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  event.preventDefault();
+  // Handle click
+};
+```
+
+## API Typing
+
+### Request/Response Types
+
+```typescript
+// API request types
+interface CreateUserRequest {
+  email: string;
+  password: string;
+  name: string;
+}
+
+interface UpdateUserRequest {
+  name?: string;
+  email?: string;
+}
+
+// API response types
+interface UserResponse {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+}
+```
+
+### Service Layer Typing
+
+```typescript
+// Service interface
+interface IUserService {
+  createUser(data: CreateUserRequest): Promise<UserResponse>;
+  getUser(id: string): Promise<UserResponse>;
+  updateUser(id: string, data: UpdateUserRequest): Promise<UserResponse>;
+  deleteUser(id: string): Promise<void>;
+}
+
+// Service implementation
+class UserService implements IUserService {
+  async createUser(data: CreateUserRequest): Promise<UserResponse> {
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create user");
+    }
+
+    return response.json();
+  }
+}
+```
+
+## Error Handling
+
+### Custom Error Types
+
+```typescript
+// Base error class
+class AppError extends Error {
+  constructor(
+    message: string,
+    public code: string,
+    public statusCode: number = 500
+  ) {
+    super(message);
+    this.name = "AppError";
+  }
+}
+
+// Specific error types
+class ValidationError extends AppError {
+  constructor(message: string, public field?: string) {
+    super(message, "VALIDATION_ERROR", 400);
+  }
+}
+
+class AuthenticationError extends AppError {
+  constructor(message: string = "Authentication required") {
+    super(message, "AUTH_ERROR", 401);
+  }
+}
+
+// Error handling utility
+function handleApiError(error: unknown): AppError {
+  if (error instanceof AppError) {
+    return error;
+  }
+
+  if (error instanceof Error) {
+    return new AppError(error.message, "UNKNOWN_ERROR");
+  }
+
+  return new AppError("An unknown error occurred", "UNKNOWN_ERROR");
+}
+```
+
+## Utility Types
+
+### Common Utility Types
+
+```typescript
+// Make all properties optional
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
+
+// Make all properties required
+type Required<T> = {
+  [P in keyof T]-?: T[P];
+};
+
+// Pick specific properties
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+// Omit specific properties
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+// Custom utility types
+type NonNullable<T> = T extends null | undefined ? never : T;
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+```
+
+## Development Standards
+
+### Code Quality
+
+- **ESLint**: Use Next.js recommended configuration
+- **Prettier**: Maintain consistent code formatting
+- **Type Checking**: Enable strict TypeScript checking
+- **Import Organization**: Use consistent import ordering
+
+### Documentation
+
+```typescript
+/**
+ * Calculates the total price of items with tax
+ * @param items - Array of items to calculate total for
+ * @param taxRate - Tax rate as decimal (e.g., 0.1 for 10%)
+ * @returns Total price including tax
+ * @throws {ValidationError} When items array is empty
+ */
+function calculateTotalWithTax(items: Item[], taxRate: number): number {
+  if (items.length === 0) {
+    throw new ValidationError("Items array cannot be empty");
+  }
+
+  const subtotal = items.reduce((sum, item) => sum + item.price, 0);
+  return subtotal * (1 + taxRate);
+}
+```
+
+### Best Practices
+
+1. **Always use explicit types** for function parameters and return values
+2. **Prefer interfaces over types** for object shapes
+3. **Use union types** for limited sets of values
+4. **Implement proper error handling** with custom error types
+5. **Document complex functions** with JSDoc comments
+6. **Use generic types** for reusable components and functions
+7. **Avoid `any` type** - use `unknown` or proper typing instead
+8. **Use type guards** for runtime type checking
+
+```typescript
+// Type guard example
+function isUser(obj: unknown): obj is IUser {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "id" in obj &&
+    "email" in obj &&
+    "name" in obj
+  );
+}
+
+// Usage
+if (isUser(data)) {
+  // data is now typed as IUser
+  console.log(data.email);
+}
+```
+
+---
+
+_Follow these TypeScript standards for type safety and code maintainability._

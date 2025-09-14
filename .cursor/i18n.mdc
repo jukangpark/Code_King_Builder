@@ -1,0 +1,587 @@
+# Internationalization (i18n)
+
+## Locale Management
+
+### Supported Locales
+
+- **Korean (ko)**: Default language
+- **English (en)**: Fallback language
+- **Japanese (ja)**: Japanese localization
+- **Chinese (zh)**: Chinese localization
+
+### Locale File Structure
+
+```
+locales/
+├── ko.json              # Korean translations
+├── en.json              # English translations
+├── ja.json              # Japanese translations
+└── zh.json              # Chinese translations
+```
+
+### Translation File Format
+
+```json
+// locales/ko.json
+{
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "success": "성공했습니다",
+    "cancel": "취소",
+    "confirm": "확인",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "편집"
+  },
+  "navigation": {
+    "home": "홈",
+    "about": "소개",
+    "contact": "연락처",
+    "login": "로그인",
+    "signup": "회원가입"
+  },
+  "auth": {
+    "signIn": {
+      "title": "로그인",
+      "email": "이메일",
+      "password": "비밀번호",
+      "submit": "로그인",
+      "forgotPassword": "비밀번호를 잊으셨나요?",
+      "noAccount": "계정이 없으신가요?",
+      "signUp": "회원가입"
+    },
+    "signUp": {
+      "title": "회원가입",
+      "name": "이름",
+      "email": "이메일",
+      "password": "비밀번호",
+      "confirmPassword": "비밀번호 확인",
+      "submit": "회원가입",
+      "hasAccount": "이미 계정이 있으신가요?",
+      "signIn": "로그인"
+    }
+  },
+  "errors": {
+    "required": "필수 입력 항목입니다",
+    "email": "올바른 이메일 주소를 입력해주세요",
+    "password": "비밀번호는 최소 8자 이상이어야 합니다",
+    "passwordMismatch": "비밀번호가 일치하지 않습니다",
+    "networkError": "네트워크 오류가 발생했습니다",
+    "serverError": "서버 오류가 발생했습니다"
+  }
+}
+```
+
+## Translation Functions
+
+### Core Translation Functions
+
+```typescript
+// lib/i18n.ts
+import ko from "../../locales/ko.json";
+import en from "../../locales/en.json";
+import ja from "../../locales/ja.json";
+import zh from "../../locales/zh.json";
+
+export const locales = {
+  ko,
+  en,
+  ja,
+  zh,
+};
+
+export type Locale = keyof typeof locales;
+
+export const localeNames: Record<Locale, string> = {
+  ko: "한국어",
+  en: "English",
+  ja: "日本語",
+  zh: "中文",
+};
+
+export const localeFlags: Record<Locale, string> = {
+  ko: "🇰🇷",
+  en: "🇺🇸",
+  ja: "🇯🇵",
+  zh: "🇨🇳",
+};
+
+// Get translation with fallback
+export function getTranslation(locale: Locale, key: string): string {
+  const keys = key.split(".");
+  let value: any = locales[locale];
+
+  for (const k of keys) {
+    if (value && typeof value === "object" && k in value) {
+      value = value[k];
+    } else {
+      // Fallback to English if translation not found
+      value = getNestedValue(locales.en, keys);
+      break;
+    }
+  }
+
+  return typeof value === "string" ? value : key;
+}
+
+// Get nested translation object
+export function getTranslations(locale: Locale, key: string): any {
+  const keys = key.split(".");
+  let value: any = locales[locale];
+
+  for (const k of keys) {
+    if (value && typeof value === "object" && k in value) {
+      value = value[k];
+    } else {
+      // Fallback to English if translation not found
+      value = getNestedValue(locales.en, keys);
+      break;
+    }
+  }
+
+  return value;
+}
+
+function getNestedValue(obj: any, keys: string[]): any {
+  let value = obj;
+  for (const key of keys) {
+    if (value && typeof value === "object" && key in value) {
+      value = value[key];
+    } else {
+      return undefined;
+    }
+  }
+  return value;
+}
+```
+
+### React Hook for Translations
+
+```typescript
+// hooks/useTranslation.ts
+import { useParams } from "next/navigation";
+import { getTranslation, getTranslations, Locale } from "@/lib/i18n";
+
+export function useTranslation() {
+  const params = useParams();
+  const locale = (params.locale as Locale) || "ko";
+
+  const t = (key: string, fallback?: string): string => {
+    const translation = getTranslation(locale, key);
+    return translation === key ? fallback || key : translation;
+  };
+
+  const tObject = (key: string) => {
+    return getTranslations(locale, key);
+  };
+
+  return {
+    t,
+    tObject,
+    locale,
+  };
+}
+
+// Usage in components
+const LoginForm: React.FC = () => {
+  const { t } = useTranslation();
+
+  return (
+    <form>
+      <h1>{t("auth.signIn.title")}</h1>
+      <input type="email" placeholder={t("auth.signIn.email")} required />
+      <input type="password" placeholder={t("auth.signIn.password")} required />
+      <button type="submit">{t("auth.signIn.submit")}</button>
+    </form>
+  );
+};
+```
+
+## Routing & Locale Detection
+
+### Middleware Configuration
+
+```typescript
+// middleware.ts
+import { NextRequest, NextResponse } from "next/server";
+
+const locales = ["ko", "en", "ja", "zh"];
+const defaultLocale = "ko";
+
+export function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Check if there is any supported locale in the pathname
+  const pathnameIsMissingLocale = locales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  );
+
+  // Redirect if there is no locale
+  if (pathnameIsMissingLocale) {
+    return NextResponse.redirect(
+      new URL(`/${defaultLocale}${pathname}`, request.url)
+    );
+  }
+}
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
+```
+
+### Locale-Specific Layouts
+
+```typescript
+// app/[locale]/layout.tsx
+import { notFound } from "next/navigation";
+import { locales } from "@/lib/i18n";
+
+interface LocaleLayoutProps {
+  children: React.ReactNode;
+  params: { locale: string };
+}
+
+export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  // Validate that the incoming `locale` parameter is valid
+  if (!locales.includes(params.locale as any)) notFound();
+
+  return (
+    <html lang={params.locale}>
+      <body>
+        <LocaleProvider locale={params.locale}>{children}</LocaleProvider>
+      </body>
+    </html>
+  );
+}
+
+// Generate static params for all locales
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+```
+
+## Component Patterns
+
+### Language Selector
+
+```typescript
+// components/LanguageSelector.tsx
+import { useRouter, usePathname } from "next/navigation";
+import { locales, localeNames, localeFlags, Locale } from "@/lib/i18n";
+
+interface LanguageSelectorProps {
+  currentLocale: Locale;
+}
+
+export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
+  currentLocale,
+}) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLocaleChange = (newLocale: Locale) => {
+    // Remove current locale from pathname
+    const pathWithoutLocale = pathname.replace(`/${currentLocale}`, "");
+    // Navigate to new locale
+    router.push(`/${newLocale}${pathWithoutLocale}`);
+  };
+
+  return (
+    <div className="relative">
+      <select
+        value={currentLocale}
+        onChange={(e) => handleLocaleChange(e.target.value as Locale)}
+        className="appearance-none bg-white border border-gray-300 rounded px-3 py-2 pr-8"
+      >
+        {locales.map((locale) => (
+          <option key={locale} value={locale}>
+            {localeFlags[locale]} {localeNames[locale]}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+```
+
+### Localized Components
+
+```typescript
+// components/LocalizedButton.tsx
+import { useTranslation } from "@/hooks/useTranslation";
+
+interface LocalizedButtonProps {
+  translationKey: string;
+  variant?: "primary" | "secondary";
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+export const LocalizedButton: React.FC<LocalizedButtonProps> = ({
+  translationKey,
+  variant = "primary",
+  onClick,
+  disabled = false,
+}) => {
+  const { t } = useTranslation();
+
+  const baseClasses = "px-4 py-2 rounded-md font-medium transition-colors";
+  const variantClasses = {
+    primary: "bg-blue-600 text-white hover:bg-blue-700",
+    secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
+  };
+
+  return (
+    <button
+      className={`${baseClasses} ${variantClasses[variant]}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {t(translationKey)}
+    </button>
+  );
+};
+
+// Usage
+<LocalizedButton
+  translationKey="common.save"
+  variant="primary"
+  onClick={handleSave}
+/>;
+```
+
+## Date & Number Formatting
+
+### Locale-Aware Formatting
+
+```typescript
+// utils/formatting.ts
+import { Locale } from "@/lib/i18n";
+
+const localeMap: Record<Locale, string> = {
+  ko: "ko-KR",
+  en: "en-US",
+  ja: "ja-JP",
+  zh: "zh-CN",
+};
+
+export function formatDate(date: Date, locale: Locale): string {
+  return new Intl.DateTimeFormat(localeMap[locale], {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+}
+
+export function formatCurrency(amount: number, locale: Locale): string {
+  const currencyMap: Record<Locale, string> = {
+    ko: "KRW",
+    en: "USD",
+    ja: "JPY",
+    zh: "CNY",
+  };
+
+  return new Intl.NumberFormat(localeMap[locale], {
+    style: "currency",
+    currency: currencyMap[locale],
+  }).format(amount);
+}
+
+export function formatNumber(number: number, locale: Locale): string {
+  return new Intl.NumberFormat(localeMap[locale]).format(number);
+}
+
+// Usage in components
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { locale } = useTranslation();
+
+  return (
+    <div className="product-card">
+      <h3>{product.name}</h3>
+      <p className="price">{formatCurrency(product.price, locale)}</p>
+      <p className="date">{formatDate(product.createdAt, locale)}</p>
+    </div>
+  );
+};
+```
+
+## Form Validation Messages
+
+### Localized Validation
+
+```typescript
+// utils/validation.ts
+import { Locale } from "@/lib/i18n";
+import { getTranslation } from "@/lib/i18n";
+
+export interface ValidationRule {
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: RegExp;
+  custom?: (value: any) => string | null;
+}
+
+export function validateField(
+  value: any,
+  rules: ValidationRule,
+  locale: Locale
+): string | null {
+  // Required validation
+  if (rules.required && (!value || value.toString().trim() === "")) {
+    return getTranslation(locale, "errors.required");
+  }
+
+  // Length validation
+  if (value && rules.minLength && value.length < rules.minLength) {
+    return getTranslation(locale, "errors.minLength", {
+      min: rules.minLength,
+    });
+  }
+
+  if (value && rules.maxLength && value.length > rules.maxLength) {
+    return getTranslation(locale, "errors.maxLength", {
+      max: rules.maxLength,
+    });
+  }
+
+  // Pattern validation
+  if (value && rules.pattern && !rules.pattern.test(value)) {
+    return getTranslation(locale, "errors.pattern");
+  }
+
+  // Custom validation
+  if (rules.custom) {
+    return rules.custom(value);
+  }
+
+  return null;
+}
+
+// Usage in forms
+const useFormValidation = (locale: Locale) => {
+  const validateEmail = (email: string) => {
+    return validateField(
+      email,
+      {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      },
+      locale
+    );
+  };
+
+  const validatePassword = (password: string) => {
+    return validateField(
+      password,
+      {
+        required: true,
+        minLength: 8,
+      },
+      locale
+    );
+  };
+
+  return {
+    validateEmail,
+    validatePassword,
+  };
+};
+```
+
+## SEO & Meta Tags
+
+### Locale-Specific Meta Tags
+
+```typescript
+// app/[locale]/layout.tsx
+import { Metadata } from "next";
+import { Locale } from "@/lib/i18n";
+
+interface LocaleLayoutProps {
+  children: React.ReactNode;
+  params: { locale: Locale };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale };
+}): Promise<Metadata> {
+  const { t } = useTranslation();
+
+  return {
+    title: {
+      template: `%s | ${t("common.appName")}`,
+      default: t("common.appName"),
+    },
+    description: t("common.appDescription"),
+    openGraph: {
+      title: t("common.appName"),
+      description: t("common.appDescription"),
+      locale: params.locale,
+      alternateLocale: ["ko", "en", "ja", "zh"].filter(
+        (l) => l !== params.locale
+      ),
+    },
+    alternates: {
+      canonical: `/${params.locale}`,
+      languages: {
+        ko: "/ko",
+        en: "/en",
+        ja: "/ja",
+        zh: "/zh",
+      },
+    },
+  };
+}
+```
+
+## Best Practices
+
+### 1. Translation Key Naming
+
+- Use dot notation for nested keys (e.g., `auth.signIn.title`)
+- Use descriptive, hierarchical names
+- Keep keys consistent across all locales
+- Use camelCase for key names
+
+### 2. Fallback Strategy
+
+- Always provide English fallback
+- Use the translation key as final fallback
+- Log missing translations in development
+- Implement translation completeness checks
+
+### 3. Content Management
+
+- Keep translations in separate files
+- Use version control for translation files
+- Implement translation review process
+- Consider using translation management tools
+
+### 4. Performance
+
+- Load only required locale data
+- Implement lazy loading for translations
+- Cache translations appropriately
+- Minimize translation file sizes
+
+### 5. Testing
+
+- Test all supported locales
+- Verify fallback behavior
+- Check date/number formatting
+- Validate form error messages
+
+### 6. Accessibility
+
+- Ensure proper language attributes
+- Support RTL languages if needed
+- Test with screen readers in different languages
+- Consider cultural differences in UI design
+
+---
+
+_Follow these internationalization guidelines for a truly global application._

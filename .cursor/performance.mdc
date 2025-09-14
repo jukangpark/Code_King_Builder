@@ -1,0 +1,664 @@
+# Performance & Optimization
+
+## Next.js Performance
+
+### Image Optimization
+
+```typescript
+// ✅ Good - Next.js Image component
+import Image from "next/image";
+
+const OptimizedImage: React.FC<ImageProps> = ({ src, alt, ...props }) => {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={800}
+      height={600}
+      placeholder="blur"
+      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      {...props}
+    />
+  );
+};
+
+// ❌ Bad - Regular img tag
+const UnoptimizedImage: React.FC<ImageProps> = ({ src, alt }) => {
+  return <img src={src} alt={alt} />;
+};
+```
+
+### Code Splitting
+
+```typescript
+// ✅ Good - Dynamic imports for code splitting
+import dynamic from "next/dynamic";
+
+// Lazy load heavy components
+const HeavyComponent = dynamic(() => import("./HeavyComponent"), {
+  loading: () => <div>Loading...</div>,
+  ssr: false, // Disable SSR if not needed
+});
+
+// Lazy load with custom loading component
+const ChartComponent = dynamic(() => import("./ChartComponent"), {
+  loading: () => <div className="animate-pulse bg-gray-200 h-64 rounded" />,
+});
+
+// Conditional loading
+const AdminPanel = dynamic(() => import("./AdminPanel"), {
+  loading: () => <div>Loading admin panel...</div>,
+});
+
+const Dashboard: React.FC = () => {
+  const { user } = useAuth();
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <HeavyComponent />
+      <ChartComponent />
+      {user?.role === "admin" && <AdminPanel />}
+    </div>
+  );
+};
+```
+
+### Bundle Optimization
+
+```typescript
+// ✅ Good - Tree shaking friendly imports
+import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
+import { formatDate } from "@/utils/dateUtils";
+
+// ❌ Bad - Importing entire library
+import * as lodash from "lodash";
+
+// ✅ Good - Specific imports
+import { debounce, throttle } from "lodash";
+
+// ✅ Good - Use native alternatives when possible
+const debouncedSearch = useCallback(
+  debounce((query: string) => {
+    // Search logic
+  }, 300),
+  []
+);
+
+// Native alternative
+const debouncedSearch = useCallback(
+  (() => {
+    let timeoutId: NodeJS.Timeout;
+    return (query: string) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        // Search logic
+      }, 300);
+    };
+  })(),
+  []
+);
+```
+
+## React Performance
+
+### Memoization
+
+```typescript
+// ✅ Good - React.memo for expensive components
+const ExpensiveComponent = React.memo<ExpensiveComponentProps>(
+  ({ data, onUpdate }) => {
+    const processedData = useMemo(() => {
+      return data.map((item) => ({
+        ...item,
+        processed: expensiveCalculation(item),
+      }));
+    }, [data]);
+
+    return (
+      <div>
+        {processedData.map((item) => (
+          <ItemComponent key={item.id} item={item} onUpdate={onUpdate} />
+        ))}
+      </div>
+    );
+  }
+);
+
+// ✅ Good - useMemo for expensive calculations
+const DataVisualization: React.FC<{ data: DataPoint[] }> = ({ data }) => {
+  const chartData = useMemo(() => {
+    return data.map((point) => ({
+      x: point.timestamp,
+      y: point.value,
+      label: formatDate(point.timestamp),
+    }));
+  }, [data]);
+
+  const chartOptions = useMemo(
+    () => ({
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top" as const,
+        },
+      },
+    }),
+    []
+  );
+
+  return <Chart data={chartData} options={chartOptions} />;
+};
+
+// ✅ Good - useCallback for stable function references
+const UserList: React.FC<{ users: IUser[] }> = ({ users }) => {
+  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
+
+  const handleUserSelect = useCallback((userId: string) => {
+    setSelectedUsers((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(userId)) {
+        newSet.delete(userId);
+      } else {
+        newSet.add(userId);
+      }
+      return newSet;
+    });
+  }, []);
+
+  return (
+    <div>
+      {users.map((user) => (
+        <UserItem
+          key={user.id}
+          user={user}
+          isSelected={selectedUsers.has(user.id)}
+          onSelect={handleUserSelect}
+        />
+      ))}
+    </div>
+  );
+};
+```
+
+### Virtual Scrolling
+
+```typescript
+// ✅ Good - Virtual scrolling for large lists
+import { FixedSizeList as List } from "react-window";
+
+const VirtualizedList: React.FC<{ items: any[] }> = ({ items }) => {
+  const Row = ({
+    index,
+    style,
+  }: {
+    index: number;
+    style: React.CSSProperties;
+  }) => (
+    <div style={style}>
+      <ItemComponent item={items[index]} />
+    </div>
+  );
+
+  return (
+    <List height={600} itemCount={items.length} itemSize={80} width="100%">
+      {Row}
+    </List>
+  );
+};
+
+// ✅ Good - Infinite scrolling
+const InfiniteList: React.FC = () => {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    try {
+      const newItems = await fetchMoreItems(items.length);
+      setItems((prev) => [...prev, ...newItems]);
+      setHasMore(newItems.length > 0);
+    } finally {
+      setLoading(false);
+    }
+  }, [items.length, loading, hasMore]);
+
+  return (
+    <InfiniteScroll
+      dataLength={items.length}
+      next={loadMore}
+      hasMore={hasMore}
+      loader={<div>Loading...</div>}
+    >
+      {items.map((item, index) => (
+        <ItemComponent key={index} item={item} />
+      ))}
+    </InfiniteScroll>
+  );
+};
+```
+
+## Database Performance
+
+### Query Optimization
+
+```typescript
+// ✅ Good - Optimized database queries
+class UserService {
+  // Use specific fields instead of SELECT *
+  async getUsers(): Promise<IUser[]> {
+    const { data, error } = await supabase
+      .from("users")
+      .select("id, name, email, created_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (error) throw error;
+    return data;
+  }
+
+  // Use indexes for filtering
+  async getUserByEmail(email: string): Promise<IUser | null> {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  // Batch operations
+  async createUsers(users: CreateUserRequest[]): Promise<IUser[]> {
+    const { data, error } = await supabase.from("users").insert(users).select();
+
+    if (error) throw error;
+    return data;
+  }
+}
+
+// ✅ Good - Connection pooling
+const dbConfig = {
+  connectionString: process.env.DATABASE_URL,
+  max: 20, // Maximum number of connections
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+};
+```
+
+### Caching Strategy
+
+```typescript
+// ✅ Good - Multi-level caching
+class CacheService {
+  private memoryCache = new Map<string, { data: any; expires: number }>();
+  private redisClient: Redis;
+
+  constructor() {
+    this.redisClient = new Redis(process.env.REDIS_URL);
+  }
+
+  async get<T>(key: string): Promise<T | null> {
+    // Level 1: Memory cache
+    const memoryItem = this.memoryCache.get(key);
+    if (memoryItem && Date.now() < memoryItem.expires) {
+      return memoryItem.data;
+    }
+
+    // Level 2: Redis cache
+    try {
+      const redisData = await this.redisClient.get(key);
+      if (redisData) {
+        const data = JSON.parse(redisData);
+        // Store in memory cache
+        this.memoryCache.set(key, {
+          data,
+          expires: Date.now() + 60000, // 1 minute
+        });
+        return data;
+      }
+    } catch (error) {
+      console.error("Redis cache error:", error);
+    }
+
+    return null;
+  }
+
+  async set(key: string, data: any, ttl: number = 300): Promise<void> {
+    // Store in memory cache
+    this.memoryCache.set(key, {
+      data,
+      expires: Date.now() + ttl * 1000,
+    });
+
+    // Store in Redis cache
+    try {
+      await this.redisClient.setex(key, ttl, JSON.stringify(data));
+    } catch (error) {
+      console.error("Redis cache error:", error);
+    }
+  }
+}
+```
+
+## Network Performance
+
+### Request Optimization
+
+```typescript
+// ✅ Good - Request batching
+class BatchRequestService {
+  private batchQueue: Array<{
+    id: string;
+    request: any;
+    resolve: Function;
+    reject: Function;
+  }> = [];
+  private batchTimeout: NodeJS.Timeout | null = null;
+
+  async request<T>(id: string, request: any): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.batchQueue.push({ id, request, resolve, reject });
+
+      if (this.batchTimeout) {
+        clearTimeout(this.batchTimeout);
+      }
+
+      this.batchTimeout = setTimeout(() => {
+        this.processBatch();
+      }, 50); // Batch requests within 50ms
+    });
+  }
+
+  private async processBatch() {
+    if (this.batchQueue.length === 0) return;
+
+    const batch = this.batchQueue.splice(0);
+    const requests = batch.map((item) => item.request);
+
+    try {
+      const responses = await this.executeBatch(requests);
+      batch.forEach((item, index) => {
+        item.resolve(responses[index]);
+      });
+    } catch (error) {
+      batch.forEach((item) => {
+        item.reject(error);
+      });
+    }
+  }
+}
+
+// ✅ Good - Request deduplication
+class RequestDeduplicationService {
+  private pendingRequests = new Map<string, Promise<any>>();
+
+  async request<T>(key: string, requestFn: () => Promise<T>): Promise<T> {
+    if (this.pendingRequests.has(key)) {
+      return this.pendingRequests.get(key)!;
+    }
+
+    const promise = requestFn().finally(() => {
+      this.pendingRequests.delete(key);
+    });
+
+    this.pendingRequests.set(key, promise);
+    return promise;
+  }
+}
+```
+
+### Compression
+
+```typescript
+// ✅ Good - Response compression
+import compression from "compression";
+
+// Next.js API route with compression
+export default function handler(req: NextRequest, res: NextResponse) {
+  // Enable compression
+  compression()(req, res, () => {
+    // Your API logic here
+    res.json({ data: "compressed response" });
+  });
+}
+
+// ✅ Good - Image compression
+import sharp from "sharp";
+
+const compressImage = async (buffer: Buffer): Promise<Buffer> => {
+  return sharp(buffer)
+    .resize(800, 600, { fit: "inside", withoutEnlargement: true })
+    .jpeg({ quality: 80 })
+    .toBuffer();
+};
+```
+
+## Build Optimization
+
+### Webpack Configuration
+
+```typescript
+// next.config.ts
+const nextConfig = {
+  // Enable Turbopack for faster builds
+  experimental: {
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
+  },
+
+  // Optimize bundle size
+  webpack: (config: any) => {
+    // Tree shaking
+    config.optimization.usedExports = true;
+    config.optimization.sideEffects = false;
+
+    // Code splitting
+    config.optimization.splitChunks = {
+      chunks: "all",
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+        common: {
+          name: "common",
+          minChunks: 2,
+          chunks: "all",
+          enforce: true,
+        },
+      },
+    };
+
+    return config;
+  },
+
+  // Image optimization
+  images: {
+    formats: ["image/webp", "image/avif"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+
+  // Compression
+  compress: true,
+};
+
+export default nextConfig;
+```
+
+### Bundle Analysis
+
+```typescript
+// scripts/analyze-bundle.js
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+module.exports = {
+  webpack: (config: any) => {
+    if (process.env.ANALYZE === 'true') {
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'server',
+          openAnalyzer: true,
+        })
+      );
+    }
+    return config;
+  },
+};
+
+// package.json
+{
+  "scripts": {
+    "analyze": "ANALYZE=true npm run build",
+    "build": "next build",
+    "build:analyze": "npm run analyze"
+  }
+}
+```
+
+## Monitoring & Analytics
+
+### Performance Monitoring
+
+```typescript
+// lib/performance.ts
+export class PerformanceMonitor {
+  static measurePageLoad() {
+    if (typeof window !== "undefined") {
+      window.addEventListener("load", () => {
+        const navigation = performance.getEntriesByType(
+          "navigation"
+        )[0] as PerformanceNavigationTiming;
+
+        const metrics = {
+          dns: navigation.domainLookupEnd - navigation.domainLookupStart,
+          tcp: navigation.connectEnd - navigation.connectStart,
+          request: navigation.responseStart - navigation.requestStart,
+          response: navigation.responseEnd - navigation.responseStart,
+          dom: navigation.domContentLoadedEventEnd - navigation.domLoading,
+          load: navigation.loadEventEnd - navigation.loadEventStart,
+        };
+
+        // Send to analytics
+        this.sendMetrics("page_load", metrics);
+      });
+    }
+  }
+
+  static measureApiCall(endpoint: string, duration: number) {
+    this.sendMetrics("api_call", {
+      endpoint,
+      duration,
+    });
+  }
+
+  static measureComponentRender(componentName: string, duration: number) {
+    this.sendMetrics("component_render", {
+      component: componentName,
+      duration,
+    });
+  }
+
+  private static sendMetrics(event: string, data: any) {
+    // Send to your analytics service
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", event, data);
+    }
+  }
+}
+
+// Usage
+PerformanceMonitor.measurePageLoad();
+```
+
+### Core Web Vitals
+
+```typescript
+// lib/web-vitals.ts
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals";
+
+export function reportWebVitals(metric: any) {
+  // Send to analytics
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", metric.name, {
+      value: Math.round(
+        metric.name === "CLS" ? metric.value * 1000 : metric.value
+      ),
+      event_category: "Web Vitals",
+      event_label: metric.id,
+      non_interaction: true,
+    });
+  }
+}
+
+// Initialize web vitals monitoring
+if (typeof window !== "undefined") {
+  getCLS(reportWebVitals);
+  getFID(reportWebVitals);
+  getFCP(reportWebVitals);
+  getLCP(reportWebVitals);
+  getTTFB(reportWebVitals);
+}
+```
+
+## Best Practices
+
+### 1. Performance Budget
+
+- Set performance budgets for bundle size
+- Monitor Core Web Vitals
+- Track loading times
+- Set up alerts for performance regressions
+
+### 2. Optimization Strategy
+
+- Measure before optimizing
+- Focus on the biggest impact
+- Use performance profiling tools
+- Test on real devices
+
+### 3. Caching
+
+- Implement multi-level caching
+- Use appropriate cache headers
+- Cache static assets
+- Implement cache invalidation
+
+### 4. Code Splitting
+
+- Split code by route
+- Lazy load heavy components
+- Use dynamic imports
+- Optimize bundle size
+
+### 5. Database
+
+- Optimize queries
+- Use indexes effectively
+- Implement connection pooling
+- Monitor query performance
+
+### 6. Monitoring
+
+- Set up performance monitoring
+- Track Core Web Vitals
+- Monitor API response times
+- Use real user monitoring
+
+---
+
+_Follow these performance guidelines for fast and efficient applications._

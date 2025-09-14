@@ -1,0 +1,831 @@
+# AI & External Integrations
+
+## AI Services Integration
+
+### Anthropic Claude API
+
+```typescript
+// lib/services/AIService.ts
+import Anthropic from "@anthropic-ai/sdk";
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+export class ClaudeService {
+  async generateCode(
+    prompt: string,
+    language: string = "typescript"
+  ): Promise<string> {
+    try {
+      const response = await anthropic.messages.create({
+        model: "claude-3-sonnet-20240229",
+        max_tokens: 4000,
+        messages: [
+          {
+            role: "user",
+            content: `Generate ${language} code for: ${prompt}. 
+            Include proper TypeScript types, error handling, and best practices.`,
+          },
+        ],
+      });
+
+      return response.content[0].type === "text"
+        ? response.content[0].text
+        : "";
+    } catch (error) {
+      console.error("Claude API error:", error);
+      throw new Error("Failed to generate code");
+    }
+  }
+
+  async generateBusinessCode(requirements: string): Promise<{
+    code: string;
+    explanation: string;
+    suggestions: string[];
+  }> {
+    try {
+      const response = await anthropic.messages.create({
+        model: "claude-3-sonnet-20240229",
+        max_tokens: 6000,
+        messages: [
+          {
+            role: "user",
+            content: `Generate a complete business application based on these requirements: ${requirements}.
+            
+            Include:
+            1. Full TypeScript/React code
+            2. Database schema
+            3. API endpoints
+            4. Authentication logic
+            5. UI components
+            6. Error handling
+            7. Testing setup
+            
+            Provide the code organized by files and include explanations for each part.`,
+          },
+        ],
+      });
+
+      const content =
+        response.content[0].type === "text" ? response.content[0].text : "";
+
+      return {
+        code: content,
+        explanation: "Generated business application code",
+        suggestions: [
+          "Review the generated code for security",
+          "Add proper error handling",
+          "Implement unit tests",
+          "Set up CI/CD pipeline",
+        ],
+      };
+    } catch (error) {
+      console.error("Business code generation error:", error);
+      throw new Error("Failed to generate business code");
+    }
+  }
+
+  async optimizeCode(code: string, language: string): Promise<string> {
+    try {
+      const response = await anthropic.messages.create({
+        model: "claude-3-sonnet-20240229",
+        max_tokens: 4000,
+        messages: [
+          {
+            role: "user",
+            content: `Optimize this ${language} code for performance, readability, and best practices:
+
+\`\`\`${language}
+${code}
+\`\`\`
+
+Focus on:
+- Performance improvements
+- Code readability
+- TypeScript best practices
+- Error handling
+- Security considerations`,
+          },
+        ],
+      });
+
+      return response.content[0].type === "text"
+        ? response.content[0].text
+        : "";
+    } catch (error) {
+      console.error("Code optimization error:", error);
+      throw new Error("Failed to optimize code");
+    }
+  }
+}
+
+export const claudeService = new ClaudeService();
+```
+
+### AI API Route
+
+```typescript
+// app/api/ai/generate/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { claudeService } from "@/lib/services/AIService";
+import { z } from "zod";
+
+const generateRequestSchema = z.object({
+  prompt: z.string().min(1),
+  language: z.string().optional().default("typescript"),
+  type: z.enum(["code", "business", "optimize"]),
+  existingCode: z.string().optional(),
+});
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const validatedData = generateRequestSchema.parse(body);
+
+    let result: any;
+
+    switch (validatedData.type) {
+      case "code":
+        result = await claudeService.generateCode(
+          validatedData.prompt,
+          validatedData.language
+        );
+        break;
+      case "business":
+        result = await claudeService.generateBusinessCode(validatedData.prompt);
+        break;
+      case "optimize":
+        if (!validatedData.existingCode) {
+          return NextResponse.json(
+            { error: "Existing code is required for optimization" },
+            { status: 400 }
+          );
+        }
+        result = await claudeService.optimizeCode(
+          validatedData.existingCode,
+          validatedData.language!
+        );
+        break;
+      default:
+        return NextResponse.json(
+          { error: "Invalid generation type" },
+          { status: 400 }
+        );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("AI generation error:", error);
+    return NextResponse.json(
+      { error: "Failed to generate content" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Email Service Integration
+
+### Nodemailer Configuration
+
+```typescript
+// lib/services/EmailService.ts
+import nodemailer from "nodemailer";
+
+interface EmailConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  auth: {
+    user: string;
+    pass: string;
+  };
+}
+
+class EmailService {
+  private transporter: nodemailer.Transporter;
+
+  constructor() {
+    const config: EmailConfig = {
+      host: process.env.SMTP_HOST!,
+      port: parseInt(process.env.SMTP_PORT!),
+      secure: process.env.SMTP_SECURE === "true",
+      auth: {
+        user: process.env.SMTP_USER!,
+        pass: process.env.SMTP_PASS!,
+      },
+    };
+
+    this.transporter = nodemailer.createTransporter(config);
+  }
+
+  async sendWelcomeEmail(to: string, name: string): Promise<void> {
+    const mailOptions = {
+      from: process.env.FROM_EMAIL,
+      to,
+      subject: "Welcome to Code King Builder!",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h1 style="color: #2563eb;">Welcome to Code King Builder!</h1>
+          <p>Hi ${name},</p>
+          <p>Thank you for joining our platform. You can now start building amazing websites with AI-powered tools.</p>
+          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3>Getting Started:</h3>
+            <ul>
+              <li>Explore our templates</li>
+              <li>Try the AI builder</li>
+              <li>Deploy your first website</li>
+            </ul>
+          </div>
+          <a href="${process.env.APP_URL}/dashboard" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Get Started</a>
+        </div>
+      `,
+    };
+
+    await this.transporter.sendMail(mailOptions);
+  }
+
+  async sendPasswordResetEmail(to: string, resetToken: string): Promise<void> {
+    const resetUrl = `${process.env.APP_URL}/auth/reset-password?token=${resetToken}`;
+
+    const mailOptions = {
+      from: process.env.FROM_EMAIL,
+      to,
+      subject: "Password Reset Request",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h1 style="color: #2563eb;">Password Reset Request</h1>
+          <p>You requested a password reset for your Code King Builder account.</p>
+          <p>Click the button below to reset your password:</p>
+          <a href="${resetUrl}" style="background-color: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Reset Password</a>
+          <p style="margin-top: 20px; color: #6b7280; font-size: 14px;">
+            This link will expire in 1 hour. If you didn't request this reset, please ignore this email.
+          </p>
+        </div>
+      `,
+    };
+
+    await this.transporter.sendMail(mailOptions);
+  }
+
+  async sendContactFormNotification(formData: any): Promise<void> {
+    const mailOptions = {
+      from: process.env.FROM_EMAIL,
+      to: process.env.ADMIN_EMAIL,
+      subject: "New Contact Form Submission",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>New Contact Form Submission</h2>
+          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px;">
+            <p><strong>Name:</strong> ${formData.name}</p>
+            <p><strong>Email:</strong> ${formData.email}</p>
+            <p><strong>Subject:</strong> ${formData.subject}</p>
+            <p><strong>Message:</strong></p>
+            <p>${formData.message}</p>
+          </div>
+        </div>
+      `,
+    };
+
+    await this.transporter.sendMail(mailOptions);
+  }
+}
+
+export const emailService = new EmailService();
+```
+
+## Discord Webhook Integration
+
+### Discord Service
+
+```typescript
+// lib/services/DiscordService.ts
+interface DiscordWebhookData {
+  content?: string;
+  embeds?: DiscordEmbed[];
+  username?: string;
+  avatar_url?: string;
+}
+
+interface DiscordEmbed {
+  title?: string;
+  description?: string;
+  color?: number;
+  fields?: DiscordField[];
+  footer?: DiscordFooter;
+  timestamp?: string;
+}
+
+interface DiscordField {
+  name: string;
+  value: string;
+  inline?: boolean;
+}
+
+interface DiscordFooter {
+  text: string;
+  icon_url?: string;
+}
+
+class DiscordService {
+  private webhookUrl: string;
+
+  constructor() {
+    this.webhookUrl = process.env.DISCORD_WEBHOOK_URL!;
+  }
+
+  async sendNotification(data: DiscordWebhookData): Promise<void> {
+    try {
+      const response = await fetch(this.webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Discord webhook failed: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Discord notification error:", error);
+      throw error;
+    }
+  }
+
+  async sendUserRegistrationNotification(user: any): Promise<void> {
+    const embed: DiscordEmbed = {
+      title: "New User Registration",
+      description: `A new user has registered on Code King Builder`,
+      color: 0x00ff00, // Green
+      fields: [
+        {
+          name: "Name",
+          value: user.name || "Not provided",
+          inline: true,
+        },
+        {
+          name: "Email",
+          value: user.email,
+          inline: true,
+        },
+        {
+          name: "Registration Time",
+          value: new Date().toISOString(),
+          inline: true,
+        },
+      ],
+      footer: {
+        text: "Code King Builder",
+      },
+      timestamp: new Date().toISOString(),
+    };
+
+    await this.sendNotification({
+      embeds: [embed],
+      username: "Code King Builder Bot",
+    });
+  }
+
+  async sendErrorNotification(error: Error, context?: string): Promise<void> {
+    const embed: DiscordEmbed = {
+      title: "Application Error",
+      description: `An error occurred: ${error.message}`,
+      color: 0xff0000, // Red
+      fields: [
+        {
+          name: "Error Message",
+          value: error.message,
+          inline: false,
+        },
+        {
+          name: "Stack Trace",
+          value: error.stack || "No stack trace available",
+          inline: false,
+        },
+      ],
+      footer: {
+        text: "Error Monitoring",
+      },
+      timestamp: new Date().toISOString(),
+    };
+
+    if (context) {
+      embed.fields?.push({
+        name: "Context",
+        value: context,
+        inline: false,
+      });
+    }
+
+    await this.sendNotification({
+      embeds: [embed],
+      username: "Error Bot",
+    });
+  }
+
+  async sendDeploymentNotification(
+    status: "success" | "failed",
+    details: string
+  ): Promise<void> {
+    const embed: DiscordEmbed = {
+      title: `Deployment ${status === "success" ? "Successful" : "Failed"}`,
+      description: details,
+      color: status === "success" ? 0x00ff00 : 0xff0000,
+      fields: [
+        {
+          name: "Status",
+          value: status.toUpperCase(),
+          inline: true,
+        },
+        {
+          name: "Time",
+          value: new Date().toISOString(),
+          inline: true,
+        },
+      ],
+      footer: {
+        text: "Deployment Bot",
+      },
+      timestamp: new Date().toISOString(),
+    };
+
+    await this.sendNotification({
+      embeds: [embed],
+      username: "Deployment Bot",
+    });
+  }
+}
+
+export const discordService = new DiscordService();
+```
+
+## Google Sheets Integration
+
+### Google Sheets Service
+
+```typescript
+// lib/services/GoogleSheetsService.ts
+import { GoogleAuth } from "google-auth-library";
+import { google } from "googleapis";
+
+interface SheetData {
+  range: string;
+  values: any[][];
+}
+
+class GoogleSheetsService {
+  private sheets: any;
+  private auth: GoogleAuth;
+
+  constructor() {
+    this.auth = new GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      },
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
+
+    this.sheets = google.sheets({ version: "v4", auth: this.auth });
+  }
+
+  async appendData(
+    spreadsheetId: string,
+    range: string,
+    values: any[][]
+  ): Promise<void> {
+    try {
+      await this.sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range,
+        valueInputOption: "USER_ENTERED",
+        requestBody: {
+          values,
+        },
+      });
+    } catch (error) {
+      console.error("Google Sheets append error:", error);
+      throw error;
+    }
+  }
+
+  async readData(spreadsheetId: string, range: string): Promise<any[][]> {
+    try {
+      const response = await this.sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range,
+      });
+
+      return response.data.values || [];
+    } catch (error) {
+      console.error("Google Sheets read error:", error);
+      throw error;
+    }
+  }
+
+  async updateData(
+    spreadsheetId: string,
+    range: string,
+    values: any[][]
+  ): Promise<void> {
+    try {
+      await this.sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range,
+        valueInputOption: "USER_ENTERED",
+        requestBody: {
+          values,
+        },
+      });
+    } catch (error) {
+      console.error("Google Sheets update error:", error);
+      throw error;
+    }
+  }
+
+  async logContactForm(data: any): Promise<void> {
+    const spreadsheetId = process.env.CONTACT_FORM_SHEET_ID!;
+    const timestamp = new Date().toISOString();
+
+    const values = [
+      [timestamp, data.name, data.email, data.subject, data.message, "New"],
+    ];
+
+    await this.appendData(spreadsheetId, "Sheet1!A:F", values);
+  }
+
+  async logUserRegistration(user: any): Promise<void> {
+    const spreadsheetId = process.env.USER_REGISTRATION_SHEET_ID!;
+    const timestamp = new Date().toISOString();
+
+    const values = [[timestamp, user.id, user.email, user.name, "Active"]];
+
+    await this.appendData(spreadsheetId, "Sheet1!A:E", values);
+  }
+}
+
+export const googleSheetsService = new GoogleSheetsService();
+```
+
+## Vercel Deployment Integration
+
+### Vercel Service
+
+```typescript
+// lib/services/VercelService.ts
+interface VercelDeploymentConfig {
+  name: string;
+  gitSource?: {
+    type: "github" | "gitlab" | "bitbucket";
+    repo: string;
+    ref: string;
+  };
+  target?: "production" | "preview";
+  regions?: string[];
+  env?: Record<string, string>;
+  buildCommand?: string;
+  outputDirectory?: string;
+}
+
+class VercelService {
+  private apiToken: string;
+  private baseUrl = "https://api.vercel.com";
+
+  constructor() {
+    this.apiToken = process.env.VERCEL_API_TOKEN!;
+  }
+
+  async createDeployment(config: VercelDeploymentConfig): Promise<any> {
+    try {
+      const response = await fetch(`${this.baseUrl}/v13/deployments`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: config.name,
+          gitSource: config.gitSource,
+          target: config.target || "preview",
+          regions: config.regions || ["iad1"],
+          env: config.env,
+          buildCommand: config.buildCommand,
+          outputDirectory: config.outputDirectory,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Vercel deployment failed: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Vercel deployment error:", error);
+      throw error;
+    }
+  }
+
+  async getDeployment(deploymentId: string): Promise<any> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/v13/deployments/${deploymentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.apiToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to get deployment: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Vercel deployment fetch error:", error);
+      throw error;
+    }
+  }
+
+  async getDeploymentLogs(deploymentId: string): Promise<any> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/v2/deployments/${deploymentId}/events`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.apiToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to get deployment logs: ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Vercel logs fetch error:", error);
+      throw error;
+    }
+  }
+}
+
+export const vercelService = new VercelService();
+```
+
+## Integration Hooks
+
+### Custom Hooks for Services
+
+```typescript
+// hooks/useAIGeneration.ts
+import { useState } from "react";
+import { claudeService } from "@/lib/services/AIService";
+
+export function useAIGeneration() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const generateCode = async (
+    prompt: string,
+    language: string = "typescript"
+  ) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await claudeService.generateCode(prompt, language);
+      return result;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Generation failed";
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateBusinessCode = async (requirements: string) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await claudeService.generateBusinessCode(requirements);
+      return result;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Generation failed";
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    loading,
+    error,
+    generateCode,
+    generateBusinessCode,
+  };
+}
+
+// hooks/useEmailService.ts
+import { useState } from "react";
+import { emailService } from "@/lib/services/EmailService";
+
+export function useEmailService() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const sendEmail = async (type: string, data: any) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      switch (type) {
+        case "welcome":
+          await emailService.sendWelcomeEmail(data.email, data.name);
+          break;
+        case "password-reset":
+          await emailService.sendPasswordResetEmail(data.email, data.token);
+          break;
+        case "contact":
+          await emailService.sendContactFormNotification(data);
+          break;
+        default:
+          throw new Error("Unknown email type");
+      }
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Email sending failed";
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    loading,
+    error,
+    sendEmail,
+  };
+}
+```
+
+## Best Practices
+
+### 1. Error Handling
+
+- Implement proper error handling for all external services
+- Use try-catch blocks with meaningful error messages
+- Log errors appropriately for debugging
+- Provide fallback mechanisms when services are unavailable
+
+### 2. Rate Limiting
+
+- Implement rate limiting for API calls
+- Use exponential backoff for retries
+- Monitor API usage and quotas
+- Cache responses when appropriate
+
+### 3. Security
+
+- Store API keys securely in environment variables
+- Use proper authentication for services
+- Validate all inputs before sending to external services
+- Implement proper error handling to avoid information leakage
+
+### 4. Performance
+
+- Use async/await for all external service calls
+- Implement proper timeout mechanisms
+- Use connection pooling where available
+- Monitor response times and optimize slow queries
+
+### 5. Monitoring
+
+- Log all external service interactions
+- Set up alerts for service failures
+- Monitor API quotas and usage
+- Track error rates and response times
+
+### 6. Testing
+
+- Mock external services in tests
+- Test error scenarios and edge cases
+- Use integration tests for critical flows
+- Test with real services in staging environment
+
+---
+
+_Follow these integration guidelines for reliable external service connections._
