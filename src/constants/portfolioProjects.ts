@@ -79,6 +79,19 @@ const portfolioProjects = [
     views: 1890,
     isCompleted: false,
   },
+  {
+    id: 6,
+    name: "산카쿠 프랜차이즈 랜딩페이지",
+    category: "음식 & 다이닝",
+    description: "산카쿠 프랜차이즈 가맹점 문의 사이트",
+    image: "/images/sankaku-franchise-landing-page.png",
+    url: "https://sankaku-franchise-landing-page.vercel.app/",
+    features: ["창업성공사례", "성공브랜드", "매출증명", "메뉴안내"],
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    rating: 4.8,
+    views: 2000,
+    isCompleted: false,
+  },
 ];
 
 export default portfolioProjects;
