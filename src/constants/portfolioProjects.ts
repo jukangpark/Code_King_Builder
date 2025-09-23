@@ -92,6 +92,24 @@ const portfolioProjects = [
     views: 2000,
     isCompleted: false,
   },
+  {
+    id: 7,
+    name: "술개팅",
+    category: "소셜 네트워킹",
+    description: "로테이션 소개팅 플랫폼",
+    image: "/images/sulgaeting.png",
+    url: "https://sulgaeting.vercel.app/",
+    features: [
+      "익명 투표 시스템",
+      "상호 선택 매칭",
+      "1:1 데이트 진행",
+      "커뮤니티 운영",
+    ],
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    rating: 4.8,
+    views: 2000,
+    isCompleted: false,
+  },
 ];
 
 export default portfolioProjects;
