@@ -62,12 +62,16 @@ export default function LanguageSelector({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
+        className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-purple-600 rounded-lg transition-colors min-w-[120px]"
       >
-        <span className="text-lg">{localeFlags[currentLocale]}</span>
-        <span className="hidden sm:inline">{localeNames[currentLocale]}</span>
+        <span className="text-lg whitespace-nowrap cursor-pointer">
+          {localeFlags[currentLocale]}
+        </span>
+        <span className="hidden sm:inline cursor-pointer">
+          {localeNames[currentLocale]}
+        </span>
         <ChevronDownIcon
-          className={`h-4 w-4 transition-transform ${
+          className={`h-4 w-4 transition-transform cursor-pointer ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -80,20 +84,24 @@ export default function LanguageSelector({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+            className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
           >
             {Object.entries(localeNames).map(([locale, name]) => (
               <button
                 key={locale}
                 onClick={() => handleLocaleChange(locale as Locale)}
-                className={`w-full flex items-center space-x-3 px-4 py-2 text-sm hover:bg-purple-50 transition-colors ${
+                className={`w-full flex items-center space-x-3 px-4 py-2 text-sm transition-colors text-gray-700 whitespace-nowrap cursor-pointer${
                   currentLocale === locale
-                    ? "text-purple-600 bg-purple-50"
-                    : "text-gray-700"
+                    ? "text-purple-600"
+                    : "text-gray-700 hover:text-purple-600"
                 }`}
               >
-                <span className="text-lg">{localeFlags[locale as Locale]}</span>
-                <span>{name}</span>
+                <span className="text-lg whitespace-nowrap cursor-pointer">
+                  {localeFlags[locale as Locale]}
+                </span>
+                <span className="whitespace-nowrap text-gray-700 cursor-pointer hover:text-purple-600">
+                  {name}
+                </span>
                 {currentLocale === locale && (
                   <div className="ml-auto w-2 h-2 bg-purple-600 rounded-full" />
                 )}

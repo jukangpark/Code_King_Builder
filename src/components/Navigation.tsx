@@ -10,6 +10,8 @@ import Image from "next/image";
 import { useAuth } from "@/app/contexts/AuthContext";
 import LoginModal from "./auth/LoginModal";
 import SignUpModal from "./auth/SignUpModal";
+import NavButton from "./navigation/NavButton";
+import DropdownButton from "./navigation/DropdownButton";
 
 interface NavigationProps {
   currentLocale: Locale;
@@ -22,7 +24,8 @@ interface NavigationProps {
     | "builder"
     | "support"
     | "about"
-    | "monitoring";
+    | "monitoring"
+    | "pricing";
 }
 
 export default function Navigation({
@@ -108,6 +111,36 @@ export default function Navigation({
     { name: "IR 공고", href: `/${currentLocale}/about/ir` },
   ];
 
+  const pricingSubmenu = [
+    {
+      name: "맞춤형 웹사이트 개발",
+      href: `/${currentLocale}/pricing/custom-development`,
+    },
+    { name: "자주 묻는 질문", href: `/${currentLocale}/pricing/faq` },
+    { name: "서비스 제공 절차", href: `/${currentLocale}/pricing/process` },
+    {
+      name: "취소 및 환불 규정",
+      href: `/${currentLocale}/pricing/refund-policy`,
+    },
+    { name: "유지보수", href: `/${currentLocale}/pricing/maintenance` },
+    { name: "계약서", href: `/${currentLocale}/pricing/contract` },
+    { name: "교육", href: `/${currentLocale}/pricing/education` },
+  ];
+
+  // 메인 네비게이션 메뉴 항목들
+  const mainMenuItems = [
+    {
+      name: getTranslation(currentLocale, "nav.templates"),
+      href: `/${currentLocale}/templates`,
+      activePage: "templates",
+    },
+    {
+      name: "포트폴리오",
+      href: `/${currentLocale}/portfolio`,
+      activePage: "portfolio",
+    },
+  ];
+
   return (
     <nav className="bg-white shadow-sm border-b border-purple-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,65 +155,55 @@ export default function Navigation({
                 width={40}
                 height={40}
               />
-              <span className="ml-2 text-xl font-bold text-gray-900">
+              <span className="ml-2 text-xl font-bold text-gray-900 whitespace-nowrap">
                 Code King Builder
               </span>
             </Link>
 
-            {/* 기업소개 드롭다운 */}
-            <div
-              className="hidden md:flex relative"
-              onMouseEnter={() => setHoveredMenu("about")}
-              onMouseLeave={() => setHoveredMenu(null)}
-            >
-              <button
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
-                  activePage === "about"
-                    ? "text-purple-600 bg-purple-50"
-                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-                }`}
-              >
-                <span>{getTranslation(currentLocale, "nav.about")}</span>
-              </button>
-              {hoveredMenu === "about" && (
-                <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
-                  <div className="py-1">
-                    {aboutSubmenu.map((item, index) => (
-                      <Link
-                        key={index}
-                        href={item.href}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
             {/* 페이지 메뉴 */}
-            <div className="hidden md:flex items-center space-x-4">
-              <Link
-                href={`/${currentLocale}/templates`}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activePage === "templates"
-                    ? "text-purple-600 bg-purple-50"
-                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-                }`}
+            <div className="hidden md:flex items-center whitespace-nowrap">
+              {/* 메인 메뉴 항목들 */}
+              <div
+                className="hidden md:flex relative"
+                onMouseEnter={() => setHoveredMenu("about")}
+                onMouseLeave={() => setHoveredMenu(null)}
               >
-                {getTranslation(currentLocale, "nav.templates")}
-              </Link>
-              <Link
-                href={`/${currentLocale}/portfolio`}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activePage === "portfolio"
-                    ? "text-purple-600 bg-purple-50"
-                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-                }`}
-              >
-                포트폴리오
-              </Link>
+                <DropdownButton
+                  isActive={activePage === "about"}
+                  onMouseEnter={() => setHoveredMenu("about")}
+                  onMouseLeave={() => setHoveredMenu(null)}
+                >
+                  {getTranslation(currentLocale, "nav.about")}
+                </DropdownButton>
+                {hoveredMenu === "about" && (
+                  <div
+                    className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50 "
+                    onMouseEnter={() => setHoveredMenu("about")}
+                    onMouseLeave={() => setHoveredMenu(null)}
+                  >
+                    <div className="py-1">
+                      {aboutSubmenu.map((item, index) => (
+                        <Link
+                          key={index}
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:text-purple-600 transition-colors text-left"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {mainMenuItems.map((item, index) => (
+                <NavButton
+                  key={index}
+                  href={item.href}
+                  isActive={activePage === item.activePage}
+                >
+                  {item.name}
+                </NavButton>
+              ))}
 
               {/* 데이터 모니터링 드롭다운 */}
               <div
@@ -188,23 +211,25 @@ export default function Navigation({
                 onMouseEnter={() => setHoveredMenu("monitoring")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <button
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
-                    activePage === "monitoring"
-                      ? "text-purple-600 bg-purple-50"
-                      : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-                  }`}
+                <DropdownButton
+                  isActive={activePage === "monitoring"}
+                  onMouseEnter={() => setHoveredMenu("monitoring")}
+                  onMouseLeave={() => setHoveredMenu(null)}
                 >
-                  <span>데이터 모니터링</span>
-                </button>
+                  데이터 모니터링
+                </DropdownButton>
                 {hoveredMenu === "monitoring" && (
-                  <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                  <div
+                    className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50"
+                    onMouseEnter={() => setHoveredMenu("monitoring")}
+                    onMouseLeave={() => setHoveredMenu(null)}
+                  >
                     <div className="py-1">
                       {monitoringSubmenu.map((item, index) => (
                         <Link
                           key={index}
                           href={item.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:text-purple-600 transition-colors text-left"
                         >
                           {item.name}
                         </Link>
@@ -214,16 +239,39 @@ export default function Navigation({
                 )}
               </div>
 
-              <Link
-                href={`/${currentLocale}/contact`}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activePage === "contact"
-                    ? "text-purple-600 bg-purple-50"
-                    : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-                }`}
+              {/* 비용정책 드롭다운 */}
+              <div
+                className="relative"
+                onMouseEnter={() => setHoveredMenu("pricing")}
+                onMouseLeave={() => setHoveredMenu(null)}
               >
-                {getTranslation(currentLocale, "nav.contact")}
-              </Link>
+                <DropdownButton
+                  isActive={activePage === "pricing"}
+                  onMouseEnter={() => setHoveredMenu("pricing")}
+                  onMouseLeave={() => setHoveredMenu(null)}
+                >
+                  비용정책
+                </DropdownButton>
+                {hoveredMenu === "pricing" && (
+                  <div
+                    className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50"
+                    onMouseEnter={() => setHoveredMenu("pricing")}
+                    onMouseLeave={() => setHoveredMenu(null)}
+                  >
+                    <div className="py-1">
+                      {pricingSubmenu.map((item, index) => (
+                        <Link
+                          key={index}
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:text-purple-600 transition-colors text-left"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* 고객지원 드롭다운 */}
               <div
@@ -231,23 +279,25 @@ export default function Navigation({
                 onMouseEnter={() => setHoveredMenu("support")}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <button
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
-                    activePage === "support"
-                      ? "text-purple-600 bg-purple-50"
-                      : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-                  }`}
+                <DropdownButton
+                  isActive={activePage === "support"}
+                  onMouseEnter={() => setHoveredMenu("support")}
+                  onMouseLeave={() => setHoveredMenu(null)}
                 >
-                  <span>{getTranslation(currentLocale, "nav.support")}</span>
-                </button>
+                  {getTranslation(currentLocale, "nav.support")}
+                </DropdownButton>
                 {hoveredMenu === "support" && (
-                  <div className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                  <div
+                    className="absolute top-full left-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50"
+                    onMouseEnter={() => setHoveredMenu("support")}
+                    onMouseLeave={() => setHoveredMenu(null)}
+                  >
                     <div className="py-1">
                       {supportSubmenu.map((item, index) => (
                         <Link
                           key={index}
                           href={item.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:text-purple-600 transition-colors text-left"
                         >
                           {item.name}
                         </Link>
@@ -262,27 +312,27 @@ export default function Navigation({
           {/* 오른쪽: 사용자 정보 + 언어 선택 */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Auth Buttons */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 min-w-[160px]">
               {loading ? (
-                // 로딩 스켈레톤
-                <div className="flex items-center space-x-3">
+                // 로딩 스켈레톤 - 고정 너비로 레이아웃 유지
+                <div className="flex items-center space-x-3 w-full">
                   {/* 프로필 아이콘 스켈레톤 */}
-                  <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse flex-shrink-0"></div>
 
                   {/* 사용자 정보 스켈레톤 */}
-                  <div className="flex flex-col space-y-1">
+                  <div className="flex flex-col space-y-1 flex-1">
                     <div className="w-16 h-3 bg-gray-200 rounded animate-pulse"></div>
-                    <div className="w-24 h-2 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="w-20 h-2 bg-gray-200 rounded animate-pulse"></div>
                   </div>
 
                   {/* 로그아웃 버튼 스켈레톤 */}
-                  <div className="w-12 h-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="w-12 h-6 bg-gray-200 rounded animate-pulse flex-shrink-0"></div>
                 </div>
               ) : user ? (
-                <>
+                <div className="flex items-center space-x-3 w-full">
                   {/* 프로필 아이콘 */}
                   <Link href={`/${currentLocale}/profile/${user.id}`}>
-                    <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-purple-700 transition-colors">
+                    <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-purple-700 transition-colors flex-shrink-0">
                       {user.user_metadata?.avatar_url ? (
                         <img
                           src={user.user_metadata.avatar_url}
@@ -297,7 +347,7 @@ export default function Navigation({
 
                   {/* 사용자 정보 */}
                   <Link href={`/${currentLocale}/profile/${user.id}`}>
-                    <div className="flex flex-col cursor-pointer hover:text-purple-600 transition-colors">
+                    <div className="flex flex-col cursor-pointer hover:text-purple-600 transition-colors flex-1">
                       <span className="text-sm font-medium text-gray-900">
                         {user.user_metadata?.name || "사용자"}
                       </span>
@@ -307,18 +357,20 @@ export default function Navigation({
                   {/* 로그아웃 버튼 */}
                   <button
                     onClick={handleLogout}
-                    className="text-sm text-gray-600 hover:text-purple-600 transition-colors"
+                    className="text-sm text-gray-600 hover:text-purple-600 transition-colors flex-shrink-0"
                   >
                     로그아웃
                   </button>
-                </>
+                </div>
               ) : (
-                <button
-                  onClick={handleLogin}
-                  className="text-sm text-gray-700 hover:text-purple-600 transition-colors"
-                >
-                  로그인
-                </button>
+                <div className="flex items-center justify-center w-full">
+                  <button
+                    onClick={handleLogin}
+                    className="text-sm text-gray-700 hover:text-purple-600 transition-colors cursor-pointer"
+                  >
+                    로그인
+                  </button>
+                </div>
               )}
             </div>
 
@@ -329,6 +381,14 @@ export default function Navigation({
                 onLocaleChange={handleLocaleChange}
               />
             </div>
+
+            {/* 상담 문의 버튼 */}
+            <Link
+              href={`/${currentLocale}/contact`}
+              className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-700 transition-colors whitespace-nowrap ml-4"
+            >
+              상담 문의
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -371,8 +431,8 @@ export default function Navigation({
             {loading ? (
               <div className="px-3 py-4 border-b border-gray-200">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse"></div>
-                  <div className="flex-1">
+                  <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse flex-shrink-0"></div>
+                  <div className="flex-1 min-w-0">
                     <div className="h-4 bg-gray-200 rounded animate-pulse mb-1"></div>
                     <div className="h-3 bg-gray-200 rounded animate-pulse w-2/3"></div>
                   </div>
@@ -385,7 +445,7 @@ export default function Navigation({
                     href={`/${currentLocale}/profile/${user.id}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                       {user.user_metadata?.avatar_url ? (
                         <img
                           src={user.user_metadata.avatar_url}
@@ -397,16 +457,18 @@ export default function Navigation({
                       )}
                     </div>
                   </Link>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <Link
                       href={`/${currentLocale}/profile/${user.id}`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <p className="font-medium text-gray-900 hover:text-purple-600 transition-colors">
+                      <p className="font-medium text-gray-900 hover:text-purple-600 transition-colors truncate">
                         {user.user_metadata?.name || "사용자"}
                       </p>
                     </Link>
-                    <p className="text-sm text-gray-600">{user.email}</p>
+                    <p className="text-sm text-gray-600 truncate">
+                      {user.email}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -450,28 +512,17 @@ export default function Navigation({
             )}
 
             {/* Navigation Links */}
-            <Link
-              href={`/${currentLocale}/templates`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                activePage === "templates"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-              }`}
-            >
-              {getTranslation(currentLocale, "nav.templates")}
-            </Link>
-            <Link
-              href={`/${currentLocale}/portfolio`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                activePage === "portfolio"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-              }`}
-            >
-              포트폴리오
-            </Link>
+            {mainMenuItems.map((item, index) => (
+              <NavButton
+                key={index}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                isActive={activePage === item.activePage}
+                className="block text-base"
+              >
+                {item.name}
+              </NavButton>
+            ))}
 
             {/* 데이터 모니터링 섹션 */}
             <div className="border-t border-gray-200 pt-4">
@@ -479,6 +530,23 @@ export default function Navigation({
                 데이터 모니터링
               </div>
               {monitoringSubmenu.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-2 text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+
+            {/* 비용정책 섹션 */}
+            <div className="border-t border-gray-200 pt-4">
+              <div className="px-3 py-2 text-sm font-medium text-gray-500 uppercase tracking-wider">
+                비용정책
+              </div>
+              {pricingSubmenu.map((item, index) => (
                 <Link
                   key={index}
                   href={item.href}
@@ -523,18 +591,6 @@ export default function Navigation({
                 </Link>
               ))}
             </div>
-
-            <Link
-              href={`/${currentLocale}/contact`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                activePage === "contact"
-                  ? "text-purple-600 bg-purple-50"
-                  : "text-gray-700 hover:text-purple-600 hover:bg-purple-50"
-              }`}
-            >
-              {getTranslation(currentLocale, "nav.contact")}
-            </Link>
           </div>
         </div>
       )}
