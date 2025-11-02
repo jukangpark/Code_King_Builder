@@ -1656,10 +1656,10 @@
   dependencies:
     undici-types "~7.10.0"
 
-"@types/nodemailer@^7.0.1":
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/@types/nodemailer/-/nodemailer-7.0.1.tgz#d52f769bb09745cc67e09bf3935531b992d22857"
-  integrity sha512-UfHAghPmGZVzaL8x9y+mKZMWyHC399+iq0MOmya5tIyenWX3lcdSb60vOmp0DocR6gCDTYTozv/ULQnREyyjkg==
+"@types/nodemailer@^7.0.3":
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-7.0.3.tgz#2199f9512415059dba06fb1b9384b073fc8ef9e7"
+  integrity sha512-fC8w49YQ868IuPWRXqPfLf+MuTRex5Z1qxMoG8rr70riqqbOp2F5xgOKE9fODEBPzpnvjkJXFgK6IL2xgMSTnA==
   dependencies:
     "@aws-sdk/client-sesv2" "^3.839.0"
     "@types/node" "*"
@@ -3423,10 +3423,10 @@ next@15.5.4:
     "@next/swc-win32-x64-msvc" "15.5.4"
     sharp "^0.34.3"
 
-nodemailer@^7.0.7:
-  version "7.0.7"
-  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-7.0.7.tgz#91a16235c08abb7805a4ec1537ca63edca79687f"
-  integrity sha512-jGOaRznodf62TVzdyhKt/f1Q/c3kYynk8629sgJHpRzGZj01ezbgMMWJSAjHADcwTKxco3B68/R+KHJY2T5BaA==
+nodemailer@^7.0.10:
+  version "7.0.10"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-7.0.10.tgz#540062dbbe574220b42e79d2d949956d3eac5a46"
+  integrity sha512-Us/Se1WtT0ylXgNFfyFSx4LElllVLJXQjWi2Xz17xWw7amDKO2MLtFnVp1WACy7GkVGs+oBlRopVNUzlrGSw1w==
 
 object-assign@^4.1.1:
   version "4.1.1"
