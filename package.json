@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.63.0",
+    "@anthropic-ai/sdk": "^0.68.0",
     "@chatscope/chat-ui-kit-react": "^2.1.1",
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
