@@ -15,11 +15,11 @@
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
     "@supabase/supabase-js": "^2.58.0",
-    "@types/nodemailer": "^7.0.1",
+    "@types/nodemailer": "^7.0.3",
     "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.23.24",
     "next": "15.5.4",
-    "nodemailer": "^7.0.7",
+    "nodemailer": "^7.0.10",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0"
