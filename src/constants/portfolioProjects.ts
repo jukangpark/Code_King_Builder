@@ -98,7 +98,7 @@ const portfolioProjects = [
     category: "소셜 네트워킹",
     description: "로테이션 소개팅 플랫폼",
     image: "/images/sulgaeting.png",
-    url: "https://sulgaeting.vercel.app/",
+    url: "https://sulgaeting.com/",
     features: [
       "익명 투표 시스템",
       "상호 선택 매칭",
