@@ -60,7 +60,7 @@
 
 - **Frontend**: Next.js 15, React 19, TailwindCSS
 - **AI Layer**: OpenAI GPT-4, Claude Sonnet + MCP Adapter
-- **DB/인증**: Supabase (PostgreSQL, Auth)
+- **DB/인증**: PostgreSQL 기반 데이터/인증 아키텍처
 - **배포**: Vercel / Docker / GitHub Actions
 - **UI/UX**: Framer Motion, HeadlessUI
 
@@ -93,7 +93,7 @@ Code King Builder의 수익 구조는 **일회성 패키지 딜리버리**(완�
 3. **PREMIUM – ₩990,000**
    - DELUXE 포함 + 고급 커스텀 (최대 20시간)
    - 결제 연동(토스페이, 카카오페이), 회원가입/로그인, 대시보드
-   - 보안 강화(JWT, Supabase Auth)
+   - 보안 강화(JWT 기반 인증)
    - 유지보수 1개월 무료
 
 #### 🔄 구독형 SaaS

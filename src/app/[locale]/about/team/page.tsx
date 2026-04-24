@@ -119,9 +119,8 @@ export default function TeamPage({ params }: TeamPageProps) {
       year: "2024-2025",
     },
     {
-      title: "보안 및 인증 시스템",
-      description:
-        "Supabase 기반의 안전하고 확장 가능한 사용자 인증 시스템 구현",
+      title: "보안 및 운영 안정성",
+      description: "안전하고 확장 가능한 서비스 운영 기반을 구축",
       year: "2024-2025",
     },
   ];

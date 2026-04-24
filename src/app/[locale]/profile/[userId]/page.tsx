@@ -1,7 +1,6 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { use, useState, useEffect, ComponentType, SVGProps } from "react";
 import {
   CreditCardIcon,
   GlobeAltIcon,
@@ -10,7 +9,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { Locale } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
-import { useAuth } from "@/app/contexts/AuthContext";
 import mockPaymentHistory from "@/mock/mockPaymentHistory";
 import mockWebsites from "@/mock/mockWebsites";
 import mockPaymentMethods from "@/mock/mockPaymentMethods";
@@ -23,6 +21,8 @@ import WebsitesTab from "./components/WebsitesTab";
 import SettingsTab from "./components/SettingsTab";
 import Banner from "@/components/Banner";
 
+type ProfileTab = "overview" | "payments" | "payment-methods" | "websites" | "settings";
+
 export default function ProfilePage({
   params,
 }: {
@@ -30,31 +30,22 @@ export default function ProfilePage({
 }) {
   const { locale, userId } = use(params);
   const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "payments" | "payment-methods" | "websites" | "settings"
-  >("overview");
+  const [activeTab, setActiveTab] = useState<ProfileTab>("overview");
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const { user } = useAuth();
-  const router = useRouter();
-
-  // 현재 사용자와 프로필 주인이 같은지 확인
-  const isOwnProfile = user?.id === userId;
 
   useEffect(() => {
     // 실제로는 API에서 데이터를 가져와야 함
     const fetchProfileData = async () => {
       setLoading(true);
-      // 임시 데이터 (실제로는 API 호출)
       setTimeout(() => {
         setProfileData({
           id: userId,
-          name: user?.user_metadata?.name || "사용자",
-          email: user?.email || "",
-          phone: user?.user_metadata?.phone || "",
-          avatar_url: user?.user_metadata?.avatar_url,
-          created_at: user?.created_at || "",
+          name: "사용자",
+          email: "",
+          phone: "",
+          avatar_url: undefined,
+          created_at: "",
           subscription_plan: "STANDARD",
           projects_created: 3,
         });
@@ -63,10 +54,14 @@ export default function ProfilePage({
     };
 
     fetchProfileData();
-  }, [userId, user]);
+  }, [userId]);
 
   // 탭 설정
-  const tabs = [
+  const tabs: Array<{
+    id: ProfileTab;
+    label: string;
+    icon: ComponentType<SVGProps<SVGSVGElement>>;
+  }> = [
     { id: "overview", label: "개요", icon: ChartBarIcon },
     { id: "payments", label: "결제 내역", icon: CreditCardIcon },
     { id: "payment-methods", label: "결제 수단", icon: CreditCardIcon },
@@ -126,7 +121,7 @@ export default function ProfilePage({
             <ProfileSidebar
               profileData={profileData}
               activeTab={activeTab}
-              onTabChange={(tab) => setActiveTab(tab as any)}
+              onTabChange={(tab) => setActiveTab(tab as ProfileTab)}
               tabs={tabs}
             />
 
@@ -134,7 +129,7 @@ export default function ProfilePage({
             <ProfileSidebar
               profileData={profileData}
               activeTab={activeTab}
-              onTabChange={(tab) => setActiveTab(tab as any)}
+              onTabChange={(tab) => setActiveTab(tab as ProfileTab)}
               tabs={tabs}
               isMobile={true}
             />

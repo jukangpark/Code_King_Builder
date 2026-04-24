@@ -1,6 +1,6 @@
 # 🚀 AI Website Builder Architecture
 
-## Next.js + Supabase 기반 SaaS 빌더
+## Next.js 기반 SaaS 빌더
 
 ---
 
@@ -97,7 +97,7 @@ graph TD
 
 **저장**:
 
-- Supabase `sites`, `pages`, `sections` 테이블에 매핑
+- `sites`, `pages`, `sections` 테이블에 매핑
 - `generations` 테이블에 prompt & 모델 로그 기록
 
 ---
@@ -119,7 +119,7 @@ graph TD
 **Next.js 처리**:
 
 - `/builder/[siteId]`에서 실시간 미리보기
-- Supabase Realtime으로 props 변경사항 즉시 반영
+- Realtime 채널로 props 변경사항 즉시 반영
 
 **장점**:
 
@@ -132,7 +132,7 @@ graph TD
 **미리보기**:
 
 - 동적 라우팅 `/[site]/[...slug]`
-- Supabase에서 섹션 JSON 불러와 컴포넌트 렌더
+- 데이터 저장소에서 섹션 JSON 불러와 컴포넌트 렌더
 
 **배포**:
 
@@ -142,7 +142,7 @@ graph TD
 
 **이미지/에셋 처리** (옵션):
 
-- AI가 image prompt 제안 → Supabase Storage에 업로드
+- AI가 image prompt 제안 → 오브젝트 스토리지에 업로드
 - 섹션 props에 asset URL 자동 패치
 
 ---
@@ -160,7 +160,7 @@ graph TD
 | 영역         | 기술                                         |
 | ------------ | -------------------------------------------- |
 | **Frontend** | Next.js 15 + React 19 + TailwindCSS          |
-| **Backend**  | Supabase (Postgres, Auth, Storage, Realtime) |
+| **Backend**  | Postgres + Auth + Storage + Realtime |
 | **AI Layer** | OpenAI GPT-4.1 / Anthropic Claude 3.5        |
 | **Infra**    | Vercel + Docker + GitHub Actions             |
 
@@ -564,7 +564,6 @@ Schema reference: RFC 6902 JSON Patch
 ## 📚 참고 자료
 
 - [Next.js 15 Documentation](https://nextjs.org/docs)
-- [Supabase Documentation](https://supabase.com/docs)
 - [JSON Schema Validation](https://json-schema.org/)
 - [RFC 6902 JSON Patch](https://tools.ietf.org/html/rfc6902)
 - [Anthropic Claude API](https://docs.anthropic.com/)

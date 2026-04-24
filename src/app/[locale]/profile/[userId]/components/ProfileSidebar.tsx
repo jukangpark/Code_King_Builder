@@ -1,3 +1,4 @@
+import { ComponentType, SVGProps } from "react";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { ProfileData } from "../types";
 
@@ -5,7 +6,11 @@ interface ProfileSidebarProps {
   profileData: ProfileData | null;
   activeTab: string;
   onTabChange: (tab: string) => void;
-  tabs: Array<{ id: string; label: string; icon: any }>;
+  tabs: Array<{
+    id: string;
+    label: string;
+    icon: ComponentType<SVGProps<SVGSVGElement>>;
+  }>;
   isMobile?: boolean;
 }
 

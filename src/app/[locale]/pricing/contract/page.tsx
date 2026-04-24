@@ -3,7 +3,6 @@
 import { use, useState } from "react";
 import { motion } from "framer-motion";
 import { Locale } from "@/lib/i18n";
-import { getTranslation } from "@/lib/i18n";
 import Navigation from "@/components/Navigation";
 import Banner from "@/components/Banner";
 
@@ -53,7 +52,7 @@ export default function ContractPage({
                 제1조 (목적)
               </h3>
               <p className="text-gray-700 leading-relaxed mb-6">
-                이 계약서는 Code King Builder(이하 "갑")과 고객(이하 "을") 간의
+                이 계약서는 Code King Builder(이하 &quot;갑&quot;)과 고객(이하 &quot;을&quot;) 간의
                 웹사이트 제작 서비스 제공에 관한 권리와 의무를 명확히 하기
                 위하여 작성됩니다.
               </p>

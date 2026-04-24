@@ -8,7 +8,6 @@
 ![React](https://img.shields.io/badge/React-19.1.0-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-06B6D4?logo=tailwindcss&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?logo=supabase&logoColor=white)
 ![Anthropic](https://img.shields.io/badge/Anthropic-Claude-FF6B35?logo=anthropic&logoColor=white)
 ![Turbopack](https://img.shields.io/badge/Turbopack-FF5733?logo=vercel&logoColor=white)
 
@@ -27,7 +26,6 @@ With the power of **Anthropic Claude AI**, users can generate complete websites,
 - 🏗️ **Template System** - Pre-built website templates and components
 - 🎨 **Customizable Designs** - Colors, layouts, and branding customization
 - ⚡ **Fast Deployment** - One-click deployment to Vercel
-- 🔒 **Secure Authentication** - Supabase-based user management system
 
 ### Advanced Features
 
@@ -52,7 +50,6 @@ With the power of **Anthropic Claude AI**, users can generate complete websites,
 
 ### Backend & Services
 
-- **Supabase** - Database, authentication, and real-time features
 - **Anthropic Claude** - AI code generation and assistance
 - **Nodemailer** - Email service integration
 - **Discord Webhooks** - Notification system
@@ -122,24 +119,11 @@ src/
 │   │   └── test/          # Testing endpoints
 │   │       └── ai-generator/
 │   │           └── route.ts
-│   ├── auth/              # Authentication pages
-│   │   └── callback/
-│   │       └── page.tsx
-│   ├── contexts/          # React contexts
-│   │   └── AuthContext.tsx
-│   ├── types/             # TypeScript type definitions
-│   │   ├── Auth.ts
-│   │   ├── IAuthContext.ts
-│   │   ├── index.ts
-│   │   └── IUser.ts
 │   ├── layout.tsx         # Root layout
 │   ├── error.tsx          # Global error handling
 │   ├── not-found.tsx      # 404 page
 │   └── globals.css        # Global styles
 ├── components/            # Reusable UI components
-│   ├── auth/              # Authentication components
-│   │   ├── LoginModal.tsx
-│   │   └── SignUpModal.tsx
 │   ├── Banner.tsx         # Site banners
 │   ├── ChatBot.tsx        # AI chat interface
 │   ├── ConditionalFooter.tsx
@@ -150,10 +134,6 @@ src/
 │   ├── Navigation.tsx     # Site navigation
 │   └── SimpleChatBot.tsx
 ├── lib/                   # Business logic & utilities
-│   ├── supabase/          # Supabase configuration
-│   │   ├── api/
-│   │   │   └── auth.ts
-│   │   └── client.ts
 │   ├── discord-service.ts # Discord integration
 │   ├── email-service.ts   # Email handling
 │   ├── emailTemplate.ts   # Email templates
@@ -190,12 +170,6 @@ src/
 User Prompt → Claude AI → Code Generation → Template Assembly → Preview → Deploy
 ```
 
-#### User Management
-
-```
-Registration → Email Verification → Profile Setup → Portfolio Management → Website Building
-```
-
 #### Deployment Pipeline
 
 ```
@@ -220,19 +194,12 @@ Code Generation → Build Process → Vercel Deployment → Domain Configuration
 
 - `POST /api/deploy/vercel` - Deploy website to Vercel
 
-### Authentication
-
-- `GET /auth/callback` - OAuth callback handling
-
----
-
 ## 🛠️ Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
 - Yarn package manager
-- Supabase account
 - Anthropic API key
 - Discord webhook URL (optional)
 
@@ -260,10 +227,6 @@ cp .env.example .env.local
 Edit `.env.local` with your configuration:
 
 ```bash
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-
 # Anthropic AI
 ANTHROPIC_API_KEY=your_anthropic_api_key
 
@@ -312,11 +275,6 @@ yarn lint
 ---
 
 ## 📚 Documentation
-
-### 🔐 Authentication System
-
-- [인증 시스템 구조](./authentication-structure.md) - Supabase 기반 인증 시스템 상세 가이드
-- [이메일 인증 템플릿](./email-verification-template.md) - 커스텀 이메일 인증 템플릿
 
 ### 🤖 AI Builder System
 
@@ -402,7 +360,6 @@ yarn test:coverage
 
 - ✅ AI-powered code generation
 - ✅ Template system
-- ✅ User authentication
 - ✅ Multi-language support
 - ✅ Portfolio management
 

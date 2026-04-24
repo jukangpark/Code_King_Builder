@@ -16,10 +16,6 @@ export const TECH_LOGOS = [
     alt: "Tailwind CSS",
   },
   {
-    src: "https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white",
-    alt: "Supabase",
-  },
-  {
     src: "https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white",
     alt: "Node.js",
   },
